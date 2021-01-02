@@ -1,5 +1,7 @@
+import { Request, Response } from '../../contracts'
+
 export class SignupController {
-  handle (request: any): any {
+  handle (request: Request): Response {
     if (!request.body.name) {
       return {
         statusCode: 400,
