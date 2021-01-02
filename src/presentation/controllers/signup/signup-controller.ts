@@ -1,17 +1,18 @@
 import { Request, Response } from '../../contracts'
+import { MissingParamError } from '../../errors'
 
 export class SignupController {
   handle (request: Request): Response {
     if (!request.body.name) {
       return {
         statusCode: 400,
-        body: new Error('Missing param: name')
+        body: new MissingParamError('name')
       }
     }
     if (!request.body.email) {
       return {
         statusCode: 400,
-        body: new Error('Missing param: email')
+        body: new MissingParamError('email')
       }
     }
   }
