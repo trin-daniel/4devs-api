@@ -1,14 +1,22 @@
-import { Controller, Request, Response } from '../../contracts'
-import { MissingParamError } from '../../errors'
+import { Controller, Request, Response, EmailValidator } from '../../contracts'
+import { MissingParamError, InvalidParamError } from '../../errors'
 import { badRequest } from '../../helpers/http-helper'
 
 export class SignupController implements Controller {
+  constructor (
+    private readonly emailValidator: EmailValidator
+  ) {}
+
   handle (request: Request): Response {
     const requiredFields = ['name', 'email', 'password', 'confirmation']
     for (const field of requiredFields) {
       if (!request.body[field]) {
         return badRequest(new MissingParamError(field))
       }
+    }
+    const isEmail = this.emailValidator.isEmail(request.body.email)
+    if (!isEmail) {
+      return badRequest(new InvalidParamError('email'))
     }
   }
 }
