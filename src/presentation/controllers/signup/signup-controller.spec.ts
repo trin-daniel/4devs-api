@@ -1,6 +1,6 @@
 import { SignupController } from './signup-controller'
 import { Account } from '../../../domain/entities'
-import { AddAccount } from '../../../domain/usecases/add-account'
+import { AddAccount } from '../../../domain/use-cases/add-account'
 import { AccountDTO } from '../../../domain/data-transfer-objects'
 import { EmailValidator } from '../../contracts/email-validator'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
