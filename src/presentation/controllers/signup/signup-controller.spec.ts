@@ -195,4 +195,22 @@ describe('Signup Controller', () => {
     const data = Object.assign({}, request.body, delete request.body.confirmation)
     expect(addSpy).toHaveBeenCalledWith(data)
   })
+
+  test('Should return 500 if AddAccount throws', () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => { throw new Error() })
+    const request =
+    {
+      body:
+      {
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'any_password',
+        confirmation: 'any_password'
+      }
+    }
+    const response = sut.handle(request)
+    expect(response.statusCode).toBe(500)
+    expect(response.body).toEqual(new ServerError())
+  })
 })
