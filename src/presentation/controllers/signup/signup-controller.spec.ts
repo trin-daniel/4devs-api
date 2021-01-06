@@ -1,10 +1,14 @@
 import { SignupController } from './signup-controller'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { EmailValidator } from '../../contracts'
+import { Account } from '../../../domain/entities'
+import { AddAccount } from '../../../domain/usecases/add-account'
+import { AccountDTO } from '../../../domain/data-transfer-objects'
 
 interface SutTypes {
   sut: SignupController,
   emailValidatorStub: EmailValidator
+  addAccountStub: AddAccount
 }
 
 const mockEmailValidator = (): EmailValidator => {
@@ -16,10 +20,27 @@ const mockEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
+const mockAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    public add (data: AccountDTO): Account {
+      const account =
+       {
+         id: '507f1f77bcf86cd799439011',
+         name: 'any_name',
+         email: 'any_email@gmail.com',
+         password: 'hash'
+       }
+      return account
+    }
+  }
+  return new AddAccountStub()
+}
+
 const makeSut = (): SutTypes => {
+  const addAccountStub = mockAddAccount()
   const emailValidatorStub = mockEmailValidator()
-  const sut = new SignupController(emailValidatorStub)
-  return { sut, emailValidatorStub }
+  const sut = new SignupController(emailValidatorStub, addAccountStub)
+  return { sut, emailValidatorStub, addAccountStub }
 }
 
 describe('Signup Controller', () => {
@@ -155,5 +176,23 @@ describe('Signup Controller', () => {
     const response = sut.handle(request)
     expect(response.statusCode).toBe(500)
     expect(response.body).toEqual(new ServerError())
+  })
+
+  test('Should call AddAccount with correct values', () => {
+    const { sut, addAccountStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+    const request =
+    {
+      body:
+      {
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'any_password',
+        confirmation: 'any_password'
+      }
+    }
+    sut.handle(request)
+    const data = Object.assign({}, request.body, delete request.body.confirmation)
+    expect(addSpy).toHaveBeenCalledWith(data)
   })
 })
