@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests",
-    "test:staged":"jest --passWithNoTests"
+    "test": "jest --passWithNoTests --runInBand",
+    "test:unit":"jest --passWithNoTests --runInBand --watch -c jest-unit-config.js",
+    "test:integration":"jest --passWithNoTests  --runInBand --watch -c jest-integration-config.js",
+    "test:ci":"jest --passWithNoTests --runInBand --coverage",
+    "test:staged":"jest --passWithNoTests --runInBand --findRelatedTests"
   },
   "keywords": [],
-  "author": "",
+  "author": "Carlos Daniel",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^26.0.19",
