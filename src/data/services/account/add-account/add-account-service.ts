@@ -11,7 +11,7 @@ export class AddAccountService implements AddAccount {
 
   public async add (data: AccountDTO): Promise<Account> {
     const password = await this.hasher.hash(data.password)
-    await this.accountRepository.add({ ...data, password })
-    return Promise.resolve(null)
+    const account = await this.accountRepository.add({ ...data, password })
+    return account
   }
 }
