@@ -34,4 +34,17 @@ describe('Add Account Service', () => {
     await sut.add(data)
     expect(hashSpy).toHaveBeenCalledWith(data.password)
   })
+
+  test('Should throw if Hasher throws', async () => {
+    const { sut, hasherStub } = makeSut()
+    jest.spyOn(hasherStub, 'hash').mockReturnValueOnce(Promise.reject(new Error()))
+    const data =
+    {
+      name: 'any_name',
+      email: 'any_email@gmail.com',
+      password: 'any_password'
+    }
+    const promise = sut.add(data)
+    await expect(promise).rejects.toThrow()
+  })
 })
