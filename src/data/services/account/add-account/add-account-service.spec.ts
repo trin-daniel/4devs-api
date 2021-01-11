@@ -80,4 +80,17 @@ describe('Add Account Service', () => {
     await sut.add(data)
     expect(addSpy).toHaveBeenCalledWith(Object.assign({}, data, { password: 'hash' }))
   })
+
+  test('Should throw if AccountRepository throws', async () => {
+    const { sut, accountRepositoryStub } = makeSut()
+    jest.spyOn(accountRepositoryStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
+    const data =
+    {
+      name: 'any_name',
+      email: 'any_email@gmail.com',
+      password: 'any_password'
+    }
+    const promise = sut.add(data)
+    await expect(promise).rejects.toThrow()
+  })
 })
