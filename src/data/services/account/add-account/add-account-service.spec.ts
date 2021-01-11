@@ -1,5 +1,7 @@
 import { AddAccountService } from './add-account-service'
-import { Hasher } from '../../../contracts'
+import { Account } from '../../../../domain/entities'
+import { AccountDTO } from '../../../../domain/data-transfer-objects'
+import { AddAccountRepository, Hasher } from '../../../contracts'
 
 const mockHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -10,15 +12,33 @@ const mockHasher = (): Hasher => {
   return new HasherStub()
 }
 
+const mockAccountRepository = (): AddAccountRepository => {
+  class AccountRepositoryStub implements AddAccountRepository {
+    public add (data: AccountDTO): Promise<Account> {
+      return Promise.resolve(
+        {
+          id: '507f1f77bcf86cd799439011',
+          name: 'any_name',
+          email: 'any_email@gmail.com',
+          password: 'hash'
+        }
+      )
+    }
+  }
+  return new AccountRepositoryStub()
+}
+
 interface SutTypes {
   sut: AddAccountService,
-  hasherStub: Hasher
+  hasherStub: Hasher,
+  accountRepositoryStub: AddAccountRepository
 }
 
 const makeSut = (): SutTypes => {
+  const accountRepositoryStub = mockAccountRepository()
   const hasherStub = mockHasher()
-  const sut = new AddAccountService(hasherStub)
-  return { sut, hasherStub }
+  const sut = new AddAccountService(hasherStub, accountRepositoryStub)
+  return { sut, hasherStub, accountRepositoryStub }
 }
 
 describe('Add Account Service', () => {
@@ -46,5 +66,18 @@ describe('Add Account Service', () => {
     }
     const promise = sut.add(data)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call method add of AccountRepository with correct values', async () => {
+    const { sut, accountRepositoryStub } = makeSut()
+    const addSpy = jest.spyOn(accountRepositoryStub, 'add')
+    const data =
+    {
+      name: 'any_name',
+      email: 'any_email@gmail.com',
+      password: 'any_password'
+    }
+    await sut.add(data)
+    expect(addSpy).toHaveBeenCalledWith(Object.assign({}, data, { password: 'hash' }))
   })
 })
