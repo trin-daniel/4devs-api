@@ -93,4 +93,23 @@ describe('Add Account Service', () => {
     const promise = sut.add(data)
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return an account on success', async () => {
+    const { sut } = makeSut()
+    const data =
+    {
+      name: 'any_name',
+      email: 'any_email@gmail.com',
+      password: 'any_password'
+    }
+    const account = await sut.add(data)
+    expect(account).toEqual(
+      {
+        id: '507f1f77bcf86cd799439011',
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'hash'
+      }
+    )
+  })
 })
