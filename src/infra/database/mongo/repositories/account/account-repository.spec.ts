@@ -13,7 +13,9 @@ const makeSut = (): SutTypes => {
 describe('Account Repository', () => {
   beforeAll(async () => await MongoHelper.connect(process.env.MONGO_URL))
 
-  afterAll(async () => MongoHelper.disconnect())
+  afterAll(async () => await MongoHelper.disconnect())
+
+  beforeEach(async () => await MongoHelper.collection('accounts').deleteMany({}))
 
   test('Should return an account on success', async () => {
     const { sut } = makeSut()
