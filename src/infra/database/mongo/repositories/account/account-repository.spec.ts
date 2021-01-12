@@ -1,13 +1,22 @@
 import { AccountRepository } from './account-repository'
 import { MongoHelper } from '../../helper/mongo-helper'
 
+interface SutTypes {
+  sut: AccountRepository
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new AccountRepository()
+  return { sut }
+}
+
 describe('Account Repository', () => {
   beforeAll(async () => await MongoHelper.connect(process.env.MONGO_URL))
 
   afterAll(async () => MongoHelper.disconnect())
 
   test('Should return an account on success', async () => {
-    const sut = new AccountRepository()
+    const { sut } = makeSut()
     const data =
     {
       name: 'any_name',
