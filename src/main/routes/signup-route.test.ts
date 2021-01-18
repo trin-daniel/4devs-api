@@ -1,7 +1,12 @@
 import supertest from 'supertest'
+import { MongoHelper } from '../../infra/database/mongo/helper/mongo-helper'
 import app from '../config/app'
 
 describe('Signup Route', () => {
+  beforeAll(async () => await MongoHelper.connect(process.env.MONGO_URL))
+  afterAll(async () => await MongoHelper.disconnect())
+  beforeEach(async () => await MongoHelper.collection('accounts').deleteMany({}))
+
   test('Should return 200 on sucess', async () => {
     const data =
     {
