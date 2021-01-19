@@ -5,7 +5,10 @@ import app from '../config/app'
 describe('Signup Route', () => {
   beforeAll(async () => await MongoHelper.connect(process.env.MONGO_URL))
   afterAll(async () => await MongoHelper.disconnect())
-  beforeEach(async () => await MongoHelper.collection('accounts').deleteMany({}))
+  beforeEach(async () => {
+    const collection = await MongoHelper.collection('accounts')
+    await collection.deleteMany({})
+  })
 
   test('Should return 200 on sucess', async () => {
     const data =
