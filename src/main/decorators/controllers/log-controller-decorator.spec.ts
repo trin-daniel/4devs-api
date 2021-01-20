@@ -25,6 +25,7 @@ interface SutTypes {
   sut: LogControllerDecorator,
   controllerStub: Controller
 }
+
 const makeSut = (): SutTypes => {
   const controllerStub = mockController()
   const sut = new LogControllerDecorator(controllerStub)
@@ -47,5 +48,21 @@ describe('Log Controller Decorator', () => {
     }
     await sut.handle(request)
     expect(handleSpy).toHaveBeenCalledWith(request)
+  })
+
+  test('Should return the same result of the controller', async () => {
+    const { sut } = makeSut()
+    const request =
+    {
+      body:
+      {
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'any_password',
+        confirmation: 'another_password'
+      }
+    }
+    const response = await sut.handle(request)
+    expect(response).toEqual({ ...request, statusCode: 200 })
   })
 })
