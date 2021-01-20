@@ -11,7 +11,7 @@ export const badRequest = (error: Error): Response => ({
   body: error
 })
 
-export const serverError = (): Response => ({
+export const serverError = (error: Error): Response => ({
   statusCode: 500,
-  body: new ServerError()
+  body: new ServerError(error.stack)
 })
