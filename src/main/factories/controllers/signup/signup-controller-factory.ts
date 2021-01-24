@@ -5,6 +5,7 @@ import { AddAccountService } from '../../../../data/services/account/add-account
 import { BcryptAdapter } from '../../../../infra/adapters/bcrypt/bcrypt-adapter'
 import { AccountRepository } from '../../../../infra/database/mongo/repositories/account/account-repository'
 import { LogControllerDecorator } from '../../../decorators/controllers/log-controller-decorator'
+import { LogMongoRepository } from '../../../../infra/database/mongo/repositories/log-error/log-mongo-repository'
 
 export const signupControllerFactory = (): Controller => {
   const accountRepository = new AccountRepository()
@@ -12,5 +13,6 @@ export const signupControllerFactory = (): Controller => {
   const hasher = new BcryptAdapter(12)
   const addAccount = new AddAccountService(hasher, accountRepository)
   const signupController = new SignupController(emailValidator, addAccount)
-  return new LogControllerDecorator(signupController)
+  const LogErrorRepository = new LogMongoRepository()
+  return new LogControllerDecorator(signupController, LogErrorRepository)
 }
