@@ -8,7 +8,7 @@ export class SigninController implements Controller {
     private readonly emailValidator: EmailValidator
   ) {}
 
-  handle (request: Request<any>): Promise<Response<any>> {
+  async handle (request: Request<any>): Promise<Response<any>> {
     const required = ['email', 'password']
     for (const field of required) {
       if (!request.body[field]) {
