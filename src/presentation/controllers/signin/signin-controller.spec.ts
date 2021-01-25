@@ -4,7 +4,7 @@ import { AuthenticationDTO } from '../../../domain/data-transfer-objects'
 import { Request } from '../../contracts'
 import { EmailValidator } from '../../contracts/email-validator'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
-import { badRequest, serverError } from '../../helpers/http-helper'
+import { badRequest, serverError, unauthorized } from '../../helpers/http-helper'
 
 interface SutTypes {
   sut: SigninController,
@@ -93,5 +93,13 @@ describe('Signin Controller', () => {
     const request = mockRequest()
     await sut.handle(request)
     expect(authSpy).toHaveBeenCalledWith(request.body)
+  })
+
+  test('Should return 401 if invalid credentials are provided', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(Promise.resolve(null))
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(unauthorized())
   })
 })
