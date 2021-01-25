@@ -1,7 +1,7 @@
 import { SigninController } from './signin-controller'
 import { EmailValidator } from '../../contracts/email-validator'
-import { InvalidParamError, MissingParamError } from '../../errors'
-import { badRequest } from '../../helpers/http-helper'
+import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
+import { badRequest, serverError } from '../../helpers/http-helper'
 import { Request } from '../../contracts'
 
 interface SutTypes {
@@ -64,5 +64,13 @@ describe('Signin Controller', () => {
     const request = Object.assign({}, { body: { ...data.body, email: 'invalid_email@gmail.com' } })
     const response = await sut.handle(request)
     expect(response).toEqual(badRequest(new InvalidParamError('email')))
+  })
+
+  test('Should return 500 if EmailValidator throws exception', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isEmail').mockImplementationOnce(() => { throw new ServerError() })
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(serverError(new ServerError()))
   })
 })
