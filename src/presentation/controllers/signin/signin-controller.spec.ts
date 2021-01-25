@@ -24,7 +24,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Signin Controller', () => {
-  test('Should return 400 if no email is provided', async () => {
+  test('Should return 400 if no email address is provided', async () => {
     const { sut } = makeSut()
     const request =
     {
@@ -50,7 +50,7 @@ describe('Signin Controller', () => {
     expect(response).toEqual(badRequest(new MissingParamError('password')))
   })
 
-  test('Should call EmailValidator with correct email', async () => {
+  test('Should call EmailValidator with correct e-mail address', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const isEmailSpy = jest.spyOn(emailValidatorStub, 'isEmail')
     const request =
