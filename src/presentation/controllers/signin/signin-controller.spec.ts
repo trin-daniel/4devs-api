@@ -107,7 +107,7 @@ describe('Signin Controller', () => {
     const { sut } = makeSut()
     const request = mockRequest()
     const response = await sut.handle(request)
-    expect(response).toEqual(ok('any_token'))
+    expect(response).toEqual(ok({ token: 'any_token' }))
   })
 
   test('Should return 500 if Authentication throws exception', async () => {

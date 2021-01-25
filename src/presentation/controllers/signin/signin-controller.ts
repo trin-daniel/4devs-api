@@ -23,8 +23,8 @@ export class SigninController implements Controller {
       if (!isEmail) {
         return badRequest(new InvalidParamError('email'))
       }
-      const accessToken = await this.authentication.auth({ email, password })
-      return !accessToken ? unauthorized() : ok(accessToken)
+      const token = await this.authentication.auth({ email, password })
+      return !token ? unauthorized() : ok({ token })
     } catch (error) {
       return serverError(error)
     }
