@@ -4,7 +4,7 @@ import { AuthenticationDTO } from '../../../domain/data-transfer-objects'
 import { Request } from '../../contracts'
 import { EmailValidator } from '../../contracts/email-validator'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
-import { badRequest, serverError, unauthorized } from '../../helpers/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'
 
 interface SutTypes {
   sut: SigninController,
@@ -101,5 +101,12 @@ describe('Signin Controller', () => {
     const request = mockRequest()
     const response = await sut.handle(request)
     expect(response).toEqual(unauthorized())
+  })
+
+  test('Should return 200 if valid credentials are provided', async () => {
+    const { sut } = makeSut()
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(ok('any_token'))
   })
 })
