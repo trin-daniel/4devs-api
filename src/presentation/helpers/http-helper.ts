@@ -1,5 +1,5 @@
 import { Response } from '../contracts'
-import { ServerError } from '../errors'
+import { ServerError, UnauthorizedError } from '../errors'
 
 export const ok = (data: any): Response => ({
   statusCode: 200,
@@ -9,6 +9,11 @@ export const ok = (data: any): Response => ({
 export const badRequest = (error: Error): Response => ({
   statusCode: 400,
   body: error
+})
+
+export const unauthorized = (): Response => ({
+  statusCode: 401,
+  body: new UnauthorizedError()
 })
 
 export const serverError = (error: Error): Response => ({
