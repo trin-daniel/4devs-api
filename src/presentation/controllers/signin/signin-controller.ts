@@ -2,7 +2,7 @@ import { Authentication } from '../../../domain/use-cases/authentication'
 import { Controller, Request, Response } from '../../contracts'
 import { EmailValidator } from '../../contracts/email-validator'
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { badRequest, serverError, unauthorized } from '../../helpers/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'
 
 export class SigninController implements Controller {
   constructor (
@@ -24,7 +24,7 @@ export class SigninController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
       const accessToken = await this.authentication.auth({ email, password })
-      return !accessToken ? unauthorized() : null
+      return !accessToken ? unauthorized() : ok(accessToken)
     } catch (error) {
       return serverError(error)
     }
