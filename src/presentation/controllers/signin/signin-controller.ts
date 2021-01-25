@@ -13,19 +13,17 @@ export class SigninController implements Controller {
   async handle (request: Request<any>): Promise<Response<any>> {
     try {
       const { email, password } = request.body
-      const required = ['email', 'password']
-      for (const field of required) {
+      const requiredFields = ['email', 'password']
+      for (const field of requiredFields) {
         if (!request.body[field]) {
-          return Promise.resolve(badRequest(new MissingParamError(field)))
+          return badRequest(new MissingParamError(field))
         }
       }
-      const isEmail = this.emailValidator.isEmail(request.body.email)
+      const isEmail = this.emailValidator.isEmail(email)
       if (!isEmail) {
-        return Promise.resolve(badRequest(new InvalidParamError('email')))
+        return badRequest(new InvalidParamError('email'))
       }
-      await this.authentication.auth(
-        { email, password }
-      )
+      await this.authentication.auth({ email, password })
     } catch (error) {
       return serverError(error)
     }
