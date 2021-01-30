@@ -25,4 +25,11 @@ describe('Compare Fields Validator', () => {
     const error = sut.validate(input)
     expect(error).toEqual(new InvalidParamError('confirmation'))
   })
+
+  test('Should return null if fields comparison succeeds', () => {
+    const { sut } = makeSut()
+    const input = data()
+    const error = sut.validate(input)
+    expect(error).toBeNull()
+  })
 })
