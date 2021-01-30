@@ -35,4 +35,11 @@ describe('Email field Validator', () => {
     const error = sut.validate(input)
     expect(error).toEqual(new InvalidParamError('email'))
   })
+
+  test('Should return null if valid e-mail address are provided', () => {
+    const { sut } = makeSut()
+    const input = data()
+    const error = sut.validate(input)
+    expect(error).toBeNull()
+  })
 })
