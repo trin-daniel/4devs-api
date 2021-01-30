@@ -38,4 +38,10 @@ describe('Validator Composite', () => {
     const error = sut.validate(data)
     expect(error).toEqual(new MissingParamError('name'))
   })
+
+  test('Should return null if all validators succeeds', () => {
+    const { sut } = makeSut()
+    const error = sut.validate(data)
+    expect(error).toBeNull()
+  })
 })
