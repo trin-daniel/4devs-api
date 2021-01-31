@@ -1,6 +1,6 @@
 import { AccountDTO } from '../../../../domain/data-transfer-objects'
 import { Account } from '../../../../domain/entities'
-import { AddAccount } from '../../../../domain/use-cases/add-account'
+import { AddAccount } from '../../../../domain/use-cases/account/add-account'
 import { AddAccountRepository, Hasher } from '../../../contracts'
 
 export class AddAccountService implements AddAccount {

@@ -1,4 +1,4 @@
-import { AddAccount } from '../../../domain/use-cases/add-account'
+import { AddAccount } from '../../../domain/use-cases/account/add-account'
 import { Controller, Request, Response } from '../../contracts'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { Validator } from '../../contracts/validator'

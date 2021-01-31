@@ -1,4 +1,4 @@
-import { Authentication } from '../../../domain/use-cases/authentication'
+import { Authentication } from '../../../domain/use-cases/authentication/authentication'
 import { Validator } from '../../contracts/validator'
 import { Controller, Request, Response } from '../../contracts'
 import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'

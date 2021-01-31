@@ -1,4 +1,4 @@
-import { Authentication } from '../../../../domain/use-cases/authentication'
+import { Authentication } from '../../../../domain/use-cases/authentication/authentication'
 import { AuthenticationDTO } from '../../../../domain/data-transfer-objects'
 import { LoadAccountByEmailRepository } from '../../../contracts'
 

@@ -1,6 +1,6 @@
 import { SignupController } from './signup-controller'
 import { Account } from '../../../domain/entities'
-import { AddAccount } from '../../../domain/use-cases/add-account'
+import { AddAccount } from '../../../domain/use-cases/account/add-account'
 import { AccountDTO } from '../../../domain/data-transfer-objects'
 import { ServerError } from '../../errors'
 import { Request } from '../../contracts'
