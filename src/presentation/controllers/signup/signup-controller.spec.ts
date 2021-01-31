@@ -6,11 +6,13 @@ import { EmailValidator } from '../../contracts/email-validator'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { Request } from '../../contracts'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
+import { Validator } from '../../contracts/validator'
 
 interface SutTypes {
   sut: SignupController,
-  emailValidatorStub: EmailValidator
-  addAccountStub: AddAccount
+  emailValidatorStub: EmailValidator,
+  addAccountStub: AddAccount,
+  validatorStub: Validator
 }
 
 const mockEmailValidator = (): EmailValidator => {
@@ -48,11 +50,21 @@ const mockAddAccount = (): AddAccount => {
   return new AddAccountStub()
 }
 
+const mockValidator = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (input: { [key: string]: any }): Error {
+      return null
+    }
+  }
+  return new ValidatorStub()
+}
+
 const makeSut = (): SutTypes => {
+  const validatorStub = mockValidator()
   const addAccountStub = mockAddAccount()
   const emailValidatorStub = mockEmailValidator()
-  const sut = new SignupController(emailValidatorStub, addAccountStub)
-  return { sut, emailValidatorStub, addAccountStub }
+  const sut = new SignupController(emailValidatorStub, addAccountStub, validatorStub)
+  return { sut, emailValidatorStub, addAccountStub, validatorStub }
 }
 
 describe('Signup Controller', () => {
@@ -150,5 +162,13 @@ describe('Signup Controller', () => {
       delete request.body.confirmation
     )
     expect(response).toEqual(ok(result))
+  })
+
+  test('Should call Validator with correct value', async () => {
+    const { sut, validatorStub } = makeSut()
+    const validateSpy = jest.spyOn(validatorStub, 'validate')
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(validateSpy).toHaveBeenCalledWith(request.body)
   })
 })
