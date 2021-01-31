@@ -151,4 +151,12 @@ describe('Authentication Service', () => {
     await sut.auth(data)
     expect(updateTokenSpy).toHaveBeenCalledWith(account.id, 'token')
   })
+
+  test('Should throw if UpdateTokenRepository throws', async () => {
+    const { sut, updateTokenRepositoryStub } = makeSut()
+    jest.spyOn(updateTokenRepositoryStub, 'updateToken').mockReturnValueOnce(Promise.reject(new Error()))
+    const data = mockCredentials()
+    const promise = sut.auth(data)
+    await expect(promise).rejects.toThrow()
+  })
 })
