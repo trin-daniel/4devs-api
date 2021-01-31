@@ -15,7 +15,10 @@ export class SigninController implements Controller {
   async handle (request: Request<any>): Promise<Response<any>> {
     try {
       const { email, password } = request.body
-      this.validator.validate({ email, password })
+      const error = this.validator.validate({ email, password })
+      if (error) {
+        return badRequest(error)
+      }
       const requiredFields = ['email', 'password']
       for (const field of requiredFields) {
         if (!request.body[field]) {
