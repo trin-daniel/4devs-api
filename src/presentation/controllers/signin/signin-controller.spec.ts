@@ -137,4 +137,12 @@ describe('Signin Controller', () => {
     await sut.handle(request)
     expect(validateSpy).toHaveBeenCalledWith(request.body)
   })
+
+  test('Should return 400 if validator returns an error', async () => {
+    const { sut, validatorStub } = makeSut()
+    jest.spyOn(validatorStub, 'validate').mockReturnValueOnce(new Error())
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(badRequest(new Error()))
+  })
 })
