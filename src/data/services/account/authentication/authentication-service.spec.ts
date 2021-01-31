@@ -1,12 +1,22 @@
 import { AuthenticationService } from './authentication-service'
 import { Account } from '../../../../domain/entities'
 import { AuthenticationDTO } from '../../../../domain/data-transfer-objects'
-import { HashCompare, LoadAccountByEmailRepository } from '../../../contracts'
+import { Encrypter, HashCompare, LoadAccountByEmailRepository } from '../../../contracts'
 
 interface SutTypes {
   sut: AuthenticationService,
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository,
-  hashCompareStub: HashCompare
+  hashCompareStub: HashCompare,
+  encrypterStub: Encrypter
+}
+
+const mockEncrypter = (): Encrypter => {
+  class EncrypterStub implements Encrypter {
+    public async encrypt (value: string): Promise<string> {
+      return Promise.resolve('token')
+    }
+  }
+  return new EncrypterStub()
 }
 
 const mockHashCompare = (): HashCompare => {
@@ -42,10 +52,11 @@ const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 }
 
 const makeSut = (): SutTypes => {
+  const encrypterStub = mockEncrypter()
   const hashCompareStub = mockHashCompare()
   const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
-  const sut = new AuthenticationService(loadAccountByEmailRepositoryStub, hashCompareStub)
-  return { sut, loadAccountByEmailRepositoryStub, hashCompareStub }
+  const sut = new AuthenticationService(loadAccountByEmailRepositoryStub, hashCompareStub, encrypterStub)
+  return { sut, loadAccountByEmailRepositoryStub, hashCompareStub, encrypterStub }
 }
 
 describe('Authentication Service', () => {
@@ -95,5 +106,14 @@ describe('Authentication Service', () => {
     const data = mockCredentials()
     const token = await sut.auth(data)
     expect(token).toBeNull()
+  })
+
+  test('Shoul call Encrypter with correct id', async () => {
+    const { sut, encrypterStub } = makeSut()
+    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+    const data = mockCredentials()
+    const account = mockAccount()
+    await sut.auth(data)
+    expect(encryptSpy).toHaveBeenCalledWith(account.id)
   })
 })
