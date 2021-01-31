@@ -108,12 +108,20 @@ describe('Authentication Service', () => {
     expect(token).toBeNull()
   })
 
-  test('Shoul call Encrypter with correct id', async () => {
+  test('Should call Encrypter with correct id', async () => {
     const { sut, encrypterStub } = makeSut()
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
     const data = mockCredentials()
     const account = mockAccount()
     await sut.auth(data)
     expect(encryptSpy).toHaveBeenCalledWith(account.id)
+  })
+
+  test('Should throw if Encrypter throws', async () => {
+    const { sut, encrypterStub } = makeSut()
+    jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(Promise.reject(new Error()))
+    const data = mockCredentials()
+    const promise = sut.auth(data)
+    await expect(promise).rejects.toThrow()
   })
 })
