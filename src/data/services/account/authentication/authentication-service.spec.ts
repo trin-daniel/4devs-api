@@ -1,13 +1,23 @@
 import { AuthenticationService } from './authentication-service'
 import { Account } from '../../../../domain/entities'
 import { AuthenticationDTO } from '../../../../domain/data-transfer-objects'
-import { Encrypter, HashCompare, LoadAccountByEmailRepository } from '../../../contracts'
+import { Encrypter, HashCompare, LoadAccountByEmailRepository, UpdateTokenRepository } from '../../../contracts'
 
 interface SutTypes {
   sut: AuthenticationService,
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository,
   hashCompareStub: HashCompare,
-  encrypterStub: Encrypter
+  encrypterStub: Encrypter,
+  updateTokenRepositoryStub: UpdateTokenRepository
+}
+
+const mockUpdateTokenRepository = (): UpdateTokenRepository => {
+  class UpdateTokenRepositoryStub implements UpdateTokenRepository {
+    async updateToken (id: string, token: string): Promise<void> {
+      Promise.resolve()
+    }
+  }
+  return new UpdateTokenRepositoryStub()
 }
 
 const mockEncrypter = (): Encrypter => {
@@ -52,11 +62,12 @@ const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 }
 
 const makeSut = (): SutTypes => {
+  const updateTokenRepositoryStub = mockUpdateTokenRepository()
   const encrypterStub = mockEncrypter()
   const hashCompareStub = mockHashCompare()
   const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
-  const sut = new AuthenticationService(loadAccountByEmailRepositoryStub, hashCompareStub, encrypterStub)
-  return { sut, loadAccountByEmailRepositoryStub, hashCompareStub, encrypterStub }
+  const sut = new AuthenticationService(loadAccountByEmailRepositoryStub, hashCompareStub, encrypterStub, updateTokenRepositoryStub)
+  return { sut, loadAccountByEmailRepositoryStub, hashCompareStub, encrypterStub, updateTokenRepositoryStub }
 }
 
 describe('Authentication Service', () => {
@@ -130,5 +141,14 @@ describe('Authentication Service', () => {
     const data = mockCredentials()
     const token = await sut.auth(data)
     expect(token).toBe('token')
+  })
+
+  test('Should call UpdateTokenRepository with correct values', async () => {
+    const { sut, updateTokenRepositoryStub } = makeSut()
+    const updateTokenSpy = jest.spyOn(updateTokenRepositoryStub, 'updateToken')
+    const data = mockCredentials()
+    const account = mockAccount()
+    await sut.auth(data)
+    expect(updateTokenSpy).toHaveBeenCalledWith(account.id, 'token')
   })
 })
