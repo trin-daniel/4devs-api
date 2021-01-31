@@ -1,11 +1,21 @@
 import { AuthenticationService } from './authentication-service'
 import { Account } from '../../../../domain/entities'
 import { AuthenticationDTO } from '../../../../domain/data-transfer-objects'
-import { LoadAccountByEmailRepository } from '../../../contracts'
+import { HashCompare, LoadAccountByEmailRepository } from '../../../contracts'
 
 interface SutTypes {
   sut: AuthenticationService,
-  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository,
+  hashCompareStub: HashCompare
+}
+
+const mockHashCompare = (): HashCompare => {
+  class HashCompareStub implements HashCompare {
+    async compare (password: string, hash: string): Promise<boolean> {
+      return Promise.resolve(true)
+    }
+  }
+  return new HashCompareStub()
 }
 
 const mockCredentials = (): AuthenticationDTO =>
@@ -32,9 +42,10 @@ const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 }
 
 const makeSut = (): SutTypes => {
+  const hashCompareStub = mockHashCompare()
   const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
-  const sut = new AuthenticationService(loadAccountByEmailRepositoryStub)
-  return { sut, loadAccountByEmailRepositoryStub }
+  const sut = new AuthenticationService(loadAccountByEmailRepositoryStub, hashCompareStub)
+  return { sut, loadAccountByEmailRepositoryStub, hashCompareStub }
 }
 
 describe('Authentication Service', () => {
@@ -60,5 +71,13 @@ describe('Authentication Service', () => {
     const data = mockCredentials()
     const token = await sut.auth(data)
     expect(token).toBeNull()
+  })
+
+  test('Shoul call HashCompare with correct values', async () => {
+    const { sut, hashCompareStub } = makeSut()
+    const compareSpy = jest.spyOn(hashCompareStub, 'compare')
+    const data = mockCredentials()
+    await sut.auth(data)
+    expect(compareSpy).toHaveBeenCalledWith(data.password, 'hash')
   })
 })
