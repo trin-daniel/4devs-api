@@ -45,4 +45,12 @@ describe('Authentication Service', () => {
     await sut.auth(data)
     expect(loadByEmailSpy).toHaveBeenCalledWith(data.email)
   })
+
+  test('Should throw if LoadAccountByEmailRepository throws', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(Promise.reject(new Error()))
+    const data = mockCredentials()
+    const promise = sut.auth(data)
+    await expect(promise).rejects.toThrow()
+  })
 })
