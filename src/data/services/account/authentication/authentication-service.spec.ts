@@ -73,11 +73,19 @@ describe('Authentication Service', () => {
     expect(token).toBeNull()
   })
 
-  test('Shoul call HashCompare with correct values', async () => {
+  test('Should call HashCompare with correct values', async () => {
     const { sut, hashCompareStub } = makeSut()
     const compareSpy = jest.spyOn(hashCompareStub, 'compare')
     const data = mockCredentials()
     await sut.auth(data)
     expect(compareSpy).toHaveBeenCalledWith(data.password, 'hash')
+  })
+
+  test('Should throw if HashCompare throws', async () => {
+    const { sut, hashCompareStub } = makeSut()
+    jest.spyOn(hashCompareStub, 'compare').mockReturnValueOnce(Promise.reject(new Error()))
+    const data = mockCredentials()
+    const promise = sut.auth(data)
+    await expect(promise).rejects.toThrow()
   })
 })
