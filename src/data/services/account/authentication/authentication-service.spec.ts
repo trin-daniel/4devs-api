@@ -88,4 +88,12 @@ describe('Authentication Service', () => {
     const promise = sut.auth(data)
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return null if HashCompare returns false', async () => {
+    const { sut, hashCompareStub } = makeSut()
+    jest.spyOn(hashCompareStub, 'compare').mockReturnValueOnce(Promise.resolve(false))
+    const data = mockCredentials()
+    const token = await sut.auth(data)
+    expect(token).toBeNull()
+  })
 })
