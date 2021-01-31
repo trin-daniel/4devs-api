@@ -5,11 +5,13 @@ import { Request } from '../../contracts'
 import { EmailValidator } from '../../contracts/email-validator'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'
+import { Validator } from '../../contracts/validator'
 
 interface SutTypes {
   sut: SigninController,
-  emailValidatorStub: EmailValidator
-  authenticationStub: Authentication
+  emailValidatorStub: EmailValidator,
+  authenticationStub: Authentication,
+  validatorStub: Validator
 }
 
 const mockEmailValidator = (): EmailValidator => {
@@ -38,11 +40,21 @@ const mockAuthentication = (): Authentication => {
   return new AuthenticationStub()
 }
 
+const mockValidator = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (input: { [key: string]: any }): Error {
+      return null
+    }
+  }
+  return new ValidatorStub()
+}
+
 const makeSut = (): SutTypes => {
+  const validatorStub = mockValidator()
   const authenticationStub = mockAuthentication()
   const emailValidatorStub = mockEmailValidator()
-  const sut = new SigninController(emailValidatorStub, authenticationStub)
-  return { sut, emailValidatorStub, authenticationStub }
+  const sut = new SigninController(emailValidatorStub, authenticationStub, validatorStub)
+  return { sut, emailValidatorStub, authenticationStub, validatorStub }
 }
 
 describe('Signin Controller', () => {
@@ -116,5 +128,13 @@ describe('Signin Controller', () => {
     const request = mockRequest()
     const response = await sut.handle(request)
     expect(response).toEqual(serverError(new ServerError()))
+  })
+
+  test('Should call Validator with correct value', async () => {
+    const { sut, validatorStub } = makeSut()
+    const validateSpy = jest.spyOn(validatorStub, 'validate')
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(validateSpy).toHaveBeenCalledWith(request.body)
   })
 })
