@@ -124,4 +124,11 @@ describe('Authentication Service', () => {
     const promise = sut.auth(data)
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return a token on success', async () => {
+    const { sut } = makeSut()
+    const data = mockCredentials()
+    const token = await sut.auth(data)
+    expect(token).toBe('token')
+  })
 })
