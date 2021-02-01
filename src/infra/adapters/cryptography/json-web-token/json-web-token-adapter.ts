@@ -7,7 +7,7 @@ export class JsonWebTokenAdapter implements Encrypter {
   ) {}
 
   async encrypt (value: string): Promise<string> {
-    const token = sign({ id: value }, this.keySecret, { expiresIn: '2d' })
-    return Promise.resolve(token)
+    const token = await sign({ id: value }, this.keySecret, { expiresIn: '2d' })
+    return token
   }
 }
