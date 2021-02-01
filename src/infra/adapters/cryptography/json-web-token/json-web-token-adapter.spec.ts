@@ -14,11 +14,12 @@ const makeSut = (): SutTypes => {
 
 jest.mock('jsonwebtoken', () => {
   return {
-    sign: (): string => {
-      return 'any_token'
+    async sign (): Promise<string> {
+      return Promise.resolve('any_token')
     }
   }
 })
+
 describe('Json Web Token Adapter', () => {
   describe('#Sign', () => {
     test('Should call the sign method with correct values', async () => {
@@ -32,6 +33,13 @@ describe('Json Web Token Adapter', () => {
       const { sut } = makeSut()
       const token = await sut.encrypt('any_id')
       expect(token).toBe('any_token')
+    })
+
+    test('Should throw if sign method throws', async () => {
+      const { sut } = makeSut()
+      jest.spyOn(jsonwebtoken, 'sign').mockImplementationOnce(() => { throw new Error() })
+      const promise = sut.encrypt('any_id')
+      await expect(promise).rejects.toThrow()
     })
   })
 })
