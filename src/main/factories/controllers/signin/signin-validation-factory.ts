@@ -1,5 +1,5 @@
 import { Validator } from '../../../../presentation/contracts/validator'
-import { EmailValidatorAdapter } from '../../../../utils/email-validator-adapter'
+import { EmailValidatorAdapter } from '../../../adapters/validators/email-validator-adapter'
 import { EmailFieldValidator, RequiredFieldValidator, ValidatorComposite } from '../../../../validation/validators'
 
 export const signinValidationFactory = (): Validator => {
