@@ -33,5 +33,18 @@ describe('Signin Route', () => {
         .send(credentials)
         .expect(200)
     })
+
+    test('Should return 401 if invalid credentials are provided', async () => {
+      const credentials =
+      {
+        email: 'any_email@gmail.com',
+        password: 'any_password'
+      }
+
+      await supertest(app)
+        .post('/api/signin')
+        .send(credentials)
+        .expect(401)
+    })
   })
 })
