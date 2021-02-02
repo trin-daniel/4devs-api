@@ -60,4 +60,24 @@ describe('Account Repository', () => {
       expect(account).toBeNull()
     })
   })
+
+  describe('#UpdateTokenRepository', () => {
+    test('Should update the account token if updateToken is successful', async () => {
+      const { sut } = makeSut()
+      const data =
+      {
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'hash'
+      }
+      const collection = await MongoHelper.collection('accounts')
+      const { ops } = await collection.insertOne(data)
+      const [account] = ops
+      const { _id } = account
+      expect(account).not.toHaveProperty('token')
+      await sut.updateToken(_id, 'any_token')
+      const result = await collection.findOne({ _id })
+      expect(result.token).toBe('any_token')
+    })
+  })
 })
