@@ -19,19 +19,20 @@ describe('Account Repository', () => {
     const collection = await MongoHelper.collection('accounts')
     await collection.deleteMany({})
   })
-
-  test('Should return an account on success', async () => {
-    const { sut } = makeSut()
-    const data =
-    {
-      name: 'any_name',
-      email: 'any_email@gmail.com',
-      password: 'hash'
-    }
-    const account = await sut.add(data)
-    expect(account).toBeTruthy()
-    expect(account.id).toBeTruthy()
-    expect(account.name).toBe('any_name')
-    expect(account.email).toBe('any_email@gmail.com')
+  describe('#AddAccountRepository', () => {
+    test('Should return an account on success', async () => {
+      const { sut } = makeSut()
+      const data =
+      {
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'hash'
+      }
+      const account = await sut.add(data)
+      expect(account).toBeTruthy()
+      expect(account.id).toBeTruthy()
+      expect(account.name).toBe('any_name')
+      expect(account.email).toBe('any_email@gmail.com')
+    })
   })
 })
