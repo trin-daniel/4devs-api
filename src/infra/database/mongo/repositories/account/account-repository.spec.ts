@@ -53,5 +53,11 @@ describe('Account Repository', () => {
       expect(account.id).toHaveProperty('id')
       expect(account).toHaveProperty('name')
     })
+
+    test('Should return null if load by e-mail address return null', async () => {
+      const { sut } = makeSut()
+      const account = await sut.loadByEmail('any_email@gmail.com')
+      expect(account).toBeNull()
+    })
   })
 })
