@@ -10,12 +10,13 @@ services:
       - "27017:27017"
   api: 
     container_name: 4devs-api-container
-    build: .
     restart: always
-    image: 4dev-api
-    command: npm run start
+    working_dir: /usr/src/4devs-api/dist
+    image: node:14
+    command: bash -c "npm install --only=prod && npm run start"
     volumes: 
       - ./dist:/usr/src/4devs-api/dist
+      - ./package.json:/usr/src/4devs-api/package.json
     ports:
       - "3333:3333"
     links:
