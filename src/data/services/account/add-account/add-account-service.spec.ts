@@ -75,6 +75,13 @@ describe('Add Account Service', () => {
     expect(account).toBeNull()
   })
 
+  test('Should throw if LoadAccountByEmailRepository throws', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(Promise.reject(new Error()))
+    const promise = sut.add(data())
+    await expect(promise).rejects.toThrow()
+  })
+
   test('Should call Hasher with correct value', async () => {
     const { sut, hasherStub } = makeSut()
     const hashSpy = jest.spyOn(hasherStub, 'hash')
