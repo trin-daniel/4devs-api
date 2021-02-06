@@ -1,7 +1,7 @@
 import { AddAccountService } from './add-account-service'
 import { Account } from '../../../../domain/entities'
 import { AccountDTO } from '../../../../domain/data-transfer-objects'
-import { AddAccountRepository, Hasher } from '../../../contracts'
+import { AddAccountRepository, Hasher, LoadAccountByEmailRepository } from '../../../contracts'
 
 const mockHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -36,20 +36,38 @@ const mockAccountRepository = (): AddAccountRepository => {
   return new AccountRepositoryStub()
 }
 
+const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
+  class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
+    public async loadByEmail (data: string): Promise<Account> {
+      return Promise.resolve(mockAccount())
+    }
+  }
+  return new LoadAccountByEmailRepositoryStub()
+}
+
 interface SutTypes {
   sut: AddAccountService,
   hasherStub: Hasher,
-  accountRepositoryStub: AddAccountRepository
+  accountRepositoryStub: AddAccountRepository,
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository,
 }
 
 const makeSut = (): SutTypes => {
+  const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
   const accountRepositoryStub = mockAccountRepository()
   const hasherStub = mockHasher()
-  const sut = new AddAccountService(hasherStub, accountRepositoryStub)
-  return { sut, hasherStub, accountRepositoryStub }
+  const sut = new AddAccountService(hasherStub, accountRepositoryStub, loadAccountByEmailRepositoryStub)
+  return { sut, hasherStub, accountRepositoryStub, loadAccountByEmailRepositoryStub }
 }
 
 describe('Add Account Service', () => {
+  test('Should call LoadAccountByEmailRepository with correct e-mail address', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    const loadByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+    await sut.add(data())
+    expect(loadByEmailSpy).toHaveBeenCalledWith(data().email)
+  })
+
   test('Should call Hasher with correct value', async () => {
     const { sut, hasherStub } = makeSut()
     const hashSpy = jest.spyOn(hasherStub, 'hash')
