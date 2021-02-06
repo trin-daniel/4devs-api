@@ -101,20 +101,6 @@ describe('Signup Controller', () => {
     expect(response).toEqual(serverError(new ServerError()))
   })
 
-  test('Should return 200 if valid data is provided', async () => {
-    const { sut } = makeSut()
-    const request = mockRequest()
-    const response = await sut.handle(request)
-    const result = Object.assign({}, request.body,
-      {
-        id: '507f1f77bcf86cd799439011',
-        password: 'hash'
-      },
-      delete request.body.confirmation
-    )
-    expect(response).toEqual(ok(result))
-  })
-
   test('Should call Authentication with correct credentials', async () => {
     const { sut, authenticationStub } = makeSut()
     const authSpy = jest.spyOn(authenticationStub, 'auth')
@@ -130,5 +116,12 @@ describe('Signup Controller', () => {
     const request = mockRequest()
     const response = await sut.handle(request)
     expect(response).toEqual(serverError(new ServerError()))
+  })
+
+  test('Should return 200 if valid data are provided', async () => {
+    const { sut } = makeSut()
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(ok({ token: 'any_token' }))
   })
 })
