@@ -1,16 +1,18 @@
 import { SignupController } from './signup-controller'
 import { Account } from '../../../domain/entities'
 import { AddAccount } from '../../../domain/use-cases/account/add-account'
-import { AccountDTO } from '../../../domain/data-transfer-objects'
+import { AccountDTO, AuthenticationDTO } from '../../../domain/data-transfer-objects'
 import { ServerError } from '../../errors'
 import { Request } from '../../contracts'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { Validator } from '../../contracts/validator'
+import { Authentication } from '../../../domain/use-cases/authentication/authentication'
 
 interface SutTypes {
   sut: SignupController,
   addAccountStub: AddAccount,
-  validatorStub: Validator
+  validatorStub: Validator,
+  authenticationStub: Authentication,
 }
 
 const mockRequest = (): Request => ({
@@ -48,11 +50,21 @@ const mockValidator = (): Validator => {
   return new ValidatorStub()
 }
 
+const mockAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth (data: AuthenticationDTO): Promise<string> {
+      return Promise.resolve('any_token')
+    }
+  }
+  return new AuthenticationStub()
+}
+
 const makeSut = (): SutTypes => {
+  const authenticationStub = mockAuthentication()
   const validatorStub = mockValidator()
   const addAccountStub = mockAddAccount()
-  const sut = new SignupController(validatorStub, addAccountStub)
-  return { sut, validatorStub, addAccountStub }
+  const sut = new SignupController(validatorStub, addAccountStub, authenticationStub)
+  return { sut, validatorStub, addAccountStub, authenticationStub }
 }
 
 describe('Signup Controller', () => {
@@ -101,5 +113,14 @@ describe('Signup Controller', () => {
       delete request.body.confirmation
     )
     expect(response).toEqual(ok(result))
+  })
+
+  test('Should call Authentication with correct credentials', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    const request = mockRequest()
+    const { email, password } = request.body
+    await sut.handle(request)
+    expect(authSpy).toHaveBeenCalledWith({ email, password })
   })
 })
