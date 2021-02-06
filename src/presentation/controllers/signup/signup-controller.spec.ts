@@ -2,9 +2,9 @@ import { SignupController } from './signup-controller'
 import { Account } from '../../../domain/entities'
 import { AddAccount } from '../../../domain/use-cases/account/add-account'
 import { AccountDTO, AuthenticationDTO } from '../../../domain/data-transfer-objects'
-import { ServerError } from '../../errors'
+import { EmailInUseError, ServerError } from '../../errors'
 import { Request } from '../../contracts'
-import { badRequest, ok, serverError } from '../../helpers/http-helper'
+import { badRequest, forbidden, ok, serverError } from '../../helpers/http-helper'
 import { Validator } from '../../contracts/validator'
 import { Authentication } from '../../../domain/use-cases/authentication/authentication'
 
@@ -91,6 +91,14 @@ describe('Signup Controller', () => {
     await sut.handle(request)
     const data = Object.assign({}, request.body, delete request.body.confirmation)
     expect(addSpy).toHaveBeenCalledWith(data)
+  })
+
+  test('Should return 403 if AddAccount returns null', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(Promise.resolve(null))
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(forbidden(new EmailInUseError()))
   })
 
   test('Should return 500 if AddAccount throws', async () => {
