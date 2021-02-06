@@ -6,5 +6,5 @@ import { AddAccount } from '../../../../../domain/use-cases/account/add-account'
 export const addAccountService = (): AddAccount => {
   const accountRepository = new AccountRepository()
   const bcryptAdapter = new BcryptAdapter(12)
-  return new AddAccountService(bcryptAdapter, accountRepository)
+  return new AddAccountService(bcryptAdapter, accountRepository, accountRepository)
 }
