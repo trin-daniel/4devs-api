@@ -1,9 +1,11 @@
+import { AddSurvey } from '../../../domain/use-cases/survey/add-survey'
 import { Controller, Request, Response, Validator } from '../../contracts'
 import { badRequest } from '../../helpers/http-helper'
 
 export class AddSurveyController implements Controller {
   constructor (
-    private readonly validator: Validator
+    private readonly validator: Validator,
+    private readonly addSurvey: AddSurvey
   ) {}
 
   async handle (request: Request<any>): Promise<Response<any>> {
@@ -12,6 +14,7 @@ export class AddSurveyController implements Controller {
     if (error) {
       return badRequest(error)
     }
+    await this.addSurvey.add({ question, answers })
     return Promise.resolve(null)
   }
 }
