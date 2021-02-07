@@ -2,7 +2,7 @@ import { AddSurveyController } from './add-survey-controller'
 import { AddSurvey } from '../../../domain/use-cases/survey/add-survey'
 import { SurveyDTO } from '../../../domain/data-transfer-objects'
 import { Request, Validator } from '../../contracts'
-import { badRequest, serverError } from '../../helpers/http-helper'
+import { badRequest, noContent, serverError } from '../../helpers/http-helper'
 
 const mockRequest = (): Request => ({
   body:
@@ -80,5 +80,12 @@ describe('Add Survey Controller', () => {
     const request = mockRequest()
     const response = await sut.handle(request)
     expect(response).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 204 if AddSurvey succeeds', async () => {
+    const { sut } = makeSut()
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(noContent())
   })
 })
