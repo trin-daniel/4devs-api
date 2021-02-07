@@ -3,9 +3,8 @@ import { Account } from '../../../domain/entities'
 import { AddAccount } from '../../../domain/use-cases/account/add-account'
 import { AccountDTO, AuthenticationDTO } from '../../../domain/data-transfer-objects'
 import { EmailInUseError, ServerError } from '../../errors'
-import { Request } from '../../contracts'
+import { Request, Validator } from '../../contracts'
 import { badRequest, forbidden, ok, serverError } from '../../helpers/http-helper'
-import { Validator } from '../../contracts/validator'
 import { Authentication } from '../../../domain/use-cases/authentication/authentication'
 
 interface SutTypes {

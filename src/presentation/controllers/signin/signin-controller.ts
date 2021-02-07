@@ -1,6 +1,5 @@
 import { Authentication } from '../../../domain/use-cases/authentication/authentication'
-import { Validator } from '../../contracts/validator'
-import { Controller, Request, Response } from '../../contracts'
+import { Controller, Request, Response, Validator } from '../../contracts'
 import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'
 
 export class SigninController implements Controller {

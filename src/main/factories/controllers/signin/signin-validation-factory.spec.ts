@@ -1,6 +1,6 @@
 import { signinValidationFactory } from './signin-validation-factory'
-import { Validator } from '../../../../presentation/contracts/validator'
-import { EmailValidator } from '../../../../presentation/contracts/email-validator'
+import { Validator } from '../../../../presentation/contracts'
+import { EmailValidator } from '../../../../validation/contracts/email-validator'
 import { EmailFieldValidator, RequiredFieldValidator, ValidatorComposite } from '../../../../validation/validators'
 
 const mockEmailValidator = (): EmailValidator => {
