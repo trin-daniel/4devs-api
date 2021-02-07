@@ -1,4 +1,4 @@
-import { SurveyDTO } from '../../../domain/data-transfer-objects'
+import { SurveyDTO } from '../../../domain/dtos'
 import { AddSurvey } from '../../../domain/use-cases/survey/add-survey'
 import { AddSurveyRepository } from '../../contracts'
 

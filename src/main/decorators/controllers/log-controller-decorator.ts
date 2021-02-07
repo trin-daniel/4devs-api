@@ -7,11 +7,10 @@ export class LogControllerDecorator implements Controller {
     private readonly logErrorRepository: LogErrorRepository
   ) {}
 
-  async handle (request: Request<any>): Promise<Response<any>> {
+  async handle (request: Request): Promise<Response> {
     const response = await this.controller.handle(request)
-    if (response.statusCode === 500) {
-      await this.logErrorRepository.logError(response.body.stack)
-    }
+    response.statusCode === 500 &&
+    await this.logErrorRepository.logError(response.body.stack)
     return response
   }
 }

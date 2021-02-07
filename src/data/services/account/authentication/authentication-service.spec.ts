@@ -1,6 +1,6 @@
 import { AuthenticationService } from './authentication-service'
 import { Account } from '../../../../domain/entities'
-import { AuthenticationDTO } from '../../../../domain/data-transfer-objects'
+import { AuthenticationDTO } from '../../../../domain/dtos'
 import { Encrypter, HashCompare, LoadAccountByEmailRepository, UpdateTokenRepository } from '../../../contracts'
 
 interface SutTypes {

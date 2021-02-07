@@ -1,5 +1,5 @@
 import { Authentication } from '../../../../domain/use-cases/authentication/authentication'
-import { AuthenticationDTO } from '../../../../domain/data-transfer-objects'
+import { AuthenticationDTO } from '../../../../domain/dtos'
 import { Encrypter, HashCompare, LoadAccountByEmailRepository, UpdateTokenRepository } from '../../../contracts'
 
 export class AuthenticationService implements Authentication {

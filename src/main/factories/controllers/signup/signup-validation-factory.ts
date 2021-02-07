@@ -2,7 +2,7 @@ import { Validator } from '../../../../presentation/contracts/validator'
 import { EmailValidatorAdapter } from '../../../../infra/adapters/validators/email-validator-adapter'
 import { CompareFieldsValidator, EmailFieldValidator, RequiredFieldValidator, ValidatorComposite } from '../../../../validation/validators'
 
-export const signupValidationFactory = (): Validator => {
+export const SignupValidationFactory = (): Validator => {
   const validators: Validator[] = []
   const requiredFields = ['name', 'email', 'password', 'confirmation']
   for (const field of requiredFields) {

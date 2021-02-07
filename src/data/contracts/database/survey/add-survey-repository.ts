@@ -1,4 +1,4 @@
-import { SurveyDTO } from '../../../../domain/data-transfer-objects'
+import { SurveyDTO } from '../../../../domain/dtos'
 
 export interface AddSurveyRepository {
   add (data: SurveyDTO): Promise<void>

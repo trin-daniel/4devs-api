@@ -1,4 +1,4 @@
-import { SurveyDTO } from '../../../../../domain/data-transfer-objects'
+import { SurveyDTO } from '../../../../../domain/dtos'
 import { AddSurveyRepository } from '../../../../../data/contracts'
 import { MongoHelper } from '../../helper/mongo-helper'
 

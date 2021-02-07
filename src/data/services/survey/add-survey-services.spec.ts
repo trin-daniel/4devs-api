@@ -1,5 +1,5 @@
 import { AddSurveyServices } from './add-survey-services'
-import { SurveyDTO } from '../../../domain/data-transfer-objects'
+import { SurveyDTO } from '../../../domain/dtos'
 import { AddSurveyRepository } from '../../contracts'
 
 const mockAddSurveyRepository = (): AddSurveyRepository => {

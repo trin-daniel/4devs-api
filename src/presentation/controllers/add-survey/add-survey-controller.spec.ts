@@ -1,6 +1,6 @@
 import { AddSurveyController } from './add-survey-controller'
 import { AddSurvey } from '../../../domain/use-cases/survey/add-survey'
-import { SurveyDTO } from '../../../domain/data-transfer-objects'
+import { SurveyDTO } from '../../../domain/dtos'
 import { Request, Validator } from '../../contracts'
 import { badRequest, noContent, serverError } from '../../helpers/http-helper'
 

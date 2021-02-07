@@ -1,5 +1,5 @@
 import { SurveyMongoRepository } from './survey-mongo-repository'
-import { SurveyDTO } from '../../../../../domain/data-transfer-objects'
+import { SurveyDTO } from '../../../../../domain/dtos'
 import { MongoHelper } from '../../helper/mongo-helper'
 
 const mockSurveyDTO = (): SurveyDTO => ({

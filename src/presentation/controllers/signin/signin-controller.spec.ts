@@ -1,6 +1,6 @@
 import { SigninController } from './signin-controller'
 import { Authentication } from '../../../domain/use-cases/authentication/authentication'
-import { AuthenticationDTO } from '../../../domain/data-transfer-objects'
+import { AuthenticationDTO } from '../../../domain/dtos'
 import { Request, Validator } from '../../contracts'
 import { ServerError } from '../../errors'
 import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'

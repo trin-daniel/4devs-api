@@ -1,4 +1,4 @@
-import { signinValidationFactory } from './signin-validation-factory'
+import { SigninValidationFactory } from './signin-validation-factory'
 import { Validator } from '../../../../presentation/contracts'
 import { EmailValidator } from '../../../../validation/contracts/email-validator'
 import { EmailFieldValidator, RequiredFieldValidator, ValidatorComposite } from '../../../../validation/validators'
@@ -16,7 +16,7 @@ jest.mock('../../../../validation/validators/validator-composite')
 
 describe('Signin Validation Factory', () => {
   test('Should call ValidatorComposite with all validators', () => {
-    signinValidationFactory()
+    SigninValidationFactory()
     const validators: Validator[] = []
     const requiredFields = ['email', 'password']
     for (const field of requiredFields) {

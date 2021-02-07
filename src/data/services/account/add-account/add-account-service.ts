@@ -1,5 +1,5 @@
-import { AccountDTO } from '../../../../domain/data-transfer-objects'
 import { Account } from '../../../../domain/entities'
+import { AccountDTO } from '../../../../domain/dtos'
 import { AddAccount } from '../../../../domain/use-cases/account/add-account'
 import { AddAccountRepository, Hasher, LoadAccountByEmailRepository } from '../../../contracts'
 
@@ -11,10 +11,11 @@ export class AddAccountService implements AddAccount {
   ) {}
 
   public async add (data: AccountDTO): Promise<Account> {
-    const account = await this.loadAccountByEmailRepository.loadByEmail(data.email)
+    const { email, password } = data
+    const account = await this.loadAccountByEmailRepository.loadByEmail(email)
     if (!account) {
-      const password = await this.hasher.hash(data.password)
-      const account = await this.accountRepository.add({ ...data, password })
+      const hash = await this.hasher.hash(password)
+      const account = await this.accountRepository.add({ ...data, password: hash })
       return account
     }
     return null

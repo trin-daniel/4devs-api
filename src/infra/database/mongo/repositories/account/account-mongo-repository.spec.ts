@@ -1,12 +1,12 @@
-import { AccountRepository } from './account-repository'
+import { AccountMongoRepository } from './account-mongo-repository'
 import { MongoHelper } from '../../helper/mongo-helper'
 
 interface SutTypes {
-  sut: AccountRepository
+  sut: AccountMongoRepository
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new AccountRepository()
+  const sut = new AccountMongoRepository()
   return { sut }
 }
 
