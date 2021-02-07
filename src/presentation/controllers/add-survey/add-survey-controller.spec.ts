@@ -1,5 +1,6 @@
 import { AddSurveyController } from './add-survey-controller'
 import { Request, Validator } from '../../contracts'
+import { badRequest } from '../../helpers/http-helper'
 
 const mockRequest = (): Request => ({
   body:
@@ -42,5 +43,13 @@ describe('Add Survey Controller', () => {
     const request = mockRequest()
     await sut.handle(request)
     expect(validateSpy).toHaveBeenCalledWith(request.body)
+  })
+
+  test('Should return 400 if validator returns an error', async () => {
+    const { sut, validatorStub } = makeSut()
+    jest.spyOn(validatorStub, 'validate').mockReturnValueOnce(new Error())
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(badRequest(new Error()))
   })
 })
