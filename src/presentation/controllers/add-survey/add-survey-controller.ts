@@ -1,6 +1,6 @@
 import { AddSurvey } from '../../../domain/use-cases/survey/add-survey'
 import { Controller, Request, Response, Validator } from '../../contracts'
-import { badRequest, serverError } from '../../helpers/http-helper'
+import { badRequest, noContent, serverError } from '../../helpers/http-helper'
 
 export class AddSurveyController implements Controller {
   constructor (
@@ -16,7 +16,7 @@ export class AddSurveyController implements Controller {
         return badRequest(error)
       }
       await this.addSurvey.add({ question, answers })
-      return null
+      return noContent()
     } catch (error) {
       return serverError(error)
     }

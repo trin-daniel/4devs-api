@@ -6,6 +6,11 @@ export const ok = (data: any): Response => ({
   body: data
 })
 
+export const noContent = (): Response => ({
+  statusCode: 204,
+  body: null
+})
+
 export const badRequest = (error: Error): Response => ({
   statusCode: 400,
   body: error
