@@ -37,7 +37,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Add Survey Controller', () => {
-  test('Should call Validator with correct values', async () => {
+  test('Should call validator with correct values', async () => {
     const { sut, validatorStub } = makeSut()
     const validateSpy = jest.spyOn(validatorStub, 'validate')
     const request = mockRequest()
