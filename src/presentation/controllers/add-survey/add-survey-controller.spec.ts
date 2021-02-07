@@ -1,4 +1,6 @@
 import { AddSurveyController } from './add-survey-controller'
+import { AddSurvey } from '../../../domain/use-cases/survey/add-survey'
+import { SurveyDTO } from '../../../domain/data-transfer-objects'
 import { Request, Validator } from '../../contracts'
 import { badRequest } from '../../helpers/http-helper'
 
@@ -25,15 +27,26 @@ const mockValidator = (): Validator => {
   return new ValidatorStub()
 }
 
+const mockAddSurveyStub = (): AddSurvey => {
+  class AddSurveyStub implements AddSurvey {
+    public async add (data: SurveyDTO): Promise<void> {
+      return Promise.resolve()
+    }
+  }
+  return new AddSurveyStub()
+}
+
 interface SutTypes {
   sut: AddSurveyController,
-  validatorStub: Validator
+  validatorStub: Validator,
+  addSurveyStub: AddSurvey
 }
 
 const makeSut = (): SutTypes => {
+  const addSurveyStub = mockAddSurveyStub()
   const validatorStub = mockValidator()
-  const sut = new AddSurveyController(validatorStub)
-  return { sut, validatorStub }
+  const sut = new AddSurveyController(validatorStub, addSurveyStub)
+  return { sut, validatorStub, addSurveyStub }
 }
 
 describe('Add Survey Controller', () => {
@@ -51,5 +64,13 @@ describe('Add Survey Controller', () => {
     const request = mockRequest()
     const response = await sut.handle(request)
     expect(response).toEqual(badRequest(new Error()))
+  })
+
+  test('Should call AddSurvey with correct values', async () => {
+    const { sut, addSurveyStub } = makeSut()
+    const addSpy = jest.spyOn(addSurveyStub, 'add')
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(addSpy).toHaveBeenCalledWith(request.body)
   })
 })
