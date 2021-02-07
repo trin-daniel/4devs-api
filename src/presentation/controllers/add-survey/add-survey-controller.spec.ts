@@ -2,7 +2,7 @@ import { AddSurveyController } from './add-survey-controller'
 import { AddSurvey } from '../../../domain/use-cases/survey/add-survey'
 import { SurveyDTO } from '../../../domain/data-transfer-objects'
 import { Request, Validator } from '../../contracts'
-import { badRequest } from '../../helpers/http-helper'
+import { badRequest, serverError } from '../../helpers/http-helper'
 
 const mockRequest = (): Request => ({
   body:
@@ -72,5 +72,13 @@ describe('Add Survey Controller', () => {
     const request = mockRequest()
     await sut.handle(request)
     expect(addSpy).toHaveBeenCalledWith(request.body)
+  })
+
+  test('Should return 500 if AddSurvey throws exception', async () => {
+    const { sut, addSurveyStub } = makeSut()
+    jest.spyOn(addSurveyStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(serverError(new Error()))
   })
 })
