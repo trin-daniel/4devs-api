@@ -1,7 +1,7 @@
 import { SigninValidationFactory } from './signin-validation-factory'
-import { Validator } from '../../../../presentation/contracts'
-import { EmailValidator } from '../../../../validation/contracts/email-validator'
-import { EmailFieldValidator, RequiredFieldValidator, ValidatorComposite } from '../../../../validation/validators'
+import { Validator } from '../../../../../presentation/contracts'
+import { EmailValidator } from '../../../../../validation/contracts/email-validator'
+import { EmailFieldValidator, RequiredFieldValidator, ValidatorComposite } from '../../../../../validation/validators'
 
 const mockEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -12,7 +12,7 @@ const mockEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
-jest.mock('../../../../validation/validators/validator-composite')
+jest.mock('../../../../../validation/validators/validator-composite')
 
 describe('Signin Validation Factory', () => {
   test('Should call ValidatorComposite with all validators', () => {

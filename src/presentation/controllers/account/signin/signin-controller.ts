@@ -1,12 +1,12 @@
-import { Authentication } from '../../../domain/use-cases/authentication/authentication'
-import { Controller, Request, Response, Validator } from '../../contracts'
-import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'
+import { Authentication } from '../../../../domain/use-cases/authentication/authentication'
+import { Controller, Request, Response, Validator } from '../../../contracts'
+import { badRequest, ok, serverError, unauthorized } from '../../../helpers/http-helper'
 
 export class SigninController implements Controller {
   constructor (
     private readonly validator: Validator,
     private readonly authentication: Authentication
-  ) {}
+  ) { }
 
   async handle (request: Request<any>): Promise<Response<any>> {
     try {
