@@ -30,26 +30,27 @@ const mockAccount = (): Account => (
 
 const mockLoadAccountByToken = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
-    async load (token: string): Promise<Account> {
+    async load (token: string, role?: string): Promise<Account> {
       return Promise.resolve(mockAccount())
     }
   }
   return new LoadAccountByTokenStub()
 }
 
-const makeSut = (): SutTypes => {
+const makeSut = (role?: string): SutTypes => {
   const loadAccountByTokenStub = mockLoadAccountByToken()
-  const sut = new AuthMiddleware(loadAccountByTokenStub)
+  const sut = new AuthMiddleware(loadAccountByTokenStub, role)
   return { sut, loadAccountByTokenStub }
 }
 
 describe('Auth Middleware', () => {
-  test('Should call LoadAccountByToken with the correct token property', async () => {
-    const { sut, loadAccountByTokenStub } = makeSut()
+  test('Should call LoadAccountByToken with the correct values', async () => {
+    const role = 'admin'
+    const { sut, loadAccountByTokenStub } = makeSut(role)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     const request = mockRequest()
     await sut.handle(request)
-    expect(loadSpy).toHaveBeenCalledWith(request.headers['x-access-token'])
+    expect(loadSpy).toHaveBeenCalledWith(request.headers['x-access-token'], role)
   })
 
   test('Should return 403 if no x-access-token property exists in headers', async () => {
