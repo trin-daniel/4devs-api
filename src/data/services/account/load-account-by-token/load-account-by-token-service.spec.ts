@@ -71,5 +71,14 @@ describe('Load Account By Token Service', () => {
       await sut.load(token, role)
       expect(loadByTokenSpy).toHaveBeenCalledWith(token, role)
     })
+
+    test('Should return null if LoadAccountByTokenRepository returns null', async () => {
+      const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+      jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(Promise.resolve(null))
+      const token = 'any_token'
+      const role = 'admin'
+      const account = await sut.load(token, role)
+      expect(account).toBeNull()
+    })
   })
 })
