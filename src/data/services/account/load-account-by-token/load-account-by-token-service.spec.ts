@@ -1,9 +1,11 @@
 import { LoadAccountByTokenService } from './load-account-by-token-service'
-import { Decrypter } from '../../../contracts'
+import { Decrypter, LoadAccountByTokenRepository } from '../../../contracts'
+import { Account } from '../../../../domain/entities'
 
 interface SutTypes {
   sut: LoadAccountByTokenService,
-  decrypterStub: Decrypter
+  decrypterStub: Decrypter,
+  loadAccountByTokenRepositoryStub: LoadAccountByTokenRepository
 }
 
 const mockDecrypter = (): Decrypter => {
@@ -15,10 +17,29 @@ const mockDecrypter = (): Decrypter => {
   return new DecrypterStub()
 }
 
+const mockAccount = (): Account => (
+  {
+    id: '507f1f77bcf86cd799439011',
+    name: 'any_name',
+    email: 'any_email@gmail.com',
+    password: 'hash'
+  }
+)
+
+const mockLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
+  class LoadAccountByTokenRepositoryStub implements LoadAccountByTokenRepository {
+    public async loadByToken (token: string, role?: string): Promise<Account> {
+      return Promise.resolve(mockAccount())
+    }
+  }
+  return new LoadAccountByTokenRepositoryStub()
+}
+
 const makeSut = (): SutTypes => {
+  const loadAccountByTokenRepositoryStub = mockLoadAccountByTokenRepository()
   const decrypterStub = mockDecrypter()
-  const sut = new LoadAccountByTokenService(decrypterStub)
-  return { sut, decrypterStub }
+  const sut = new LoadAccountByTokenService(decrypterStub, loadAccountByTokenRepositoryStub)
+  return { sut, decrypterStub, loadAccountByTokenRepositoryStub }
 }
 
 describe('Load Account By Token Service', () => {
@@ -39,6 +60,16 @@ describe('Load Account By Token Service', () => {
       const role = 'admin'
       const account = await sut.load(token, role)
       expect(account).toBeNull()
+    })
+  })
+  describe('#LoadAccountByTokenRepository', () => {
+    test('Should call LoadAccountByTokenRepository with correct values', async () => {
+      const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+      const loadByTokenSpy = jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
+      const token = 'any_token'
+      const role = 'admin'
+      await sut.load(token, role)
+      expect(loadByTokenSpy).toHaveBeenCalledWith(token, role)
     })
   })
 })
