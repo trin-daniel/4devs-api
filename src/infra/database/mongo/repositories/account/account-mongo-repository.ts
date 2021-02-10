@@ -1,9 +1,13 @@
-import { AddAccountRepository, LoadAccountByEmailRepository, UpdateTokenRepository } from '../../../../../data/contracts'
+import { AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByTokenRepository, UpdateTokenRepository } from '../../../../../data/contracts'
 import { Account } from '../../../../../domain/entities'
 import { AccountDTO } from '../../../../../domain/dtos'
 import { MongoHelper } from '../../helper/mongo-helper'
 
-export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateTokenRepository {
+export class AccountMongoRepository implements
+AddAccountRepository,
+LoadAccountByEmailRepository,
+UpdateTokenRepository,
+LoadAccountByTokenRepository {
   public async add (data: AccountDTO): Promise<Account> {
     const collection = await MongoHelper.collection('accounts')
     const { ops } = await collection.insertOne(data)
@@ -14,6 +18,12 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
   public async loadByEmail (email: string): Promise<Account> {
     const collection = await MongoHelper.collection('accounts')
     const account = await collection.findOne({ email })
+    return account && MongoHelper.mapper<Account>(account)
+  }
+
+  public async loadByToken (token: string, role?: string): Promise<Account> {
+    const collection = await MongoHelper.collection('accounts')
+    const account = await collection.findOne({ token, role })
     return account && MongoHelper.mapper<Account>(account)
   }
 
