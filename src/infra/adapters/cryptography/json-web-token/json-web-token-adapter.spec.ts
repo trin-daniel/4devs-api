@@ -53,5 +53,11 @@ describe('Json Web Token Adapter', () => {
       await sut.decrypt('token')
       expect(verifySpy).toHaveBeenCalledWith('token', keySecret)
     })
+
+    test('Should return a value when verify succeeds', async () => {
+      const { sut } = makeSut()
+      const id = await sut.decrypt('token')
+      expect(id).toBe('any_value')
+    })
   })
 })
