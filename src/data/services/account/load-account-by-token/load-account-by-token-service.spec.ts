@@ -27,8 +27,18 @@ describe('Load Account By Token Service', () => {
       const { sut, decrypterStub } = makeSut()
       const decryptSpy = jest.spyOn(decrypterStub, 'decrypt')
       const token = 'any_token'
-      await sut.load(token)
+      const role = 'admin'
+      await sut.load(token, role)
       expect(decryptSpy).toHaveBeenCalledWith(token)
+    })
+
+    test('Should return null if Decrypter returns null', async () => {
+      const { sut, decrypterStub } = makeSut()
+      jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(Promise.resolve(null))
+      const token = 'any_token'
+      const role = 'admin'
+      const account = await sut.load(token, role)
+      expect(account).toBeNull()
     })
   })
 })
