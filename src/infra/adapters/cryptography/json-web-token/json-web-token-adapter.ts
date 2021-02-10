@@ -1,7 +1,7 @@
-import { Encrypter } from '../../../../data/contracts'
-import { sign } from 'jsonwebtoken'
+import { Encrypter, Decrypter } from '../../../../data/contracts'
+import { sign, verify } from 'jsonwebtoken'
 
-export class JsonWebTokenAdapter implements Encrypter {
+export class JsonWebTokenAdapter implements Encrypter, Decrypter {
   constructor (
     private readonly keySecret: string
   ) {}
@@ -9,5 +9,10 @@ export class JsonWebTokenAdapter implements Encrypter {
   async encrypt (value: string): Promise<string> {
     const token = await sign({ id: value }, this.keySecret, { expiresIn: '2d' })
     return token
+  }
+
+  async decrypt (value: string): Promise<string> {
+    await verify(value, this.keySecret)
+    return null
   }
 }
