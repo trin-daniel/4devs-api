@@ -61,6 +61,15 @@ describe('Load Account By Token Service', () => {
       const account = await sut.load(token, role)
       expect(account).toBeNull()
     })
+
+    test('Should throw if Decrypter throws', async () => {
+      const { sut, decrypterStub } = makeSut()
+      jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(Promise.reject(new Error()))
+      const token = 'any_token'
+      const role = 'admin'
+      const promise = sut.load(token, role)
+      await expect(promise).rejects.toThrow()
+    })
   })
   describe('#LoadAccountByTokenRepository', () => {
     test('Should call LoadAccountByTokenRepository with correct values', async () => {
