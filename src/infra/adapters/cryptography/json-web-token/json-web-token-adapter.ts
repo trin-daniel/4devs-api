@@ -12,7 +12,7 @@ export class JsonWebTokenAdapter implements Encrypter, Decrypter {
   }
 
   async decrypt (value: string): Promise<string> {
-    await verify(value, this.keySecret)
-    return null
+    const id = await verify(value, this.keySecret) as string
+    return id
   }
 }
