@@ -98,5 +98,23 @@ describe('Account Repository', () => {
       expect(account).toHaveProperty('id')
       expect(account).toHaveProperty('name')
     })
+
+    test('Should return an account if user role are provided', async () => {
+      const { sut } = makeSut()
+      const data =
+      {
+        token: 'any_token',
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'hash',
+        role: 'any_role'
+      }
+      const collection = await MongoHelper.collection('accounts')
+      await collection.insertOne(data)
+      const account = await sut.loadByToken(data.token, data.role)
+      expect(account).toBeTruthy()
+      expect(account).toHaveProperty('id')
+      expect(account).toHaveProperty('name')
+    })
   })
 })
