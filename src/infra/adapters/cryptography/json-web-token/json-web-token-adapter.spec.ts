@@ -16,6 +16,9 @@ jest.mock('jsonwebtoken', () => {
   return {
     async sign (): Promise<string> {
       return Promise.resolve('any_token')
+    },
+    async verify (): Promise<string> {
+      return Promise.resolve('any_value')
     }
   }
 })
@@ -40,6 +43,15 @@ describe('Json Web Token Adapter', () => {
       jest.spyOn(jsonwebtoken, 'sign').mockImplementationOnce(() => { throw new Error() })
       const promise = sut.encrypt('any_id')
       await expect(promise).rejects.toThrow()
+    })
+  })
+
+  describe('#Verify', () => {
+    test('Should call verify with correct values', async () => {
+      const { sut, keySecret } = makeSut()
+      const verifySpy = jest.spyOn(jsonwebtoken, 'verify')
+      await sut.decrypt('token')
+      expect(verifySpy).toHaveBeenCalledWith('token', keySecret)
     })
   })
 })
