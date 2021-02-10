@@ -116,5 +116,11 @@ describe('Account Repository', () => {
       expect(account).toHaveProperty('id')
       expect(account).toHaveProperty('name')
     })
+
+    test('Should return null if load by token returns null', async () => {
+      const { sut } = makeSut()
+      const account = await sut.loadByToken('any_token', 'any_role')
+      expect(account).toBeNull()
+    })
   })
 })
