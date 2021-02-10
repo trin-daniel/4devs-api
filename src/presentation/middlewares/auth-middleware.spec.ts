@@ -1,9 +1,9 @@
 import { AuthMiddleware } from './auth-middleware'
+import { Account } from '../../domain/entities'
 import { LoadAccountByToken } from '../../domain/use-cases/account/load-account-by-token'
 import { Request } from '../contracts'
-import { forbidden } from '../helpers/http-helper'
+import { forbidden, ok } from '../helpers/http-helper'
 import { AccessDeniedError } from '../errors'
-import { Account } from '../../domain/entities'
 
 interface SutTypes {
   sut: AuthMiddleware,
@@ -66,5 +66,12 @@ describe('Auth Middleware', () => {
     const request = mockRequest()
     const response = await sut.handle(request)
     expect(response).toEqual(forbidden(new AccessDeniedError()))
+  })
+
+  test('Should return 200 if LoadAccountByToken returns an account', async () => {
+    const { sut } = makeSut()
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(ok({ account_id: '507f1f77bcf86cd799439011' }))
   })
 })
