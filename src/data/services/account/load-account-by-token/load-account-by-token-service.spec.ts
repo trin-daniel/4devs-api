@@ -80,5 +80,13 @@ describe('Load Account By Token Service', () => {
       const account = await sut.load(token, role)
       expect(account).toBeNull()
     })
+
+    test('Should return an account on success', async () => {
+      const { sut } = makeSut()
+      const token = 'any_token'
+      const role = 'admin'
+      const account = await sut.load(token, role)
+      expect(account).toEqual(mockAccount())
+    })
   })
 })
