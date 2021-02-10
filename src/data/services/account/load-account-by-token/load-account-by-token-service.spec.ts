@@ -97,5 +97,14 @@ describe('Load Account By Token Service', () => {
       const account = await sut.load(token, role)
       expect(account).toEqual(mockAccount())
     })
+
+    test('Should throw if LoadAccountByTokenRepository throws', async () => {
+      const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+      jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(Promise.reject(new Error()))
+      const token = 'any_token'
+      const role = 'admin'
+      const promise = sut.load(token, role)
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
