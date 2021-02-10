@@ -80,4 +80,23 @@ describe('Account Repository', () => {
       expect(result.token).toBe('any_token')
     })
   })
+
+  describe('#LoadAccountByTokenRepository', () => {
+    test('Should return an account without passing the users role', async () => {
+      const { sut } = makeSut()
+      const data =
+      {
+        token: 'any_token',
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'hash'
+      }
+      const collection = await MongoHelper.collection('accounts')
+      await collection.insertOne(data)
+      const account = await sut.loadByToken(data.token)
+      expect(account).toBeTruthy()
+      expect(account).toHaveProperty('id')
+      expect(account).toHaveProperty('name')
+    })
+  })
 })
