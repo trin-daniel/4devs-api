@@ -1,6 +1,7 @@
 export * from './cryptography/hasher'
 export * from './cryptography/hash-compare'
 export * from './cryptography/encrypter'
+export * from './cryptography/decrypter'
 export * from './database/account/add-account-repository'
 export * from './database/log-error/log-error-repository'
 export * from './database/account/load-account-by-email-repository'
