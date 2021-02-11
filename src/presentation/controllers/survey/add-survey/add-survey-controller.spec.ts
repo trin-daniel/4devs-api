@@ -3,6 +3,7 @@ import { AddSurvey } from '../../../../domain/use-cases/survey/add-survey'
 import { SurveyDTO } from '../../../../domain/dtos'
 import { Request, Validator } from '../../../contracts'
 import { badRequest, noContent, serverError } from '../../../helpers/http-helper'
+import { reset, set } from 'mockdate'
 
 const mockRequest = (): Request => ({
   body:
@@ -14,7 +15,8 @@ const mockRequest = (): Request => ({
          image: 'any_image',
          answer: 'any_answer'
        }
-     ]
+     ],
+    date: new Date()
   }
 })
 
@@ -50,12 +52,15 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Add Survey Controller', () => {
+  beforeAll(() => set(new Date()))
+  afterAll(() => reset())
   test('Should call Validator with correct values', async () => {
     const { sut, validatorStub } = makeSut()
     const validateSpy = jest.spyOn(validatorStub, 'validate')
     const request = mockRequest()
+    const data = Object.assign({}, request.body, delete request.body.date)
     await sut.handle(request)
-    expect(validateSpy).toHaveBeenCalledWith(request.body)
+    expect(validateSpy).toHaveBeenCalledWith(data)
   })
 
   test('Should return 400 if Validator returns an error', async () => {

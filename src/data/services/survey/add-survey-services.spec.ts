@@ -1,6 +1,7 @@
 import { AddSurveyServices } from './add-survey-services'
 import { SurveyDTO } from '../../../domain/dtos'
 import { AddSurveyRepository } from '../../contracts'
+import { set, reset } from 'mockdate'
 
 const mockAddSurveyRepository = (): AddSurveyRepository => {
   class AddSurveyRepositoryStub implements AddSurveyRepository {
@@ -19,7 +20,8 @@ const mockSurveyDTO = (): SurveyDTO => ({
       image: 'any_images',
       answer: 'any_answer'
     }
-  ]
+  ],
+  date: new Date()
 })
 
 interface SutTypes {
@@ -34,6 +36,8 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Add Survey Services', () => {
+  beforeAll(() => set(new Date()))
+  afterAll(() => reset())
   test('Should call AddSurveyRepository with correct values', async () => {
     const { sut, addSurveyRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add')

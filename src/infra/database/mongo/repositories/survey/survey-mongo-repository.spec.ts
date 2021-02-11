@@ -13,7 +13,8 @@ const mockSurveyDTO = (): SurveyDTO => ({
       {
         answer: 'another_answer'
       }
-    ]
+    ],
+  date: new Date()
 })
 
 interface SutTypes {
