@@ -11,7 +11,7 @@ describe('Add Survey Route', () => {
   })
 
   describe('#POST/Surveys', () => {
-    test('Should return 204 on success', async () => {
+    test('Should return 403 if no token is provided', async () => {
       const data =
       {
         question: 'any_question',
@@ -25,7 +25,7 @@ describe('Add Survey Route', () => {
       await supertest(app)
         .post('/api/surveys')
         .send(data)
-        .expect(204)
+        .expect(403)
     })
   })
 })
