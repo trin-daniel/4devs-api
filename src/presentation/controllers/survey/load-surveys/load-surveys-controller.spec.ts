@@ -2,6 +2,7 @@ import { LoadSurveysController } from './load-surveys-controller'
 import { Surveys } from '../../../../domain/entities'
 import { LoadSurveys } from '../../../../domain/use-cases/survey/load-surveys'
 import { Request } from '../../../contracts'
+import { ok } from '../../../helpers/http-helper'
 import { set, reset } from 'mockdate'
 
 const mockSurveys = (): Surveys[] => (
@@ -58,6 +59,13 @@ describe('Load Surveys Controller', () => {
       const request = mockRequest()
       await sut.handle(request)
       expect(loadSpy).toHaveBeenCalled()
+    })
+
+    test('Should return 200 on success', async () => {
+      const { sut } = makeSut()
+      const request = mockRequest()
+      const response = await sut.handle(request)
+      expect(response).toEqual(ok(mockSurveys()))
     })
   })
 })
