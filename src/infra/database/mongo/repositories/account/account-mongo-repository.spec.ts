@@ -82,7 +82,7 @@ describe('Account Repository', () => {
   })
 
   describe('#LoadAccountByTokenRepository', () => {
-    test('Should return an account without passing the users role', async () => {
+    test('Should return an account if admin role are not provided', async () => {
       const { sut } = makeSut()
       const data =
       {
@@ -99,7 +99,7 @@ describe('Account Repository', () => {
       expect(account).toHaveProperty('name')
     })
 
-    test('Should return an account if user role are provided', async () => {
+    test('Should return an account if admin role are provided', async () => {
       const { sut } = makeSut()
       const data =
       {
@@ -107,7 +107,7 @@ describe('Account Repository', () => {
         name: 'any_name',
         email: 'any_email@gmail.com',
         password: 'hash',
-        role: 'any_role'
+        role: 'admin'
       }
       const collection = await MongoHelper.collection('accounts')
       await collection.insertOne(data)
@@ -115,6 +115,38 @@ describe('Account Repository', () => {
       expect(account).toBeTruthy()
       expect(account).toHaveProperty('id')
       expect(account).toHaveProperty('name')
+    })
+
+    test('Should return null if the admin role is wrong or is not provided', async () => {
+      const { sut } = makeSut()
+      const data =
+      {
+        token: 'any_token',
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'hash'
+      }
+      const collection = await MongoHelper.collection('accounts')
+      await collection.insertOne(data)
+      const account = await sut.loadByToken(data.token, 'any_role')
+      expect(account).toBeNull()
+    })
+
+    test('Should allow the admin to access any route if the admin role is provided', async () => {
+      const { sut } = makeSut()
+      const data =
+      {
+        token: 'any_token',
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'hash',
+        role: 'admin'
+      }
+      const collection = await MongoHelper.collection('accounts')
+      await collection.insertOne(data)
+      const account = await sut.loadByToken(data.token)
+      expect(account).toBeTruthy()
+      expect(account).toHaveProperty('token')
     })
 
     test('Should return null if load by token returns null', async () => {

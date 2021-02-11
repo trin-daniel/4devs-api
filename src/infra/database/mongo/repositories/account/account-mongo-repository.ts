@@ -23,7 +23,7 @@ LoadAccountByTokenRepository {
 
   public async loadByToken (token: string, role?: string): Promise<Account> {
     const collection = await MongoHelper.collection('accounts')
-    const account = await collection.findOne({ token, role })
+    const account = await collection.findOne({ token, $or: [{ role }, { role: 'admin' }] })
     return account && MongoHelper.mapper<Account>(account)
   }
 
