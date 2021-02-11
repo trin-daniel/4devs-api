@@ -2,7 +2,7 @@ import { LoadSurveysController } from './load-surveys-controller'
 import { Surveys } from '../../../../domain/entities'
 import { LoadSurveys } from '../../../../domain/use-cases/survey/load-surveys'
 import { Request } from '../../../contracts'
-import { ok } from '../../../helpers/http-helper'
+import { ok, serverError } from '../../../helpers/http-helper'
 import { set, reset } from 'mockdate'
 
 const mockSurveys = (): Surveys[] => (
@@ -66,6 +66,14 @@ describe('Load Surveys Controller', () => {
       const request = mockRequest()
       const response = await sut.handle(request)
       expect(response).toEqual(ok(mockSurveys()))
+    })
+
+    test('Should return 500 if LoadSurveys throws exception', async () => {
+      const { sut, loadSurveysStub } = makeSut()
+      jest.spyOn(loadSurveysStub, 'load').mockReturnValueOnce(Promise.reject(new Error()))
+      const request = mockRequest()
+      const response = await sut.handle(request)
+      expect(response).toEqual(serverError(new Error()))
     })
   })
 })
