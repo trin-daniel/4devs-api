@@ -1,6 +1,6 @@
 import { LoadSurveys } from '../../../../domain/use-cases/survey/load-surveys'
 import { Controller, Request, Response } from '../../../contracts'
-import { ok } from '../../../helpers/http-helper'
+import { ok, serverError } from '../../../helpers/http-helper'
 
 export class LoadSurveysController implements Controller {
   constructor (
@@ -8,7 +8,11 @@ export class LoadSurveysController implements Controller {
   ) {}
 
   async handle (request: Request): Promise<Response> {
-    const surveys = await this.loadSurveys.load()
-    return ok(surveys)
+    try {
+      const surveys = await this.loadSurveys.load()
+      return ok(surveys)
+    } catch (error) {
+      return serverError(error)
+    }
   }
 }
