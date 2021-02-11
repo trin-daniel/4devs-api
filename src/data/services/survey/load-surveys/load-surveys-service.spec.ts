@@ -1,6 +1,7 @@
 import { LoadSurveysService } from './load-surveys-service'
 import { LoadSurveysRepository } from '../../../contracts'
 import { Surveys } from '../../../../domain/entities'
+import { set, reset } from 'mockdate'
 
 interface SutTypes {
   sut: LoadSurveysService,
@@ -41,12 +42,21 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Load Surveys Service', () => {
-  describe('#LoadSurveysRepository', () => {
+  beforeAll(() => set(new Date()))
+  afterAll(() => reset())
+
+  describe('#LoadAll', () => {
     test('Should call LoadSurveysRepository', async () => {
       const { sut, loadSurveysRepositoryStub } = makeSut()
       const loadAllSpy = jest.spyOn(loadSurveysRepositoryStub, 'loadAll')
       await sut.load()
       expect(loadAllSpy).toHaveBeenCalled()
+    })
+
+    test('Should return all surveys when the case is successful', async () => {
+      const { sut } = makeSut()
+      const surveys = await sut.load()
+      expect(surveys).toEqual(mockSurveys())
     })
   })
 })
