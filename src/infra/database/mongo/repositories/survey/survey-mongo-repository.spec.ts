@@ -46,4 +46,15 @@ describe('Survey Mongo Repository', () => {
       expect(survey).toHaveProperty('answers')
     })
   })
+
+  describe('#LoadSurveysRepository', () => {
+    test('Should return all surveys if loadAll is successful', async () => {
+      const collection = await MongoHelper.collection('surveys')
+      await collection.insertOne(mockSurveyDTO())
+      const { sut } = makeSut()
+      const surveys = await sut.loadAll()
+      expect(surveys.length).toBe(1)
+      expect(surveys[0]).toHaveProperty('_id')
+    })
+  })
 })
