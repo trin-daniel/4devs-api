@@ -1,6 +1,6 @@
 import { AddSurveyServices } from './add-survey-services'
-import { SurveyDTO } from '../../../domain/dtos'
-import { AddSurveyRepository } from '../../contracts'
+import { SurveyDTO } from '../../../../domain/dtos'
+import { AddSurveyRepository } from '../../../contracts'
 import { set, reset } from 'mockdate'
 
 const mockAddSurveyRepository = (): AddSurveyRepository => {
@@ -38,19 +38,22 @@ const makeSut = (): SutTypes => {
 describe('Add Survey Services', () => {
   beforeAll(() => set(new Date()))
   afterAll(() => reset())
-  test('Should call AddSurveyRepository with correct values', async () => {
-    const { sut, addSurveyRepositoryStub } = makeSut()
-    const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add')
-    const survey = mockSurveyDTO()
-    await sut.add(survey)
-    expect(addSpy).toHaveBeenCalledWith(survey)
-  })
 
-  test('Should throw if AddSurveyRepository throws', async () => {
-    const { sut, addSurveyRepositoryStub } = makeSut()
-    jest.spyOn(addSurveyRepositoryStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
-    const survey = mockSurveyDTO()
-    const promise = sut.add(survey)
-    await expect(promise).rejects.toThrow()
+  describe('#AddSurveyRepository', () => {
+    test('Should call AddSurveyRepository with correct values', async () => {
+      const { sut, addSurveyRepositoryStub } = makeSut()
+      const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add')
+      const survey = mockSurveyDTO()
+      await sut.add(survey)
+      expect(addSpy).toHaveBeenCalledWith(survey)
+    })
+
+    test('Should throw if AddSurveyRepository throws', async () => {
+      const { sut, addSurveyRepositoryStub } = makeSut()
+      jest.spyOn(addSurveyRepositoryStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
+      const survey = mockSurveyDTO()
+      const promise = sut.add(survey)
+      await expect(promise).rejects.toThrow()
+    })
   })
 })

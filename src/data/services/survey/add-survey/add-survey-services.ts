@@ -1,6 +1,6 @@
-import { SurveyDTO } from '../../../domain/dtos'
-import { AddSurvey } from '../../../domain/use-cases/survey/add-survey'
-import { AddSurveyRepository } from '../../contracts'
+import { SurveyDTO } from '../../../../domain/dtos'
+import { AddSurvey } from '../../../../domain/use-cases/survey/add-survey'
+import { AddSurveyRepository } from '../../../contracts'
 
 export class AddSurveyServices implements AddSurvey {
   constructor (

@@ -4,11 +4,9 @@ import { AccountMongoRepository } from '../../../../../infra/database/mongo/repo
 import { AddAccount } from '../../../../../domain/use-cases/account/add-account'
 
 export const AddAccountServiceFactory = (): AddAccount => {
-  const accountMongoRepository = new AccountMongoRepository()
-  const bcryptAdapter = new BcryptAdapter(12)
   return new AddAccountService(
-    bcryptAdapter,
-    accountMongoRepository,
-    accountMongoRepository
+    new BcryptAdapter(12),
+    new AccountMongoRepository(),
+    new AccountMongoRepository()
   )
 }

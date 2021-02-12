@@ -6,13 +6,11 @@ import { AddAccountServiceFactory } from '../../../use-cases/account/add-account
 import { LogControllerDecoratorFactory } from '../../../decorators/log/log-controller-decorator-factory'
 
 export const SignupControllerFactory = (): Controller => {
-  const addAccountServiceFactory = AddAccountServiceFactory()
-  const signupValidationFactory = SignupValidationFactory()
-  const authenticationServiceFactory = AuthenticationServiceFactory()
-  const signupController = new SignupController(
-    signupValidationFactory,
-    addAccountServiceFactory,
-    authenticationServiceFactory
+  return LogControllerDecoratorFactory(
+    new SignupController(
+      SignupValidationFactory(),
+      AddAccountServiceFactory(),
+      AuthenticationServiceFactory()
+    )
   )
-  return LogControllerDecoratorFactory(signupController)
 }

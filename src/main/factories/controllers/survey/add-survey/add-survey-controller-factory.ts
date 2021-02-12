@@ -5,8 +5,9 @@ import { AddSurveyServiceFactory } from '../../../use-cases/survey/add-survey/ad
 import { AddSurveyValidationFactory } from './add-survey-validation-factory'
 
 export const AddSurveyControllerFactory = (): Controller => {
-  const addSurveyService = AddSurveyServiceFactory()
-  const addSurveyValidationFactory = AddSurveyValidationFactory()
-  const addSurveyController = new AddSurveyController(addSurveyValidationFactory, addSurveyService)
-  return LogControllerDecoratorFactory(addSurveyController)
+  return LogControllerDecoratorFactory(
+    new AddSurveyController(
+      AddSurveyValidationFactory(),
+      AddSurveyServiceFactory()
+    ))
 }

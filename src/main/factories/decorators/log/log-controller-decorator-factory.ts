@@ -3,6 +3,5 @@ import { LogControllerDecorator } from '../../../decorators/controllers/log-cont
 import { LogMongoRepository } from '../../../../infra/database/mongo/repositories/log-error/log-mongo-repository'
 
 export const LogControllerDecoratorFactory = (controller: Controller): Controller => {
-  const logMongoRepository = new LogMongoRepository()
-  return new LogControllerDecorator(controller, logMongoRepository)
+  return new LogControllerDecorator(controller, new LogMongoRepository())
 }

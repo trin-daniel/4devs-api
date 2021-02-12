@@ -5,11 +5,10 @@ import { AuthenticationServiceFactory } from '../../../use-cases/account/authent
 import { LogControllerDecoratorFactory } from '../../../decorators/log/log-controller-decorator-factory'
 
 export const signinControllerFactory = (): Controller => {
-  const signinValidationFactory = SigninValidationFactory()
-  const authenticationServiceFactory = AuthenticationServiceFactory()
-  const signinController = new SigninController(
-    signinValidationFactory,
-    authenticationServiceFactory
+  return LogControllerDecoratorFactory(
+    new SigninController(
+      SigninValidationFactory(),
+      AuthenticationServiceFactory()
+    )
   )
-  return LogControllerDecoratorFactory(signinController)
 }

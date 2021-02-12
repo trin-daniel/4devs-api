@@ -6,13 +6,10 @@ import { JsonWebTokenAdapter } from '../../../../../infra/adapters/cryptography/
 import env from '../../../../config/env'
 
 export const AuthenticationServiceFactory = (): Authentication => {
-  const accountMongoRepository = new AccountMongoRepository()
-  const bcryptAdapter = new BcryptAdapter(12)
-  const jsonWebTokenAdapter = new JsonWebTokenAdapter(env.SECRET_KEY)
   return new AuthenticationService(
-    accountMongoRepository,
-    bcryptAdapter,
-    jsonWebTokenAdapter,
-    accountMongoRepository
+    new AccountMongoRepository(),
+    new BcryptAdapter(12),
+    new JsonWebTokenAdapter(env.SECRET_KEY),
+    new AccountMongoRepository()
   )
 }

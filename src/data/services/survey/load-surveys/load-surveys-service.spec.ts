@@ -45,7 +45,7 @@ describe('Load Surveys Service', () => {
   beforeAll(() => set(new Date()))
   afterAll(() => reset())
 
-  describe('#LoadAll', () => {
+  describe('#LoadSurveysRepository', () => {
     test('Should call LoadSurveysRepository', async () => {
       const { sut, loadSurveysRepositoryStub } = makeSut()
       const loadAllSpy = jest.spyOn(loadSurveysRepositoryStub, 'loadAll')
