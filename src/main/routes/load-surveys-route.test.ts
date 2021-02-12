@@ -46,7 +46,7 @@ describe('Load Surveys Route', () => {
   afterAll(async () => await MongoHelper.disconnect())
   beforeEach(async () => {
     const collection = await MongoHelper.collection('accounts')
-    const surveysCollection = await MongoHelper.collection('accounts')
+    const surveysCollection = await MongoHelper.collection('surveys')
     await collection.deleteMany({})
     await surveysCollection.deleteMany({})
   })
