@@ -1,0 +1,45 @@
+import { Surveys } from '@domain/entities'
+import { LoadSurveyByIdService } from '@data/services/survey/load-survey-by-id/load-survey-by-id-service'
+import { LoadSurveyByIdRepository } from '@data/contracts'
+
+type SutTypes = {
+  sut: LoadSurveyByIdService,
+  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository
+}
+
+const mockSurveys = (): Surveys => (
+
+  {
+    id: '507f1f77bcf86cd799439011',
+    question: 'any_question',
+    answers: [{ image: 'any_image', answer: 'any_answer' }],
+    date: new Date()
+  }
+
+)
+
+const mockLoadSurveyByIdRepository = (): LoadSurveyByIdRepository => {
+  class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
+    async loadById (id: string): Promise<Surveys> {
+      return Promise.resolve(mockSurveys())
+    }
+  }
+  return new LoadSurveyByIdRepositoryStub()
+}
+
+const makeSut = (): SutTypes => {
+  const loadSurveyByIdRepositoryStub = mockLoadSurveyByIdRepository()
+  const sut = new LoadSurveyByIdService(loadSurveyByIdRepositoryStub)
+  return { sut, loadSurveyByIdRepositoryStub }
+}
+
+describe('Load Survey By Id Service', () => {
+  describe('#LoadSurveyByIdRepository', () => {
+    test('Should call LoadSurveyByIdRepository with correct id', async () => {
+      const { sut, loadSurveyByIdRepositoryStub } = makeSut()
+      const loadByIdSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById')
+      await sut.load('any_id')
+      expect(loadByIdSpy).toHaveBeenCalledWith('any_id')
+    })
+  })
+})
