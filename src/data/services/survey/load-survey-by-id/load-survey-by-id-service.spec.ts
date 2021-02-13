@@ -51,5 +51,12 @@ describe('Load Survey By Id Service', () => {
       const survey = await sut.load('any_id')
       expect(survey).toEqual(mockSurveys())
     })
+
+    test('Should throw if LoadSurveyByIdRepository throws', async () => {
+      const { sut, loadSurveyByIdRepositoryStub } = makeSut()
+      jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById').mockRejectedValue(new Error())
+      const promise = sut.load('any_id')
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
