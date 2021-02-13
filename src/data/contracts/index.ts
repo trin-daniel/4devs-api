@@ -9,3 +9,4 @@ export * from '@data/contracts/database/account/load-account-by-token-repository
 export * from '@data/contracts/database/account/update-token-repository'
 export * from '@data/contracts/database/survey/add-survey-repository'
 export * from '@data/contracts/database/survey/load-surveys-repository'
+export * from '@data/contracts/database/survey/load-survey-by-id-repository'
