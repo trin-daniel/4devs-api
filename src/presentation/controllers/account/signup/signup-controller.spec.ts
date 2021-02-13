@@ -1,11 +1,21 @@
-import { SignupController } from './signup-controller'
-import { Account } from '../../../../domain/entities'
-import { AddAccount } from '../../../../domain/use-cases/account/add-account'
-import { AccountDTO, AuthenticationDTO } from '../../../../domain/dtos'
-import { EmailInUseError, ServerError } from '../../../errors'
-import { Request, Validator } from '../../../contracts'
-import { badRequest, forbidden, ok, serverError } from '../../../helpers/http-helper'
-import { Authentication } from '../../../../domain/use-cases/authentication/authentication'
+import { Account } from '@domain/entities'
+import { AddAccount } from '@domain/use-cases/account/add-account'
+import { Authentication } from '@domain/use-cases/authentication/authentication'
+import
+{
+  AccountDTO,
+  AuthenticationDTO
+} from '@domain/dtos'
+import { SignupController } from '@presentation/controllers/account/signup/signup-controller'
+import { EmailInUseError, ServerError } from '@presentation/errors'
+import { Request, Validator } from '@presentation/contracts'
+import
+{
+  badRequest,
+  forbidden,
+  ok,
+  serverError
+} from '@presentation/helpers/http-helper'
 
 interface SutTypes {
   sut: SignupController,

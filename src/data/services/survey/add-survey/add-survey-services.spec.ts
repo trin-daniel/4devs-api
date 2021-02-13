@@ -1,6 +1,6 @@
-import { AddSurveyServices } from './add-survey-services'
-import { SurveyDTO } from '../../../../domain/dtos'
-import { AddSurveyRepository } from '../../../contracts'
+import { SurveyDTO } from '@domain/dtos'
+import { AddSurveyServices } from '@data/services/survey/add-survey/add-survey-services'
+import { AddSurveyRepository } from '@data/contracts'
 import { set, reset } from 'mockdate'
 
 const mockAddSurveyRepository = (): AddSurveyRepository => {

@@ -1,6 +1,10 @@
-import { LoadAccountByTokenService } from './load-account-by-token-service'
-import { Decrypter, LoadAccountByTokenRepository } from '../../../contracts'
-import { Account } from '../../../../domain/entities'
+import { Account } from '@domain/entities'
+import { LoadAccountByTokenService } from '@data/services/account/load-account-by-token/load-account-by-token-service'
+import
+{
+  Decrypter,
+  LoadAccountByTokenRepository
+} from '@data/contracts'
 
 interface SutTypes {
   sut: LoadAccountByTokenService,

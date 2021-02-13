@@ -1,5 +1,5 @@
-import { MongoHelper } from '../../infra/database/mongo/helper/mongo-helper'
-import app from '../config/app'
+import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
+import app from '@main/config/app'
 import supertest from 'supertest'
 
 describe('Signup Route', () => {

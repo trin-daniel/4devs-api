@@ -1,6 +1,10 @@
-import { ValidatorComposite } from './validator-composite'
-import { Validator } from '../../presentation/contracts/validator'
-import { InvalidParamError, MissingParamError } from '../../presentation/errors'
+import { ValidatorComposite } from '@validation/validators/validator-composite'
+import { Validator } from '@presentation/contracts/validator'
+import
+{
+  InvalidParamError,
+  MissingParamError
+} from '@presentation/errors'
 
 interface SutTypes {
   sut: ValidatorComposite,

@@ -1,7 +1,11 @@
-import { SurveyDTO } from '../../../../../domain/dtos'
-import { AddSurveyRepository, LoadSurveysRepository } from '../../../../../data/contracts'
-import { MongoHelper } from '../../helper/mongo-helper'
-import { Surveys } from '../../../../../domain/entities'
+import { SurveyDTO } from '@domain/dtos'
+import { Surveys } from '@domain/entities'
+import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
+import
+{
+  AddSurveyRepository,
+  LoadSurveysRepository
+} from '@data/contracts'
 
 export class SurveyMongoRepository implements AddSurveyRepository, LoadSurveysRepository {
   async add (data: SurveyDTO): Promise<void> {

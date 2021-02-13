@@ -1,6 +1,6 @@
-import { LoadSurveysService } from './load-surveys-service'
-import { LoadSurveysRepository } from '../../../contracts'
-import { Surveys } from '../../../../domain/entities'
+import { Surveys } from '@domain/entities'
+import { LoadSurveysService } from '@data/services/survey/load-surveys/load-surveys-service'
+import { LoadSurveysRepository } from '@data/contracts'
 import { set, reset } from 'mockdate'
 
 interface SutTypes {

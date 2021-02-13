@@ -1,4 +1,4 @@
-import { JsonWebTokenAdapter } from './json-web-token-adapter'
+import { JsonWebTokenAdapter } from '@infra/adapters/cryptography/json-web-token/json-web-token-adapter'
 import jsonwebtoken from 'jsonwebtoken'
 
 interface SutTypes {

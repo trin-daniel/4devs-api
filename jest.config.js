@@ -21,11 +21,11 @@ module.exports = {
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom:
-   [
-     '<rootDir>/src/**/*.ts',
-     '!<rootDir>/src/**/index.ts',
-     '!<rootDir>/src/main/**'
-   ],
+    [
+      '<rootDir>/src/**/*.ts',
+      '!<rootDir>/src/**/index.ts',
+      '!<rootDir>/src/main/**'
+    ],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
@@ -86,7 +86,14 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: {
+    '@domain\\/(.*)': '<rootDir>/src/domain/$1',
+    '@data\\/(.*)': '<rootDir>/src/data/$1',
+    '@infra\\/(.*)': '<rootDir>/src/infra/$1',
+    '@main\\/(.*)': '<rootDir>/src/main/$1',
+    '@presentation\\/(.*)': '<rootDir>/src/presentation/$1',
+    '@validation\\/(.*)': '<rootDir>/src/validation/$1'
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -176,9 +183,9 @@ module.exports = {
 
   // A map from regular expressions to paths to transformers
   transform:
-   {
-     '.+\\.ts$': 'ts-jest'
-   }
+  {
+    '.+\\.ts$': 'ts-jest'
+  }
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [

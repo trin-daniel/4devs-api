@@ -1,5 +1,5 @@
-import { LogErrorRepository } from '../../../data/contracts'
-import { Controller, Request, Response } from '../../../presentation/contracts'
+import { Controller, Request, Response } from '@presentation/contracts'
+import { LogErrorRepository } from '@data/contracts'
 
 export class LogControllerDecorator implements Controller {
   constructor (

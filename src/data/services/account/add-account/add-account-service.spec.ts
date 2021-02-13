@@ -1,7 +1,13 @@
-import { AddAccountService } from './add-account-service'
-import { Account } from '../../../../domain/entities'
-import { AccountDTO } from '../../../../domain/dtos'
-import { AddAccountRepository, Hasher, LoadAccountByEmailRepository } from '../../../contracts'
+import { Account } from '@domain/entities'
+import { AccountDTO } from '@domain/dtos'
+import { AddAccountService } from '@data/services/account/add-account/add-account-service'
+
+import
+{
+  AddAccountRepository,
+  Hasher,
+  LoadAccountByEmailRepository
+} from '@data/contracts'
 
 const mockHasher = (): Hasher => {
   class HasherStub implements Hasher {

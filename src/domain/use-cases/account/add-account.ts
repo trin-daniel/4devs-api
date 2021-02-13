@@ -1,5 +1,5 @@
-import { Account } from '../../entities'
-import { AccountDTO } from '../../dtos'
+import { Account } from '@domain/entities'
+import { AccountDTO } from '@domain/dtos'
 
 export interface AddAccount {
   add (data: AccountDTO): Promise<Account>

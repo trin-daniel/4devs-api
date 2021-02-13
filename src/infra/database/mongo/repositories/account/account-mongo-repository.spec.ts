@@ -1,5 +1,5 @@
-import { AccountMongoRepository } from './account-mongo-repository'
-import { MongoHelper } from '../../helper/mongo-helper'
+import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
+import { AccountMongoRepository } from '@infra/database/mongo/repositories/account/account-mongo-repository'
 
 interface SutTypes {
   sut: AccountMongoRepository

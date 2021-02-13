@@ -1,5 +1,5 @@
-import { Validator } from '../../../../../presentation/contracts'
-import { RequiredFieldValidator, ValidatorComposite } from '../../../../../validation/validators'
+import { Validator } from '@presentation/contracts'
+import { RequiredFieldValidator, ValidatorComposite } from '@validation/validators'
 
 export const AddSurveyValidationFactory = (): Validator => {
   const validators: Validator[] = []

@@ -1,7 +1,7 @@
-import { expressRouteAdapter } from '../adapters/express/express-route-adapter'
-import { signinControllerFactory } from '../factories/controllers/account/signin/signin-controller-factory'
+import { ExpressRouteAdapter } from '@main/adapters/express/express-route-adapter'
+import { signinControllerFactory } from '@main/factories/controllers/account/signin/signin-controller-factory'
 import { Router } from 'express'
 
 export default (router: Router): void => {
-  router.post('/signin', expressRouteAdapter(signinControllerFactory()))
+  router.post('/signin', ExpressRouteAdapter(signinControllerFactory()))
 }

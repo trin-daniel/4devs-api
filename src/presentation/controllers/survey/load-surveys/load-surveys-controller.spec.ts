@@ -1,8 +1,15 @@
-import { LoadSurveysController } from './load-surveys-controller'
-import { Surveys } from '../../../../domain/entities'
-import { LoadSurveys } from '../../../../domain/use-cases/survey/load-surveys'
-import { Request } from '../../../contracts'
-import { noContent, ok, serverError } from '../../../helpers/http-helper'
+import { Surveys } from '@domain/entities'
+import { LoadSurveys } from '@domain/use-cases/survey/load-surveys'
+import { Request } from '@presentation/contracts'
+import { LoadSurveysController } from '@presentation/controllers/survey/load-surveys/load-surveys-controller'
+
+import
+{
+  noContent,
+  ok,
+  serverError
+} from '@presentation/helpers/http-helper'
+
 import { set, reset } from 'mockdate'
 
 const mockSurveys = (): Surveys[] => (

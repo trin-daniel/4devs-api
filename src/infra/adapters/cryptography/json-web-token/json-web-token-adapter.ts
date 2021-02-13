@@ -1,4 +1,4 @@
-import { Encrypter, Decrypter } from '../../../../data/contracts'
+import { Encrypter, Decrypter } from '@data/contracts'
 import { sign, verify } from 'jsonwebtoken'
 
 export class JsonWebTokenAdapter implements Encrypter, Decrypter {

@@ -1,8 +1,13 @@
-import { AddSurveyController } from './add-survey-controller'
-import { AddSurvey } from '../../../../domain/use-cases/survey/add-survey'
-import { SurveyDTO } from '../../../../domain/dtos'
-import { Request, Validator } from '../../../contracts'
-import { badRequest, noContent, serverError } from '../../../helpers/http-helper'
+import { AddSurvey } from '@domain/use-cases/survey/add-survey'
+import { SurveyDTO } from '@domain/dtos'
+import { AddSurveyController } from '@presentation/controllers/survey/add-survey/add-survey-controller'
+import { Request, Validator } from '@presentation/contracts'
+import
+{
+  badRequest,
+  noContent,
+  serverError
+} from '@presentation/helpers/http-helper'
 import { reset, set } from 'mockdate'
 
 const mockRequest = (): Request => ({

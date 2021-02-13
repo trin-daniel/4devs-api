@@ -1,5 +1,5 @@
-import { CompareFieldsValidator } from './compare-fields-validator'
-import { InvalidParamError } from '../../presentation/errors'
+import { InvalidParamError } from '@presentation/errors'
+import { CompareFieldsValidator } from '@validation/validators/compare-fields-validator'
 
 interface SutTypes {
   sut: CompareFieldsValidator

@@ -1,6 +1,13 @@
-import { Authentication } from '../../../../domain/use-cases/authentication/authentication'
-import { AuthenticationDTO } from '../../../../domain/dtos'
-import { Encrypter, HashCompare, LoadAccountByEmailRepository, UpdateTokenRepository } from '../../../contracts'
+import { Authentication } from '@domain/use-cases/authentication/authentication'
+import { AuthenticationDTO } from '@domain/dtos'
+
+import
+{
+  Encrypter,
+  HashCompare,
+  LoadAccountByEmailRepository,
+  UpdateTokenRepository
+} from '@data/contracts'
 
 export class AuthenticationService implements Authentication {
   constructor (

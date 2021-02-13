@@ -1,8 +1,8 @@
-import { AccountDTO, SurveyDTO } from '../../domain/dtos'
-import { Account, Surveys } from '../../domain/entities'
-import { MongoHelper } from '../../infra/database/mongo/helper/mongo-helper'
-import app from '../config/app'
-import env from '../config/env'
+import { AccountDTO, SurveyDTO } from '@domain/dtos'
+import { Account, Surveys } from '@domain/entities'
+import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
+import app from '@main/config/app'
+import env from '@main/config/env'
 import supertest from 'supertest'
 import jsonwebtoken from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -10,12 +10,12 @@ import bcrypt from 'bcrypt'
 const mockSurveyDTO = (): SurveyDTO => ({
   question: 'any_question',
   answers:
-  [
-    {
-      image: 'any_images',
-      answer: 'any_answer'
-    }
-  ],
+    [
+      {
+        image: 'any_images',
+        answer: 'any_answer'
+      }
+    ],
   date: new Date()
 })
 

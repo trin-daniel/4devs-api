@@ -1,4 +1,4 @@
-import { HashCompare, Hasher } from '../../../../data/contracts'
+import { HashCompare, Hasher } from '@data/contracts'
 import { hash, compare } from 'bcrypt'
 
 export class BcryptAdapter implements Hasher, HashCompare {

@@ -18,6 +18,7 @@
   "rules": {
     "no-useless-constructor": "off",
     "node/no-path-concat": "off",
-    "camelcase":"off"
+    "camelcase": "off",
+    "import/first": "off"
   }
 }

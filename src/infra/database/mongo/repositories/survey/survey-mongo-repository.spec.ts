@@ -1,6 +1,6 @@
-import { SurveyMongoRepository } from './survey-mongo-repository'
-import { SurveyDTO } from '../../../../../domain/dtos'
-import { MongoHelper } from '../../helper/mongo-helper'
+import { SurveyDTO } from '@domain/dtos'
+import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
+import { SurveyMongoRepository } from '@infra/database/mongo/repositories/survey/survey-mongo-repository'
 
 const mockSurveyDTO = (): SurveyDTO => ({
   question: 'any_question',

@@ -1,3 +1,3 @@
-export * from './account-dto'
-export * from './authentication-dto'
-export * from './survey-dto'
+export * from '@domain/dtos/account-dto'
+export * from '@domain/dtos/authentication-dto'
+export * from '@domain/dtos/survey-dto'

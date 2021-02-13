@@ -1,8 +1,8 @@
-import { LogControllerDecorator } from './log-controller-decorator'
-import { Account } from '../../../domain/entities'
-import { Controller, Request, Response } from '../../../presentation/contracts'
-import { ok, serverError } from '../../../presentation/helpers/http-helper'
-import { LogErrorRepository } from '../../../data/contracts'
+import { Account } from '@domain/entities'
+import { Controller, Request, Response } from '@presentation/contracts'
+import { ok, serverError } from '@presentation/helpers/http-helper'
+import { LogErrorRepository } from '@data/contracts'
+import { LogControllerDecorator } from '@main/decorators/controllers/log-controller-decorator'
 
 const mockController = (): Controller => {
   class ControllerSutb implements Controller {

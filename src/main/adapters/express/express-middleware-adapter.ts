@@ -1,5 +1,10 @@
+import
+{
+  Middleware,
+  Request,
+  Response
+} from '@presentation/contracts'
 import { RequestHandler } from 'express'
-import { Middleware, Request, Response } from '../../../presentation/contracts'
 
 export const ExpressMiddlewareAdapter = (middleware: Middleware): RequestHandler => {
   return async (req, res, next) => {

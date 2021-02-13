@@ -1,7 +1,12 @@
-import { AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByTokenRepository, UpdateTokenRepository } from '../../../../../data/contracts'
-import { Account } from '../../../../../domain/entities'
-import { AccountDTO } from '../../../../../domain/dtos'
-import { MongoHelper } from '../../helper/mongo-helper'
+import {
+  AddAccountRepository,
+  LoadAccountByEmailRepository,
+  LoadAccountByTokenRepository,
+  UpdateTokenRepository
+} from '@data/contracts'
+import { Account } from '@domain/entities'
+import { AccountDTO } from '@domain/dtos'
+import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
 
 export class AccountMongoRepository implements
 AddAccountRepository,

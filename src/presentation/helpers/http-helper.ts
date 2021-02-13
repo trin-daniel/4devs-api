@@ -1,5 +1,9 @@
-import { Response } from '../contracts'
-import { ServerError, UnauthorizedError } from '../errors'
+import { Response } from '@presentation/contracts'
+import
+{
+  ServerError,
+  UnauthorizedError
+} from '@presentation/errors'
 
 export const ok = (data: any): Response => ({
   statusCode: 200,

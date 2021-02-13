@@ -1,7 +1,13 @@
-import { AuthenticationService } from './authentication-service'
-import { Account } from '../../../../domain/entities'
-import { AuthenticationDTO } from '../../../../domain/dtos'
-import { Encrypter, HashCompare, LoadAccountByEmailRepository, UpdateTokenRepository } from '../../../contracts'
+import { AuthenticationService } from '@data/services/account/authentication/authentication-service'
+import { Account } from '@domain/entities'
+import { AuthenticationDTO } from '@domain/dtos'
+import
+{
+  Encrypter,
+  HashCompare,
+  LoadAccountByEmailRepository,
+  UpdateTokenRepository
+} from '@data/contracts'
 
 interface SutTypes {
   sut: AuthenticationService,

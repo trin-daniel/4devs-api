@@ -1,7 +1,12 @@
-import { Account } from '../../../../domain/entities'
-import { AccountDTO } from '../../../../domain/dtos'
-import { AddAccount } from '../../../../domain/use-cases/account/add-account'
-import { AddAccountRepository, Hasher, LoadAccountByEmailRepository } from '../../../contracts'
+import { Account } from '@domain/entities'
+import { AccountDTO } from '@domain/dtos'
+import { AddAccount } from '@domain/use-cases/account/add-account'
+import
+{
+  AddAccountRepository,
+  Hasher,
+  LoadAccountByEmailRepository
+} from '@data/contracts'
 
 export class AddAccountService implements AddAccount {
   constructor (

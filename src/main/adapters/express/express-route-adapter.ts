@@ -1,7 +1,12 @@
-import { Controller, Request, Response } from '../../../presentation/contracts'
+import
+{
+  Controller,
+  Request,
+  Response
+} from '@presentation/contracts'
 import { RequestHandler } from 'express'
 
-export const expressRouteAdapter = (controller: Controller): RequestHandler => {
+export const ExpressRouteAdapter = (controller: Controller): RequestHandler => {
   return async (req, res) => {
     const request: Request =
     {

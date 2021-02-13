@@ -1,6 +1,6 @@
-import { EmailFieldValidator } from './email-field-validator'
-import { EmailValidator } from '../contracts/email-validator'
-import { InvalidParamError } from '../../presentation/errors'
+import { InvalidParamError } from '@presentation/errors'
+import { EmailValidator } from '@validation/contracts/email-validator'
+import { EmailFieldValidator } from '@validation/validators/email-field-validator'
 
 interface SutTypes {
   sut: EmailFieldValidator,
