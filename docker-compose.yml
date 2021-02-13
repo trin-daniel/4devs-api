@@ -14,6 +14,8 @@ services:
     working_dir: /usr/src/4devs-api/dist
     image: node:15
     command: bash -c "npm install --only=prod && npm run start:dev"
+    environment: 
+      - MONGO_URL=mongodb://mongo:27017/4devs-api
     volumes: 
       - ./dist/:/usr/src/4devs-api/dist/
       - ./package.json:/usr/src/4devs-api/package.json
