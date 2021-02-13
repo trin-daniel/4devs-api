@@ -61,5 +61,11 @@ describe('Save Survey Result Service', () => {
       const promise = sut.save(mockSurveyResultDTO())
       await expect(promise).rejects.toThrow()
     })
+
+    test('Should return a SurveyResult on success', async () => {
+      const { sut } = makeSut()
+      const surveyResult = await sut.save(mockSurveyResultDTO())
+      expect(surveyResult).toEqual(mockSurveyResult())
+    })
   })
 })
