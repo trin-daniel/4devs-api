@@ -1,7 +1,7 @@
 import { BcryptAdapter } from '@infra/adapters/cryptography/bcrypt/bcrypt-adapter'
 import bcrypt from 'bcrypt'
 
-interface SutTypes {
+type SutTypes = {
   sut: BcryptAdapter,
   salt: number
 }

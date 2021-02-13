@@ -40,7 +40,7 @@ const mockLogErrorRepository = (): LogErrorRepository => {
   return new LogErrorRepositorySutb()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: LogControllerDecorator,
   controllerStub: Controller
   logErrorRepositoryStub: LogErrorRepository

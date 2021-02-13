@@ -1,7 +1,7 @@
 import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
 import { AccountMongoRepository } from '@infra/database/mongo/repositories/account/account-mongo-repository'
 
-interface SutTypes {
+type SutTypes = {
   sut: AccountMongoRepository
 }
 

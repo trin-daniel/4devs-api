@@ -11,7 +11,7 @@ import
   unauthorized
 } from '@presentation/helpers/http-helper'
 
-interface SutTypes {
+type SutTypes = {
   sut: SigninController,
   authenticationStub: Authentication,
   validatorStub: Validator

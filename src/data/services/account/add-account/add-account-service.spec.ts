@@ -51,7 +51,7 @@ const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   return new LoadAccountByEmailRepositoryStub()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: AddAccountService,
   hasherStub: Hasher,
   accountRepositoryStub: AddAccountRepository,

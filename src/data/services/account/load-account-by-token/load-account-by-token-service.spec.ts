@@ -6,7 +6,7 @@ import
   LoadAccountByTokenRepository
 } from '@data/contracts'
 
-interface SutTypes {
+type SutTypes = {
   sut: LoadAccountByTokenService,
   decrypterStub: Decrypter,
   loadAccountByTokenRepositoryStub: LoadAccountByTokenRepository

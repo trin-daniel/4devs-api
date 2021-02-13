@@ -9,7 +9,7 @@ import
   UpdateTokenRepository
 } from '@data/contracts'
 
-interface SutTypes {
+type SutTypes = {
   sut: AuthenticationService,
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository,
   hashCompareStub: HashCompare,

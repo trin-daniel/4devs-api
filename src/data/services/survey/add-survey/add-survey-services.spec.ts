@@ -24,7 +24,7 @@ const mockSurveyDTO = (): SurveyDTO => ({
   date: new Date()
 })
 
-interface SutTypes {
+type SutTypes = {
   sut: AddSurveyServices
   addSurveyRepositoryStub: AddSurveyRepository
 }

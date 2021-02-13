@@ -3,7 +3,7 @@ import { LoadSurveysService } from '@data/services/survey/load-surveys/load-surv
 import { LoadSurveysRepository } from '@data/contracts'
 import { set, reset } from 'mockdate'
 
-interface SutTypes {
+type SutTypes = {
   sut: LoadSurveysService,
   loadSurveysRepositoryStub: LoadSurveysRepository
 }

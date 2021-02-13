@@ -2,7 +2,7 @@ import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
 import { LogMongoRepository } from '@infra/database/mongo/repositories/log-error/log-mongo-repository'
 import { LogErrorRepository } from '@data/contracts'
 
-interface SutTypes {
+type SutTypes = {
   sut: LogErrorRepository
 }
 const makeSut = (): SutTypes => {

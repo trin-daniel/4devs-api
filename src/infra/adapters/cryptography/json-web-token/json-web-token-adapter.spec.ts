@@ -1,7 +1,7 @@
 import { JsonWebTokenAdapter } from '@infra/adapters/cryptography/json-web-token/json-web-token-adapter'
 import jsonwebtoken from 'jsonwebtoken'
 
-interface SutTypes {
+type SutTypes = {
   sut: JsonWebTokenAdapter,
   keySecret: string
 }

@@ -6,7 +6,7 @@ import
   MissingParamError
 } from '@presentation/errors'
 
-interface SutTypes {
+type SutTypes = {
   sut: ValidatorComposite,
   validatorsStub: Validator[]
 }

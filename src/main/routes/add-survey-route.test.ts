@@ -18,7 +18,7 @@ const mockSurveyDTO = (): Omit<SurveyDTO, 'date'> => ({
   ]
 })
 
-interface AccountWithRole extends AccountDTO {
+type AccountWithRole = AccountDTO & {
   role: 'admin'
 }
 
