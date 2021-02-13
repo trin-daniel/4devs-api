@@ -9,7 +9,7 @@ export class SaveSurveyResultService implements SaveSurveyResult {
   ) {}
 
   public async save (data: SurveyResultDTO): Promise<SurveyResult> {
-    await this.saveSurveyResultRepository.save(data)
-    return null
+    const surveyResult = await this.saveSurveyResultRepository.save(data)
+    return surveyResult
   }
 }
