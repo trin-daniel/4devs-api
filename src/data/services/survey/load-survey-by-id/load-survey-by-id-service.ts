@@ -8,7 +8,7 @@ export class LoadSurveyByIdService implements LoadSurveyById {
   ) {}
 
   public async load (id: string): Promise<Surveys> {
-    await this.loadSurveyByIdRepository.loadById(id)
-    return null
+    const survey = await this.loadSurveyByIdRepository.loadById(id)
+    return survey
   }
 }
