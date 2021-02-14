@@ -1,6 +1,7 @@
-export type Request<S = any, H =any> = {
+export type Request<S = any, H = any, P = any> = {
   body?: S,
-  headers?: H
+  headers?: H,
+  params?: P
 }
 
 export type Response<R = any> = {
