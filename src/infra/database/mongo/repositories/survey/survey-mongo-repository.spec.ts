@@ -1,4 +1,5 @@
 import { SurveyDTO } from '@domain/dtos'
+import { Surveys } from '@domain/entities'
 import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
 import { SurveyMongoRepository } from '@infra/database/mongo/repositories/survey/survey-mongo-repository'
 
@@ -9,13 +10,18 @@ const mockSurveyDTO = (): SurveyDTO => ({
       {
         image: 'any_images',
         answer: 'any_answer'
-      },
-      {
-        answer: 'another_answer'
       }
     ],
   date: new Date()
 })
+
+const insertSurvey = async () => {
+  const collection = await MongoHelper.collection('surveys')
+  const { ops } = await collection.insertOne(mockSurveyDTO())
+  const [res] = ops
+  const survey = await MongoHelper.mapper(res)
+  return survey as Surveys
+}
 
 type SutTypes = {
   sut: SurveyMongoRepository
@@ -61,6 +67,17 @@ describe('Survey Mongo Repository', () => {
       const { sut } = makeSut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(0)
+    })
+  })
+
+  describe('#LoadSurveyByIdRepository', () => {
+    test('Should return a survey if load by id is successful', async () => {
+      const { id } = await insertSurvey()
+      const { sut } = makeSut()
+      const survey = await sut.loadById(id)
+      expect(survey).toBeTruthy()
+      expect(survey).toHaveProperty('answers')
+      expect(survey).toHaveProperty('question')
     })
   })
 })
