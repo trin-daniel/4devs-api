@@ -1,6 +1,6 @@
 import { SurveyResult } from '@domain/entities'
 import { SurveyResultDTO } from '@domain/dtos'
-import { SaveSurveyResult } from '@domain/use-cases/survey/save-survey-result'
+import { SaveSurveyResult } from '@domain/use-cases/survey-result/save-survey-result'
 import { SaveSurveyResultRepository } from '@data/contracts'
 
 export class SaveSurveyResultService implements SaveSurveyResult {

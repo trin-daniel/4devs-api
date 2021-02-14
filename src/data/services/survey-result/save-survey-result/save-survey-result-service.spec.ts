@@ -1,6 +1,6 @@
 import { SurveyResultDTO } from '@domain/dtos'
 import { SurveyResult } from '@domain/entities'
-import { SaveSurveyResultService } from '@data/services/survey/save-survey-result/save-survey-result-service'
+import { SaveSurveyResultService } from '@data/services/survey-result/save-survey-result/save-survey-result-service'
 import { SaveSurveyResultRepository } from '@data/contracts'
 import { reset, set } from 'mockdate'
 
