@@ -20,12 +20,12 @@ LoadSurveyByIdRepository {
   async loadAll (): Promise<Surveys[]> {
     const collection = await MongoHelper.collection('surveys')
     const surveys = await collection.find().toArray() as Surveys[]
-    return surveys
+    return surveys.map(item => MongoHelper.mapper(item)) as Surveys[]
   }
 
   async loadById (id: string): Promise<Surveys> {
     const collection = await MongoHelper.collection('surveys')
     const survey = await collection.findOne({ _id: id }) as Surveys
-    return survey
+    return survey && MongoHelper.mapper(survey)
   }
 }

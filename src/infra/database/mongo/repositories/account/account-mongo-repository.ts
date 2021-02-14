@@ -38,6 +38,5 @@ LoadAccountByTokenRepository {
       { _id: id },
       { $set: { token } }
     )
-    Promise.resolve()
   }
 }

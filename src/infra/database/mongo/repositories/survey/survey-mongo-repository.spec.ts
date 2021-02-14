@@ -60,7 +60,7 @@ describe('Survey Mongo Repository', () => {
       const { sut } = makeSut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(1)
-      expect(surveys[0]).toHaveProperty('_id')
+      expect(surveys[0]).toHaveProperty('id')
     })
 
     test('Should return an empty array if loadAll returns empty', async () => {
