@@ -1,4 +1,4 @@
-import { Account, Surveys } from '@domain/entities'
+import { Account, SurveyResult, Surveys } from '@domain/entities'
 import { AccountDTO, SurveyDTO } from '@domain/dtos'
 import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
 import { SurveyResultRepository } from '@infra/database/mongo/repositories/survey-result/survey-result-mongo-repository'
@@ -19,6 +19,10 @@ const mockSurveyDTO = (): SurveyDTO => ({
         {
           image: 'any_images',
           answer: 'any_answer'
+        },
+        {
+          image: 'another_image',
+          answer: 'another_answer'
         }
       ],
   date: new Date()
@@ -60,7 +64,7 @@ describe('Survey Result Mongo Repository', () => {
   })
 
   describe('#SaveSurveyResultRepository', () => {
-    test('Should add a new survey or update an existing survey', async () => {
+    test('Should add a new survey result or update an existing survey result', async () => {
       const account = await insertAccount()
       const survey = await insertSurvey()
       const { sut } = makeSut()
@@ -75,6 +79,34 @@ describe('Survey Result Mongo Repository', () => {
       expect(surveyResult).toBeTruthy()
       expect(surveyResult).toHaveProperty('id')
       expect(surveyResult).toHaveProperty('answer', survey.answers[0].answer)
+    })
+
+    test('Should update the survey result if it already exists', async () => {
+      const account = await insertAccount()
+      const survey = await insertSurvey()
+      const insertSurveyResult = await MongoHelper.collection('survey-results')
+      const { ops } = await insertSurveyResult.insertOne(
+        {
+          account_id: account.id,
+          answer: survey.answers[0].answer,
+          survey_id: survey.id,
+          date: new Date()
+        }
+      )
+      const [res] = ops
+      const format = await MongoHelper.mapper(res) as SurveyResult
+      const { sut } = makeSut()
+      const surveyResult = await sut.save(
+        {
+          account_id: account.id,
+          answer: survey.answers[1].answer,
+          survey_id: survey.id,
+          date: new Date()
+        }
+      )
+      expect(surveyResult).toBeTruthy()
+      expect(surveyResult.id).toEqual(format.id)
+      expect(surveyResult).toHaveProperty('answer', survey.answers[1].answer)
     })
   })
 })
