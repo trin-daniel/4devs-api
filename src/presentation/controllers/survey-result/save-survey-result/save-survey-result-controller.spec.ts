@@ -5,7 +5,7 @@ import { LoadSurveyById } from '@domain/use-cases/survey/load-survey-by-id'
 import { Request } from '@presentation/contracts'
 import { SaveSurveyResultController } from '@presentation/controllers/survey-result/save-survey-result/save-survey-result-controller'
 import { InvalidParamError } from '@presentation/errors'
-import { forbidden, serverError } from '@presentation/helpers/http-helper'
+import { forbidden, ok, serverError } from '@presentation/helpers/http-helper'
 import { reset, set } from 'mockdate'
 
 type SutTypes = {
@@ -36,7 +36,7 @@ const mockSurveys = (): Surveys =>
 
 const mockSurveyResult = (): SurveyResult => (
   {
-    id: (Math.random() + 4e10 * 3.14).toFixed(0).concat('6cd799439011'),
+    id: 'bcf86cd50799437f1f779011',
     account_id: mockRequest().account_id,
     survey_id: mockSurveys().id,
     answer: mockRequest().body.answer,
@@ -123,6 +123,13 @@ describe('Save Survey Result Controller', () => {
       const saveSpy = jest.spyOn(saveSurveyResultStub, 'save')
       await sut.handle(request)
       expect(saveSpy).toHaveBeenCalledWith(mockSurveyResultDTO())
+    })
+
+    test('Should return 200 if the SaveSurveyResult use case is successful', async () => {
+      const { sut } = makeSut()
+      const request = mockRequest()
+      const response = await sut.handle(request)
+      expect(response).toEqual(ok(mockSurveyResult()))
     })
 
     test('Should return 500 if SaveSurveyResult throws exception', async () => {
