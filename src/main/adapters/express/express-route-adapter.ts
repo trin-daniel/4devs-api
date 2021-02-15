@@ -10,7 +10,9 @@ export const ExpressRouteAdapter = (controller: Controller): RequestHandler => {
   return async (req, res) => {
     const request: Request =
     {
-      body: req.body
+      body: req.body,
+      params: req.params,
+      account_id: req.account_id
     }
     const response: Response = await controller.handle(request)
     if (response.statusCode >= 200 && response.statusCode <= 299) {

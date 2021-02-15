@@ -29,6 +29,7 @@ export class SaveSurveyResultController implements Controller {
       } else {
         return forbidden(new InvalidParamError('survey_id'))
       }
+
       return ok(await this.saveSurveyResult.save(
         {
           survey_id,

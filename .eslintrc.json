@@ -19,6 +19,7 @@
     "no-useless-constructor": "off",
     "node/no-path-concat": "off",
     "camelcase": "off",
-    "import/first": "off"
+    "import/first": "off",
+    "no-unused-vars":"off"
   }
 }

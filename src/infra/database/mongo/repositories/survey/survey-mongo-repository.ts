@@ -7,6 +7,7 @@ import
   LoadSurveyByIdRepository,
   LoadSurveysRepository
 } from '@data/contracts'
+import { ObjectId } from 'mongodb'
 
 export class SurveyMongoRepository implements
 AddSurveyRepository,
@@ -25,7 +26,7 @@ LoadSurveyByIdRepository {
 
   async loadById (id: string): Promise<Surveys> {
     const collection = await MongoHelper.collection('surveys')
-    const survey = await collection.findOne({ _id: id }) as Surveys
+    const survey = await collection.findOne({ _id: new ObjectId(id) }) as Surveys
     return survey && MongoHelper.mapper(survey)
   }
 }
