@@ -4,26 +4,29 @@ export const signInPath = {
     tags: ['sign-in'],
     summary: 'API de autenticação',
     requestBody: {
-      description: 'A Requisição deve possuir um body com os campos abaixo:',
+      description: 'Preencha todos os campos corretamente.',
       content: {
-        'application/json': {
-          schema: {
+        'application/json':
+        {
+          schema:
+          {
             $ref: '#/schemas/signInSchema'
           }
         }
       }
     },
-    responses: {
-      200: {
-        description: 'Sucesso',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/schemas/accountSchema'
-            }
-          }
-        }
-      }
+    responses:
+    {
+      200:
+      {
+        description: 'sucesso',
+        content: { 'application/json': { schema: { $ref: '#/schemas/accountSchema' } } }
+      },
+
+      400: { $ref: '#/components/badRequest' },
+      401: { $ref: '#/components/unauthorized' },
+      404: { $ref: '#/components/notFound' },
+      500: { $ref: '#/components/serverError' }
     }
   }
 }
