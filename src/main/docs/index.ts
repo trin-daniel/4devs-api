@@ -1,7 +1,7 @@
-import { signInPath } from '@main/docs/paths/sign-in-path'
-import { accountSchema, signInSchema, errorSchema } from '@main/docs/schemas'
+import { signInPath, surveyPath } from '@main/docs/paths'
+import { accountSchema, signInSchema, errorSchema, surveySchema, surveysSchema, surveyAnswerSchema, apiKeyAuthSchema } from '@main/docs/schemas'
 
-import { badRequest, serverError, unauthorized, notFound } from '@main/docs/components/http'
+import { badRequest, serverError, unauthorized, notFound, forbidden } from '@main/docs/components/http'
 
 export default {
   openapi: '3.0.0',
@@ -17,25 +17,33 @@ export default {
     url: 'https://www.gnu.org/licenses/gpl-3.0-standalone.html'
   },
   servers: [{ url: '/api' }],
-  tags: [{ name: 'sign-in' }],
+  tags: [{ name: 'sign-in' }, { name: 'Surveys' }],
 
   paths:
   {
-    '/signin': signInPath
+    '/signin': signInPath,
+    '/surveys': surveyPath
   },
 
   schemas:
   {
     accountSchema,
     signInSchema,
-    errorSchema
+    errorSchema,
+    surveysSchema,
+    surveySchema,
+    surveyAnswerSchema
   },
 
   components:
   {
+    securitySchemes: {
+      apiKeyAuth: apiKeyAuthSchema
+    },
     badRequest,
     serverError,
     unauthorized,
-    notFound
+    notFound,
+    forbidden
   }
 }
