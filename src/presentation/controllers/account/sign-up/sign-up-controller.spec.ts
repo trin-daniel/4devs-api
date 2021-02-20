@@ -1,21 +1,11 @@
 import { Account } from '@domain/entities'
 import { AddAccount } from '@domain/use-cases/account/add-account'
 import { Authentication } from '@domain/use-cases/authentication/authentication'
-import
-{
-  AccountDTO,
-  AuthenticationDTO
-} from '@domain/dtos'
-import { SignupController } from '@presentation/controllers/account/signup/signup-controller'
+import { AccountDTO, AuthenticationDTO } from '@domain/dtos'
+import { SignupController } from '@presentation/controllers/account/sign-up/sign-up-controller'
 import { EmailInUseError, ServerError } from '@presentation/errors'
 import { Request, Validator } from '@presentation/contracts'
-import
-{
-  badRequest,
-  forbidden,
-  ok,
-  serverError
-} from '@presentation/helpers/http-helper'
+import { badRequest, forbidden, ok, serverError } from '@presentation/helpers/http-helper'
 
 type SutTypes = {
   sut: SignupController,
@@ -34,17 +24,18 @@ const mockRequest = (): Request => ({
   }
 })
 
+const mockAccount = (): Account => (
+  {
+    id: '507f1f77bcf86cd799439011',
+    name: 'any_name',
+    email: 'any_email@gmail.com',
+    password: 'hash'
+  }
+)
 const mockAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     public async add (data: AccountDTO): Promise<Account> {
-      const account =
-      {
-        id: '507f1f77bcf86cd799439011',
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'hash'
-      }
-      return Promise.resolve(account)
+      return Promise.resolve(mockAccount())
     }
   }
   return new AddAccountStub()
@@ -76,7 +67,7 @@ const makeSut = (): SutTypes => {
   return { sut, validatorStub, addAccountStub, authenticationStub }
 }
 
-describe('Signup Controller', () => {
+describe('SignUp Controller', () => {
   test('Should call Validator with correct value', async () => {
     const { sut, validatorStub } = makeSut()
     const validateSpy = jest.spyOn(validatorStub, 'validate')

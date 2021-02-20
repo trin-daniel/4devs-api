@@ -2,7 +2,7 @@ import { MongoHelper } from '@infra/database/mongo/helper/mongo-helper'
 import app from '@main/config/app'
 import supertest from 'supertest'
 
-describe('Signup Route', () => {
+describe('SignUp Route', () => {
   beforeAll(async () => await MongoHelper.connect(process.env.MONGO_URL))
   afterAll(async () => await MongoHelper.disconnect())
 
@@ -11,7 +11,7 @@ describe('Signup Route', () => {
     await collection.deleteMany({})
   })
 
-  describe('#POST/Signup', () => {
+  describe('#POST/SignUp', () => {
     test('Should return 200 when adding account successfully', async () => {
       const data =
       {

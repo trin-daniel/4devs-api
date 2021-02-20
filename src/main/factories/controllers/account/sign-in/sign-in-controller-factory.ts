@@ -1,6 +1,6 @@
 import { Controller } from '@presentation/contracts'
-import { SigninController } from '@presentation/controllers/account/signin/signin-controller'
-import { SigninValidationFactory } from '@main/factories/controllers/account/signin/signin-validation-factory'
+import { SigninController } from '@presentation/controllers/account/sign-in/sign-in-controller'
+import { SigninValidationFactory } from '@main/factories/controllers/account/sign-in/sign-in-validation-factory'
 import { AuthenticationServiceFactory } from '@main/factories/use-cases/account/authentication/authentication-service-factory'
 import { LogControllerDecoratorFactory } from '@main/factories/decorators/log/log-controller-decorator-factory'
 

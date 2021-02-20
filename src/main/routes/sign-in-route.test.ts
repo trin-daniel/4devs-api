@@ -11,7 +11,7 @@ describe('Signin Route', () => {
     await collection.deleteMany({})
   })
 
-  describe('#POST/Signin', () => {
+  describe('#POST/SignIn', () => {
     test('Should return 200 if authentication succeeds', async () => {
       const collection = await MongoHelper.collection('accounts')
       const data =

@@ -1,15 +1,9 @@
-import { SigninController } from './signin-controller'
+import { SigninController } from '@presentation/controllers/account/sign-in/sign-in-controller'
 import { Authentication } from '@domain/use-cases/authentication/authentication'
 import { AuthenticationDTO } from '@domain/dtos'
 import { Request, Validator } from '@presentation/contracts'
 import { ServerError } from '@presentation/errors'
-import
-{
-  badRequest,
-  ok,
-  serverError,
-  unauthorized
-} from '@presentation/helpers/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
 
 type SutTypes = {
   sut: SigninController,
