@@ -2,19 +2,19 @@
   "name": "4devs-api",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/main/server.js",
+  "main": "Dist/Main/Server.js",
   "scripts": {
     "test": "jest --passWithNoTests --runInBand",
     "test:unit": "jest --passWithNoTests --runInBand --watch -c jest-unit-config.js",
     "test:integration": "jest --passWithNoTests  --runInBand --watch -c jest-integration-config.js",
     "test:ci": "jest --passWithNoTests --runInBand --coverage",
     "test:staged": "jest --passWithNoTests --runInBand --findRelatedTests",
-    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
+    "test:coveralls": "npm run test:ci && coveralls < Coverage/lcov.info",
     "up": "npm run build && docker-compose up -d",
     "down": "docker-compose down",
-    "start": "DEBUG=app:server node dist/main/server.js",
-    "start:dev": "DEBUG=app* node dist/main/server.js",
-    "build": "rimraf dist && tsc"
+    "start": "DEBUG=app:server node Dist/Main/Server.js",
+    "start:dev": "DEBUG=app* node Dist/Main/Server.js",
+    "build": "rimraf Dist && tsc"
   },
   "keywords": [],
   "author": "Carlos Daniel",
@@ -56,8 +56,7 @@
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
     "mongodb": "^3.6.4",
-    "swagger-ui-express": "^4.1.6",
-    "validator": "^13.5.2"
+    "swagger-ui-express": "^4.1.6"
   },
   "engines": {
     "node": "15.x"

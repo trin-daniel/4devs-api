@@ -22,13 +22,13 @@ module.exports = {
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom:
     [
-      '<rootDir>/src/**/*.ts',
-      '!<rootDir>/src/**/index.ts',
-      '!<rootDir>/src/main/**'
+      '<rootDir>/Source/**/*.ts',
+      '!<rootDir>/Source/**/index.ts',
+      '!<rootDir>/Source/Main/**'
     ],
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: 'coverage',
+  coverageDirectory: 'Coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -87,12 +87,12 @@ module.exports = {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    '@domain\\/(.*)': '<rootDir>/src/domain/$1',
-    '@data\\/(.*)': '<rootDir>/src/data/$1',
-    '@infra\\/(.*)': '<rootDir>/src/infra/$1',
-    '@main\\/(.*)': '<rootDir>/src/main/$1',
-    '@presentation\\/(.*)': '<rootDir>/src/presentation/$1',
-    '@validation\\/(.*)': '<rootDir>/src/validation/$1'
+    '@Application\\/(.*)': '<rootDir>/Source/Application/$1',
+    '@Data\\/(.*)': '<rootDir>/Source/Data/$1',
+    '@Infra\\/(.*)': '<rootDir>/Source/Infra/$1',
+    '@Main\\/(.*)': '<rootDir>/Source/Main/$1',
+    '@Presentation\\/(.*)': '<rootDir>/Source/Presentation/$1',
+    '@Validation\\/(.*)': '<rootDir>/Source/Validation/$1'
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -129,7 +129,7 @@ module.exports = {
   // rootDir: undefined,
 
   // A list of paths to directories that Jest should use to search for files in
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>/Source'],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",

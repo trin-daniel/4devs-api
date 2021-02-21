@@ -5,20 +5,20 @@ services:
     image: mongo:3
     restart: always
     volumes: 
-      - ./data:/data/db
+      - ./Database:/data/db
     ports: 
       - "27017:27017"
   api: 
     container_name: 4devs-api-container
     restart: always
-    working_dir: /usr/src/4devs-api/dist
+    working_dir: /usr/Source/4devs-api/Dist
     image: node:15
     command: bash -c "npm install --only=prod && npm run start:dev"
     environment: 
       - MONGO_URL=mongodb://mongo:27017/4devs-api
     volumes: 
-      - ./dist/:/usr/src/4devs-api/dist/
-      - ./package.json:/usr/src/4devs-api/package.json
+      - ./Dist/:/usr/Source/4devs-api/Dist/
+      - ./package.json:/usr/Source/4devs-api/package.json
     ports:
       - "3333:3333"
     links:

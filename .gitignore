@@ -1,6 +1,5 @@
 node_modules
-dist
-coverage
+Dist
+Coverage
 globalConfig.json
-data
-!src/data
+Database
