@@ -1,5 +1,5 @@
-import { SignInPath, SurveyPath, SignUpPath } from '@Main/Docs/Paths'
-import { Account, AddSurvey, SignIn, SignUp, Survey, Surveys, Error, SurveyAnswer, ApiKeyAuth } from '@Main/Docs/Schemas'
+import { SignInPath, SurveyPath, SurveyResultPath, SignUpPath } from '@Main/Docs/Paths'
+import { Account, AddSurvey, SignIn, SignUp, Survey, Surveys, SaveSurvey, SurveyResult, Error, SurveyAnswer, ApiKeyAuth } from '@Main/Docs/Schemas'
 import { BadRequest, ServerError, Unauthorized, NotFound, Forbidden } from '@Main/Docs/Components/Http'
 
 export default {
@@ -22,7 +22,8 @@ export default {
   {
     '/sign-in': SignInPath,
     '/sign-up': SignUpPath,
-    '/surveys': SurveyPath
+    '/surveys': SurveyPath,
+    '/surveys/{survey_id}/results': SurveyResultPath
   },
 
   schemas:
@@ -34,7 +35,9 @@ export default {
     AddSurvey,
     Surveys,
     Survey,
-    SurveyAnswer
+    SurveyAnswer,
+    SaveSurvey,
+    SurveyResult
   },
 
   components:
