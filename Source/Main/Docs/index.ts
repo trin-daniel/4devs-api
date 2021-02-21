@@ -1,5 +1,5 @@
-import { SignInPath, SurveyPath } from '@Main/Docs/Paths'
-import { Account, SignIn, Survey, Surveys, Error, SurveyAnswer, ApiKeyAuth } from '@Main/Docs/Schemas'
+import { SignInPath, SurveyPath, SignUpPath } from '@Main/Docs/Paths'
+import { Account, SignIn, SignUp, Survey, Surveys, Error, SurveyAnswer, ApiKeyAuth } from '@Main/Docs/Schemas'
 import { BadRequest, ServerError, Unauthorized, NotFound, Forbidden } from '@Main/Docs/Components/Http'
 
 export default {
@@ -16,11 +16,12 @@ export default {
     url: 'https://www.gnu.org/licenses/gpl-3.0-standalone.html'
   },
   servers: [{ url: '/api' }],
-  tags: [{ name: 'Sign-In' }, { name: 'Surveys' }],
+  tags: [{ name: 'Sign-In' }, { name: 'Sign-Up' }, { name: 'Surveys' }],
 
   paths:
   {
     '/sign-in': SignInPath,
+    '/sign-up': SignUpPath,
     '/surveys': SurveyPath
   },
 
@@ -28,6 +29,7 @@ export default {
   {
     Account,
     SignIn,
+    SignUp,
     Error,
     Surveys,
     Survey,
