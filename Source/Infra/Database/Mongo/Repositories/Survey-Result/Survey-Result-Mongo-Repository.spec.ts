@@ -80,6 +80,8 @@ describe('Survey Result Mongo Repository', () => {
       expect(SurveyResult.answers[0].answer).toBe(Survey.answers[0].answer)
       expect(SurveyResult.answers[0].count).toBe(1)
       expect(SurveyResult.answers[0].percent).toBe(100)
+      expect(SurveyResult.answers[1].count).toBe(0)
+      expect(SurveyResult.answers[1].percent).toBe(0)
     })
 
     test('Should update the survey result if it already exists', async () => {
@@ -108,6 +110,8 @@ describe('Survey Result Mongo Repository', () => {
       expect(SurveyResult.answers[0].answer).toBe(Survey.answers[1].answer)
       expect(SurveyResult.answers[0].count).toBe(1)
       expect(SurveyResult.answers[0].percent).toBe(100)
+      expect(SurveyResult.answers[1].count).toBe(0)
+      expect(SurveyResult.answers[1].percent).toBe(0)
     })
   })
 })

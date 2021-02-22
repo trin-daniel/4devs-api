@@ -36,6 +36,13 @@ export class QueryBuilder {
     return this
   }
 
+  Sort (data: object): QueryBuilder {
+    this.Query.push({
+      $sort: data
+    })
+    return this
+  }
+
   Project (data: object): QueryBuilder {
     this.Query.push({
       $project: data
