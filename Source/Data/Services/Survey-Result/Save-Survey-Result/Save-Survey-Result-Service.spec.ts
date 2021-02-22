@@ -4,14 +4,21 @@ import { SaveSurveyResultService } from '@Data/Services/Survey-Result/Save-Surve
 import { SaveSurveyResultRepository } from '@Data/Protocols/Database'
 import MockDate from 'mockdate'
 
-type SutTypes = {Sut: SaveSurveyResultService, SaveSurveyResultRepositoryStub: SaveSurveyResultRepository}
+type SutTypes = { Sut: SaveSurveyResultService, SaveSurveyResultRepositoryStub: SaveSurveyResultRepository }
 
 const MockSurveyResult = (): SurveyResult => (
   {
     id: '507f1f77bcf86cd799439011',
-    account_id: 'any_id',
+    question: 'any_question',
     survey_id: 'any_survey_id',
-    answer: 'any_answer',
+    answers: [
+      {
+        image: 'any_image',
+        answer: 'any_answer',
+        count: 1,
+        percent: 50
+      }
+    ],
     date: new Date().toLocaleDateString('pt-br')
   }
 )

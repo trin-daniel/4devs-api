@@ -30,7 +30,7 @@ const MockSurveys = (): Surveys =>
     }
   )
 
-const MockSurveyResult = (): SurveyResult => (
+const MockSurveyResult = (): any => (
   {
     id: 'bcf86cd50799437f1f779011',
     account_id: MockRequest().account_id,

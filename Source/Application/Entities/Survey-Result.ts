@@ -1,7 +1,12 @@
 export type SurveyResult = {
   id: string,
+  question: string
   survey_id: string,
-  account_id: string,
-  answer: string,
+  answers: Array<{
+    image?: string,
+    answer: string,
+    count: number,
+    percent: number
+  }>,
   date: string
 }

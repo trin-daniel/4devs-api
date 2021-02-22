@@ -3,3 +3,4 @@ Dist
 Coverage
 globalConfig.json
 Database
+!Source/Infra/Database
