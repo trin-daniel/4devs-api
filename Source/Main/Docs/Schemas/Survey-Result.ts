@@ -3,8 +3,12 @@ export const SurveyResult = {
   properties: {
     id: { type: 'string' },
     survey_id: { type: 'string' },
-    account_id: { type: 'string' },
-    answer: { type: 'string' },
+    question: { type: 'string' },
+    answers: {
+      type: 'array',
+      items: { $ref: '#schemas/SurveyResultAnswer' }
+    },
     date: { type: 'string' }
-  }
+  },
+  required: ['survey_id', 'question', 'answers', 'date']
 }

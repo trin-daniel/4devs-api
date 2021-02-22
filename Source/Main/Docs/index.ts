@@ -1,5 +1,5 @@
 import { SignInPath, SurveyPath, SurveyResultPath, SignUpPath } from '@Main/Docs/Paths'
-import { Account, AddSurvey, SignIn, SignUp, Survey, Surveys, SaveSurvey, SurveyResult, Error, SurveyAnswer, ApiKeyAuth } from '@Main/Docs/Schemas'
+import { Account, AddSurvey, SignIn, SignUp, Survey, Surveys, SaveSurvey, SurveyResult, SurveyResultAnswer, Error, SurveyAnswer, ApiKeyAuth } from '@Main/Docs/Schemas'
 import { BadRequest, ServerError, Unauthorized, NotFound, Forbidden } from '@Main/Docs/Components/Http'
 
 export default {
@@ -36,6 +36,7 @@ export default {
     Surveys,
     Survey,
     SurveyAnswer,
+    SurveyResultAnswer,
     SaveSurvey,
     SurveyResult
   },
