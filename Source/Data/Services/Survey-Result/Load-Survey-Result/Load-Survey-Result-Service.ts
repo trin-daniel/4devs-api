@@ -8,7 +8,7 @@ export class LoadSurveyResultService implements LoadSurveyResultUseCase {
   ) {}
 
   async Load (survey_id: string):Promise<SurveyResult> {
-    await this.LoadSurveyResult.LoadBySurveyId(survey_id)
-    return null
+    const Survey = await this.LoadSurveyResult.LoadBySurveyId(survey_id)
+    return Survey
   }
 }
