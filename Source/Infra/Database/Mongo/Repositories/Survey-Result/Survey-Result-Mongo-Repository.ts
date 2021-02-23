@@ -1,11 +1,11 @@
 import { SurveyResultDTO } from '@Application/DTOS'
 import { SurveyResult } from '@Application/Entities'
-import { SaveSurveyResultRepository } from '@Data/Protocols/Database'
+import { LoadSurveyResultRepository, SaveSurveyResultRepository } from '@Data/Protocols/Database'
 import { MongoHelper, QueryBuilder } from '@Infra/Database/Mongo/Helper'
 import { ObjectId } from 'mongodb'
 
-export class SurveyResultRepository implements SaveSurveyResultRepository {
-  private async LoadSurvey (survey_id: string): Promise<SurveyResult> {
+export class SurveyResultRepository implements SaveSurveyResultRepository, LoadSurveyResultRepository {
+  async LoadBySurveyId (survey_id: string): Promise<SurveyResult> {
     const Collection = await MongoHelper.collection('survey-results')
     const Query = new QueryBuilder()
       .Match({
@@ -172,7 +172,7 @@ export class SurveyResultRepository implements SaveSurveyResultRepository {
       { $set: { answer, date } },
       { upsert: true }
     )
-    const Survey = await this.LoadSurvey(survey_id)
+    const Survey = await this.LoadBySurveyId(survey_id)
     return Survey
   }
 }
