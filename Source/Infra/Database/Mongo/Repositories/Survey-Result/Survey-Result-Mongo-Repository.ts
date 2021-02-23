@@ -161,7 +161,7 @@ export class SurveyResultRepository implements SaveSurveyResultRepository, LoadS
       .Build()
     const ResultOperation = await Collection.aggregate(Query).toArray()
 
-    return ResultOperation?.length && ResultOperation[0]
+    return ResultOperation?.length ? ResultOperation[0] : null
   }
 
   async Save (data: SurveyResultDTO): Promise<void> {
