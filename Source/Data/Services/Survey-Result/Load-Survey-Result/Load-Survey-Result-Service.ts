@@ -11,7 +11,18 @@ export class LoadSurveyResultService implements LoadSurveyResultUseCase {
   async Load (survey_id: string):Promise<SurveyResult> {
     const Survey = await this.LoadSurveyResult.LoadBySurveyId(survey_id)
     if (!Survey) {
-      await this.LoadSurveyByIdRepository.LoadById(survey_id)
+      const Survey = await this.LoadSurveyByIdRepository.LoadById(survey_id)
+      const { id, question, answers, date } = Survey
+      const Result = {
+        id,
+        question,
+        survey_id,
+        answers: answers.map(item => ({
+          answer: item.answer, image: item.image, count: 0, percent: 0
+        })),
+        date
+      }
+      return Result
     }
     return Survey
   }
