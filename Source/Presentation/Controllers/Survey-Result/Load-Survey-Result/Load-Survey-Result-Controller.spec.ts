@@ -2,6 +2,8 @@ import { Surveys } from '@Application/Entities'
 import { LoadSurveyByIdUseCase } from '@Application/Use-Cases/Survey/Load-Survey-By-Id-Use-Case'
 import { Request } from '@Presentation/Protocols'
 import { LoadSurveyResultController } from '@Presentation/Controllers/Survey-Result/Load-Survey-Result/Load-Survey-Result-Controller'
+import { Forbidden } from '@Presentation/Helpers/Http-Helper'
+import { InvalidParamError } from '@Presentation/Errors'
 
 const MockRequest = (): Request =>
   (
@@ -49,6 +51,13 @@ describe('Load Survey Result Controller', () => {
       const { params: { survey_id } } = Request
       await Sut.handle(Request)
       expect(LoadSpy).toHaveBeenCalledWith(survey_id)
+    })
+
+    test('Should return 403 if LoadSurveyByIdUseCase returns null', async () => {
+      const { Sut, LoadSurveyByIdUseCaseStub } = makeSut()
+      jest.spyOn(LoadSurveyByIdUseCaseStub, 'Load').mockResolvedValueOnce(null)
+      const Response = await Sut.handle(MockRequest())
+      expect(Response).toEqual(Forbidden(new InvalidParamError('survey_id')))
     })
   })
 })
