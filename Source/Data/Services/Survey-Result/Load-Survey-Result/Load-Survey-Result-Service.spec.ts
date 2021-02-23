@@ -94,5 +94,17 @@ describe('Load Survey Result UseCase', () => {
       await Sut.Load('any_survey_id')
       expect(LoadByIdSpy).toHaveBeenCalledWith('any_survey_id')
     })
+
+    test('Should return SurveyResult with all answers with count and percent zeroed', async () => {
+      const { Sut, LoadSurveyResultRepositoryStub } = makeSut()
+      const SurveyResultWithCountZero = MockSurveyResult()
+      jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId').mockResolvedValueOnce(null)
+      const SurveyResult = await Sut.Load('any_survey_id')
+      expect(SurveyResult).toEqual(
+        {
+          ...SurveyResultWithCountZero,
+          answers: [{ answer: 'any_answer', image: 'any_image', count: 0, percent: 0 }]
+        })
+    })
   })
 })
