@@ -1,6 +1,6 @@
 import { SurveyResult } from '@Application/Entities'
 import { LoadSurveyResultRepository } from '@Data/Protocols/Database'
-import { LoadSurveyResultService } from './Load-Survey-Result-Service'
+import { LoadSurveyResultService } from '@Data/Services/Survey-Result/Load-Survey-Result/Load-Survey-Result-Service'
 
 const MockSurveyResult = (): SurveyResult => (
   {
@@ -46,6 +46,12 @@ describe('Load Survey Result UseCase', () => {
       const LoadBySurveyIdSpy = jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId')
       await Sut.Load('any_survey_id')
       expect(LoadBySurveyIdSpy).toHaveBeenCalledWith('any_survey_id')
+    })
+
+    test('Should return a SurveyResult if LoadSurveyResultRepository succeeds', async () => {
+      const { Sut } = makeSut()
+      const SurveyResult = await Sut.Load('any_survey_id')
+      expect(SurveyResult).toEqual(MockSurveyResult())
     })
   })
 })
