@@ -53,5 +53,12 @@ describe('Load Survey Result UseCase', () => {
       const SurveyResult = await Sut.Load('any_survey_id')
       expect(SurveyResult).toEqual(MockSurveyResult())
     })
+
+    test('Should throw if LoadSurveyResultRepository throws', async () => {
+      const { Sut, LoadSurveyResultRepositoryStub } = makeSut()
+      jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId').mockRejectedValueOnce(new Error())
+      const PromiseRejected = Sut.Load('any_survey_id')
+      await expect(PromiseRejected).rejects.toThrow()
+    })
   })
 })
