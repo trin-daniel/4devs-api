@@ -105,5 +105,12 @@ describe('Load Survey Result Controller', () => {
       await Sut.handle(MockRequest())
       expect(LoadSpy).toHaveBeenCalledWith(survey_id)
     })
+
+    test('Should return 500 if LoadSurveyResultUseCase throws exception', async () => {
+      const { Sut, LoadSurveyResultUseCaseStub } = makeSut()
+      jest.spyOn(LoadSurveyResultUseCaseStub, 'Load').mockRejectedValueOnce(new Error())
+      const Response = await Sut.handle(MockRequest())
+      expect(Response).toEqual(ServerErrorHelper(new Error()))
+    })
   })
 })
