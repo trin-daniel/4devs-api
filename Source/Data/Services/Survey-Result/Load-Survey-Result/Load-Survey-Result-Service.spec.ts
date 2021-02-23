@@ -1,5 +1,5 @@
-import { SurveyResult } from '@Application/Entities'
-import { LoadSurveyResultRepository } from '@Data/Protocols/Database'
+import { SurveyResult, Surveys } from '@Application/Entities'
+import { LoadSurveyByIdRepository, LoadSurveyResultRepository } from '@Data/Protocols/Database'
 import { LoadSurveyResultService } from '@Data/Services/Survey-Result/Load-Survey-Result/Load-Survey-Result-Service'
 
 const MockSurveyResult = (): SurveyResult => (
@@ -19,6 +19,17 @@ const MockSurveyResult = (): SurveyResult => (
   }
 )
 
+const MockSurveys = (): Surveys => (
+
+  {
+    id: '507f1f77bcf86cd799439011',
+    question: 'any_question',
+    answers: [{ image: 'any_image', answer: 'any_answer' }],
+    date: new Date().toLocaleDateString('pt-BR')
+  }
+
+)
+
 const MockLoadSurveyResultRepository = (): LoadSurveyResultRepository => {
   class LoadSurveyResultRepositoryStub implements LoadSurveyResultRepository {
     async LoadBySurveyId (survey_id: string): Promise<SurveyResult> {
@@ -28,15 +39,26 @@ const MockLoadSurveyResultRepository = (): LoadSurveyResultRepository => {
   return new LoadSurveyResultRepositoryStub()
 }
 
+const MockLoadSurveyByIdRepository = (): LoadSurveyByIdRepository => {
+  class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
+    async LoadById (id: string): Promise<Surveys> {
+      return Promise.resolve(MockSurveys())
+    }
+  }
+  return new LoadSurveyByIdRepositoryStub()
+}
+
 type SutTypes = {
   Sut: LoadSurveyResultService,
-  LoadSurveyResultRepositoryStub: LoadSurveyResultRepository
+  LoadSurveyResultRepositoryStub: LoadSurveyResultRepository,
+  LoadSurveyByIdRepositoryStub: LoadSurveyByIdRepository
 }
 
 const makeSut = (): SutTypes => {
+  const LoadSurveyByIdRepositoryStub = MockLoadSurveyByIdRepository()
   const LoadSurveyResultRepositoryStub = MockLoadSurveyResultRepository()
-  const Sut = new LoadSurveyResultService(LoadSurveyResultRepositoryStub)
-  return { Sut, LoadSurveyResultRepositoryStub }
+  const Sut = new LoadSurveyResultService(LoadSurveyResultRepositoryStub, LoadSurveyByIdRepositoryStub)
+  return { Sut, LoadSurveyResultRepositoryStub, LoadSurveyByIdRepositoryStub }
 }
 
 describe('Load Survey Result UseCase', () => {
@@ -59,6 +81,18 @@ describe('Load Survey Result UseCase', () => {
       jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId').mockRejectedValueOnce(new Error())
       const PromiseRejected = Sut.Load('any_survey_id')
       await expect(PromiseRejected).rejects.toThrow()
+    })
+
+    test('Should call LoadSurveyByIdRepository if LoadSurveyResultRepository returns null', async () => {
+      const {
+        Sut,
+        LoadSurveyResultRepositoryStub,
+        LoadSurveyByIdRepositoryStub
+      } = makeSut()
+      jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId').mockResolvedValueOnce(null)
+      const LoadByIdSpy = jest.spyOn(LoadSurveyByIdRepositoryStub, 'LoadById')
+      await Sut.Load('any_survey_id')
+      expect(LoadByIdSpy).toHaveBeenCalledWith('any_survey_id')
     })
   })
 })
