@@ -2,7 +2,7 @@ import { SurveyResult, Surveys } from '@Application/Entities'
 import { LoadSurveyByIdUseCase } from '@Application/Use-Cases/Survey/Load-Survey-By-Id-Use-Case'
 import { Request } from '@Presentation/Protocols'
 import { LoadSurveyResultController } from '@Presentation/Controllers/Survey-Result/Load-Survey-Result/Load-Survey-Result-Controller'
-import { Forbidden, ServerErrorHelper } from '@Presentation/Helpers/Http-Helper'
+import { Forbidden, Ok, ServerErrorHelper } from '@Presentation/Helpers/Http-Helper'
 import { InvalidParamError } from '@Presentation/Errors'
 import { LoadSurveyResultUseCase } from '@Application/Use-Cases/Survey-Result/Load-Survey-Result-Use-Case'
 
@@ -111,6 +111,12 @@ describe('Load Survey Result Controller', () => {
       jest.spyOn(LoadSurveyResultUseCaseStub, 'Load').mockRejectedValueOnce(new Error())
       const Response = await Sut.handle(MockRequest())
       expect(Response).toEqual(ServerErrorHelper(new Error()))
+    })
+
+    test('Should return 200 if all use cases are successful', async () => {
+      const { Sut } = makeSut()
+      const Response = await Sut.handle(MockRequest())
+      expect(Response).toEqual(Ok(MockSurveyResult()))
     })
   })
 })
