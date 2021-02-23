@@ -1,4 +1,4 @@
-import { Account, SurveyResult, Surveys } from '@Application/Entities'
+import { Account, Surveys } from '@Application/Entities'
 import { AccountDTO, SurveyDTO } from '@Application/DTOS'
 import { MongoHelper } from '@Infra/Database/Mongo/Helper/Mongo-Helper'
 import { SurveyResultRepository } from '@Infra/Database/Mongo/Repositories/Survey-Result/Survey-Result-Mongo-Repository'
@@ -63,11 +63,11 @@ describe('Survey Result Mongo Repository', () => {
   })
 
   describe('#SaveSurveyResultRepository', () => {
-    test('Should add a new survey result or update an existing survey result', async () => {
+    test('Should add a new survey result', async () => {
       const Account = await InsertAccount()
       const Survey = await InsertSurvey()
       const { Sut } = makeSut()
-      const SurveyResult = await Sut.Save(
+      await Sut.Save(
         {
           account_id: Account.id,
           answer: Survey.answers[0].answer,
@@ -75,13 +75,10 @@ describe('Survey Result Mongo Repository', () => {
           date: new Date().toLocaleDateString('pt-br')
         }
       )
+      const Collection = await MongoHelper.collection('survey-results')
+      const SurveyResult = await Collection.findOne({ account_id: Account.id, survey_id: Survey.id })
       expect(SurveyResult).toBeTruthy()
       expect(SurveyResult).toHaveProperty('survey_id')
-      expect(SurveyResult.answers[0].answer).toBe(Survey.answers[0].answer)
-      expect(SurveyResult.answers[0].count).toBe(1)
-      expect(SurveyResult.answers[0].percent).toBe(100)
-      expect(SurveyResult.answers[1].count).toBe(0)
-      expect(SurveyResult.answers[1].percent).toBe(0)
     })
 
     test('Should update the survey result if it already exists', async () => {
@@ -97,7 +94,7 @@ describe('Survey Result Mongo Repository', () => {
         }
       )
       const { Sut } = makeSut()
-      const SurveyResult = await Sut.Save(
+      await Sut.Save(
         {
           account_id: Account.id,
           answer: Survey.answers[1].answer,
@@ -105,13 +102,17 @@ describe('Survey Result Mongo Repository', () => {
           date: new Date().toLocaleDateString('pt-br')
         }
       )
+      const Collection = await MongoHelper.collection('survey-results')
+      const SurveyResult = await Collection
+        .find(
+          {
+            account_id: Account.id,
+            survey_id: Survey.id
+          })
+        .toArray()
       expect(SurveyResult).toBeTruthy()
-      expect(SurveyResult).toHaveProperty('survey_id')
-      expect(SurveyResult.answers[0].answer).toBe(Survey.answers[1].answer)
-      expect(SurveyResult.answers[0].count).toBe(1)
-      expect(SurveyResult.answers[0].percent).toBe(100)
-      expect(SurveyResult.answers[1].count).toBe(0)
-      expect(SurveyResult.answers[1].percent).toBe(0)
+      expect(SurveyResult[0]).toHaveProperty('survey_id')
+      expect(SurveyResult.length).toBe(1)
     })
   })
 

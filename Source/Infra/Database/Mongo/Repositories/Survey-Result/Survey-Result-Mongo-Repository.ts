@@ -164,7 +164,7 @@ export class SurveyResultRepository implements SaveSurveyResultRepository, LoadS
     return ResultOperation?.length && ResultOperation[0]
   }
 
-  async Save (data: SurveyResultDTO): Promise<SurveyResult> {
+  async Save (data: SurveyResultDTO): Promise<void> {
     const { account_id, survey_id, answer, date } = data
     const Collection = await MongoHelper.collection('survey-results')
     await Collection.findOneAndUpdate(
@@ -172,7 +172,5 @@ export class SurveyResultRepository implements SaveSurveyResultRepository, LoadS
       { $set: { answer, date } },
       { upsert: true }
     )
-    const Survey = await this.LoadBySurveyId(survey_id)
-    return Survey
   }
 }

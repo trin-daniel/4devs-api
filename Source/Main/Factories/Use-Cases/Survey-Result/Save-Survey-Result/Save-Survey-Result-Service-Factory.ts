@@ -4,6 +4,7 @@ import { SurveyResultRepository } from '@Infra/Database/Mongo/Repositories/Surve
 
 export const SaveSurveyResultServiceFactory = (): SaveSurveyResultUseCase => {
   return new SaveSurveyResultService(
+    new SurveyResultRepository(),
     new SurveyResultRepository()
   )
 }
