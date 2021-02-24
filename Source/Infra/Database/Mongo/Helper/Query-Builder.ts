@@ -29,13 +29,6 @@ export class QueryBuilder {
     return this
   }
 
-  AddFields (data: object): QueryBuilder {
-    this.Query.push({
-      $addFields: data
-    })
-    return this
-  }
-
   Sort (data: object): QueryBuilder {
     this.Query.push({
       $sort: data
