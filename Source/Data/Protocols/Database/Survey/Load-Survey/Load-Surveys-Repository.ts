@@ -1,5 +1,5 @@
 import { Surveys } from '@Application/Entities'
 
 export interface LoadSurveysRepository {
-  LoadAll (): Promise<Surveys[]>
+  LoadAll (account_id: string): Promise<Surveys[]>
 }

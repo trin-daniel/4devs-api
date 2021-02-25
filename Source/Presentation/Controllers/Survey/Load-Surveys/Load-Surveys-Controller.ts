@@ -10,7 +10,8 @@ export class LoadSurveysController implements Controller {
 
   async handle (request: Request): Promise<Response<Surveys[]>> {
     try {
-      const Surveys = await this.LoadSurveys.Load()
+      const { account_id } = request
+      const Surveys = await this.LoadSurveys.Load(account_id)
       return Surveys.length ? Ok(Surveys) : NoContent()
     } catch (error) {
       return ServerErrorHelper(error)

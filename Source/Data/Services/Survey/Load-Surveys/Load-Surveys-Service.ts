@@ -7,8 +7,8 @@ export class LoadSurveysService implements LoadSurveysUseCase {
     private readonly LoadSurveysRepository: LoadSurveysRepository
   ) {}
 
-  async Load (): Promise<Surveys[]> {
-    const Surveys = await this.LoadSurveysRepository.LoadAll()
+  async Load (account_id: string): Promise<Surveys[]> {
+    const Surveys = await this.LoadSurveysRepository.LoadAll(account_id)
     return Surveys
   }
 }
