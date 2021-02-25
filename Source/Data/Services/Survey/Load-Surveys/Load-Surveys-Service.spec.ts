@@ -4,7 +4,7 @@ import { LoadSurveysRepository } from '@Data/Protocols/Database'
 import MockDate from 'mockdate'
 
 type SutTypes = {Sut: LoadSurveysService, LoadSurveysRepositoryStub: LoadSurveysRepository}
-
+const MockAccountId = () => ({ account_id: 'any_id' })
 const MockSurveys = (): Surveys[] => (
   [
     {
@@ -43,23 +43,23 @@ describe('Load Surveys Service', () => {
   afterAll(() => MockDate.reset())
 
   describe('#LoadSurveysRepository', () => {
-    test('Should call LoadSurveysRepository', async () => {
+    test('Should call LoadSurveysRepository with correct account_id', async () => {
       const { Sut, LoadSurveysRepositoryStub } = makeSut()
       const LoadAllSpy = jest.spyOn(LoadSurveysRepositoryStub, 'LoadAll')
-      await Sut.Load()
-      expect(LoadAllSpy).toHaveBeenCalled()
+      await Sut.Load(MockAccountId().account_id)
+      expect(LoadAllSpy).toHaveBeenCalledWith(MockAccountId().account_id)
     })
 
     test('Should return all surveys when the case is successful', async () => {
       const { Sut } = makeSut()
-      const Surveys = await Sut.Load()
+      const Surveys = await Sut.Load(MockAccountId().account_id)
       expect(Surveys).toEqual(MockSurveys())
     })
 
     test('Should throw if LoadSurveysRepository throws', async () => {
       const { Sut, LoadSurveysRepositoryStub } = makeSut()
       jest.spyOn(LoadSurveysRepositoryStub, 'LoadAll').mockRejectedValueOnce(new Error())
-      const PromiseRejected = Sut.Load()
+      const PromiseRejected = Sut.Load(MockAccountId().account_id)
       await expect(PromiseRejected).rejects.toThrow()
     })
   })

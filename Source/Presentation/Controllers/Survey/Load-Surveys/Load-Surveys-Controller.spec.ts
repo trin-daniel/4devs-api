@@ -25,7 +25,8 @@ const MockSurveys = (): Surveys[] => (
 
 const MockRequest = (): Request => ({
   body: {},
-  headers: {}
+  headers: {},
+  account_id: 'any_account_id'
 })
 
 const MockLoadSurveysUseCase = (): LoadSurveysUseCase => {
@@ -50,11 +51,11 @@ describe('Load Surveys Controller', () => {
   afterAll(() => MockDate.reset())
 
   describe('#LoadSurveysUseCase', () => {
-    test('Should call LoadSurveysUseCase', async () => {
+    test('Should call LoadSurveysUseCase with correct account_id', async () => {
       const { Sut, LoadSurveysUseCaseStub } = makeSut()
       const LoadSpy = jest.spyOn(LoadSurveysUseCaseStub, 'Load')
       await Sut.handle(MockRequest())
-      expect(LoadSpy).toHaveBeenCalled()
+      expect(LoadSpy).toHaveBeenCalledWith(MockRequest().account_id)
     })
 
     test('Should return 200 on success', async () => {
