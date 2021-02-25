@@ -1,20 +1,14 @@
 export const Survey = {
   type: 'object',
   properties: {
-    id: {
-      type: 'string'
-    },
-    question: {
-      type: 'string'
-    },
+    id: { type: 'string' },
+    question: { type: 'string' },
     answers: {
       type: 'array',
-      items: {
-        $ref: '#/schemas/SurveyAnswer'
-      }
+      items: { $ref: '#/schemas/SurveyAnswer' }
     },
-    date: {
-      type: 'string'
-    }
-  }
+    didAnswer: { type: 'boolean' },
+    date: { type: 'string' }
+  },
+  required: ['id', 'question', 'answers', 'didAnswer', 'date']
 }
