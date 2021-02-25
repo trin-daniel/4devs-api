@@ -4,6 +4,7 @@ import { AuthenticationDTO } from '@Application/DTOS'
 import { Request, Validation } from '@Presentation/Protocols'
 import { ServerError } from '@Presentation/Errors'
 import { BadRequest, Ok, ServerErrorHelper, Unauthorized } from '@Presentation/Helpers/Http-Helper'
+import { Authentication } from '@Application/Entities'
 
 type SutTypes = {Sut: SignInController, AuthenticationUseCaseStub: AuthenticationUseCase, ValidationComponentStub: Validation}
 
@@ -15,8 +16,8 @@ const MockRequest = (): Request => (
 
 const MockAuthentication = (): AuthenticationUseCase => {
   class AuthenticationUseCaseStub implements AuthenticationUseCase {
-    async Auth (data: AuthenticationDTO): Promise<string> {
-      return Promise.resolve('any_token')
+    async Auth (data: AuthenticationDTO): Promise<Authentication> {
+      return Promise.resolve({ token: 'any_token', name: 'any_name' })
     }
   }
   return new AuthenticationUseCaseStub()
@@ -75,7 +76,7 @@ describe('SignIn Controller', () => {
     test('Should return 200 on success', async () => {
       const { Sut } = makeSut()
       const Response = await Sut.handle(MockRequest())
-      expect(Response).toEqual(Ok({ token: 'any_token' }))
+      expect(Response).toEqual(Ok({ token: 'any_token', name: 'any_name' }))
     })
 
     test('Should return 500 if AuthenticationUseCase throws exception', async () => {

@@ -1,4 +1,4 @@
-import { Account } from '@Application/Entities'
+import { Account, Authentication } from '@Application/Entities'
 import { AccountDTO, AuthenticationDTO } from '@Application/DTOS'
 import { SignUpController } from '@Presentation/Controllers/Account/Sign-Up/Sign-Up-Controller'
 import { EmailInUseError, ServerError } from '@Presentation/Errors'
@@ -47,8 +47,8 @@ const MockValidation = (): Validation => {
 
 const MockAuthenticationUseCase = (): AuthenticationUseCase => {
   class AuthenticationUseCaseStub implements AuthenticationUseCase {
-    async Auth (data: AuthenticationDTO): Promise<string> {
-      return Promise.resolve('any_token')
+    async Auth (data: AuthenticationDTO): Promise<Authentication> {
+      return Promise.resolve({ token: 'any_token', name: 'any_name' })
     }
   }
   return new AuthenticationUseCaseStub()
@@ -126,7 +126,7 @@ describe('SignUp Controller', () => {
     test('Should return 200 on success', async () => {
       const { Sut } = makeSut()
       const Response = await Sut.handle(MockRequest())
-      expect(Response).toEqual(Ok({ token: 'any_token' }))
+      expect(Response).toEqual(Ok({ token: 'any_token', name: 'any_name' }))
     })
   })
 })

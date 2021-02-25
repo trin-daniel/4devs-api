@@ -137,7 +137,7 @@ describe('Authentication Service', () => {
     test('Should return a token on success', async () => {
       const { Sut } = makeSut()
       const Token = await Sut.Auth(MockCredentials())
-      expect(Token).toBe('token')
+      expect(Token).toEqual({ token: 'token', name: 'any_name' })
     })
   })
 
