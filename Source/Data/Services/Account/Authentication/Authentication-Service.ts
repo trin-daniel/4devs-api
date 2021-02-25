@@ -2,6 +2,7 @@ import { AuthenticationUseCase } from '@Application/Use-Cases/Authentication/Aut
 import { AuthenticationDTO } from '@Application/DTOS'
 import { Encrypter, HashCompare } from '@Data/Protocols/Cryptography'
 import { LoadAccountByEmailRepository, UpdateTokenRepository } from '@Data/Protocols/Database'
+import { Authentication } from '@Application/Entities'
 
 export class AuthenticationService implements AuthenticationUseCase {
   constructor (
@@ -9,9 +10,9 @@ export class AuthenticationService implements AuthenticationUseCase {
     private readonly HashCompare: HashCompare,
     private readonly Encrypter: Encrypter,
     private readonly UpdateTokenRepository: UpdateTokenRepository
-  ) {}
+  ) { }
 
-  async Auth (data: AuthenticationDTO): Promise<string> {
+  async Auth (data: AuthenticationDTO): Promise<Authentication> {
     const { email, password } = data
     const Account = await this.LoadAccountByEmail.LoadByEmail(email)
     if (Account) {
@@ -19,7 +20,7 @@ export class AuthenticationService implements AuthenticationUseCase {
       if (IsEqual) {
         const Token = await this.Encrypter.Encrypt(Account.id)
         await this.UpdateTokenRepository.UpdateToken(Account.id, Token)
-        return Token
+        return { token: Token, name: Account.name }
       }
     }
     return null

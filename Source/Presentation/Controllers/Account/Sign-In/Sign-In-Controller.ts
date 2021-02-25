@@ -16,8 +16,8 @@ export class SignInController implements Controller {
       if (Error) {
         return BadRequest(Error)
       }
-      const Token = await this.Authentication.Auth({ email, password })
-      return !Token ? Unauthorized() : Ok({ token: Token })
+      const Credentials = await this.Authentication.Auth({ email, password })
+      return !Credentials ? Unauthorized() : Ok(Credentials)
     } catch (error) {
       return ServerErrorHelper(error)
     }

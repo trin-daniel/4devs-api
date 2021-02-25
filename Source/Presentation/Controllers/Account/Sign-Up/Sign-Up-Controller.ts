@@ -20,7 +20,7 @@ export class SignUpController implements Controller {
       }
       const Account = await this.AddAccount.Add({ name, email, password })
       return Account
-        ? Ok({ token: await this.Authentication.Auth({ email, password }) })
+        ? Ok(await this.Authentication.Auth({ email, password }))
         : Forbidden(new EmailInUseError())
     } catch (error) {
       return ServerErrorHelper(error)
