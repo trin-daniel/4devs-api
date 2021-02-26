@@ -2,10 +2,11 @@ import { SurveyResultDTO } from '@Application/DTOS'
 import { SurveyResult } from '@Application/Entities'
 import { LoadSurveyResultRepository, SaveSurveyResultRepository } from '@Data/Protocols/Database'
 import { MongoHelper, QueryBuilder } from '@Infra/Database/Mongo/Helper'
+const Round = require('mongo-round')
 import { ObjectId } from 'mongodb'
 
 export class SurveyResultRepository implements SaveSurveyResultRepository, LoadSurveyResultRepository {
-  async LoadBySurveyId (survey_id: string): Promise<SurveyResult> {
+  async LoadBySurveyId (survey_id: string, account_id: string): Promise<SurveyResult> {
     const Collection = await MongoHelper.collection('survey-results')
     const Query = new QueryBuilder()
       .Match({
@@ -43,6 +44,11 @@ export class SurveyResultRepository implements SaveSurveyResultRepository, LoadS
         },
         count: {
           $sum: 1
+        },
+        currentAccountAnswer: {
+          $push: {
+            $cond: [{ $eq: ['$data.account_id', account_id] }, '$data.answer', null]
+          }
         }
       })
       .Project({
@@ -77,6 +83,9 @@ export class SurveyResultRepository implements SaveSurveyResultRepository, LoadS
                     },
                     else: 0
                   }
+                },
+                isCurrentAccountAnswer: {
+                  $eq: ['$$item.answer', { $arrayElemAt: ['$currentAccountAnswer', 0] }]
                 }
               }]
             }
@@ -117,7 +126,8 @@ export class SurveyResultRepository implements SaveSurveyResultRepository, LoadS
           question: '$question',
           date: '$date',
           answer: '$answers.answer',
-          image: '$answers.image'
+          image: '$answers.image',
+          isCurrentAccountAnswer: '$answers.isCurrentAccountAnswer'
         },
         count: {
           $sum: '$answers.count'
@@ -134,8 +144,9 @@ export class SurveyResultRepository implements SaveSurveyResultRepository, LoadS
         answer: {
           answer: '$_id.answer',
           image: '$_id.image',
-          count: '$count',
-          percent: '$percent'
+          count: Round('$count'),
+          percent: Round('$percent'),
+          isCurrentAccountAnswer: '$_id.isCurrentAccountAnswer'
         }
       })
       .Sort({

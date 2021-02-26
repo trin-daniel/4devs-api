@@ -36,7 +36,8 @@ const MockSurveyResult = (): SurveyResult => (
         image: 'any_image',
         answer: 'any_answer',
         count: 1,
-        percent: 50
+        percent: 50,
+        isCurrentAccountAnswer: true
       }
     ],
     date: new Date().toLocaleDateString('pt-br')
@@ -54,7 +55,7 @@ const MockLoadSurveyByIdUseCase = (): LoadSurveyByIdUseCase => {
 
 const MockLoadSurveyResultUseCase = (): LoadSurveyResultUseCase => {
   class LoadSurveyResultUseCaseStub implements LoadSurveyResultUseCase {
-    Load (survey_id: string): Promise<SurveyResult> {
+    Load (survey_id: string, account_id: string): Promise<SurveyResult> {
       return Promise.resolve(MockSurveyResult())
     }
   }
@@ -97,13 +98,13 @@ describe('Load Survey Result Controller', () => {
   })
 
   describe('#LoadSurveyResultUseCase', () => {
-    test('Should call LoadSurveyResultUseCase with correct value', async () => {
+    test('Should call LoadSurveyResultUseCase with correct values', async () => {
       const { Sut, LoadSurveyResultUseCaseStub } = makeSut()
       const LoadSpy = jest.spyOn(LoadSurveyResultUseCaseStub, 'Load')
       const Request = MockRequest()
-      const { params: { survey_id } } = Request
+      const { params: { survey_id }, account_id } = Request
       await Sut.handle(MockRequest())
-      expect(LoadSpy).toHaveBeenCalledWith(survey_id)
+      expect(LoadSpy).toHaveBeenCalledWith(survey_id, account_id)
     })
 
     test('Should return 500 if LoadSurveyResultUseCase throws exception', async () => {

@@ -8,8 +8,8 @@ export class LoadSurveyResultService implements LoadSurveyResultUseCase {
     private readonly LoadSurveyByIdRepository: LoadSurveyByIdRepository
   ) {}
 
-  async Load (survey_id: string):Promise<SurveyResult> {
-    const Survey = await this.LoadSurveyResult.LoadBySurveyId(survey_id)
+  async Load (survey_id: string, account_id: string):Promise<SurveyResult> {
+    const Survey = await this.LoadSurveyResult.LoadBySurveyId(survey_id, account_id)
     if (!Survey) {
       const Survey = await this.LoadSurveyByIdRepository.LoadById(survey_id)
       const { id, question, answers, date } = Survey
@@ -18,7 +18,7 @@ export class LoadSurveyResultService implements LoadSurveyResultUseCase {
         question,
         survey_id,
         answers: answers.map(item => ({
-          answer: item.answer, image: item.image, count: 0, percent: 0
+          answer: item.answer, image: item.image, count: 0, percent: 0, isCurrentAccountAnswer: false
         })),
         date
       }

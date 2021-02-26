@@ -12,7 +12,8 @@ const MockSurveyResult = (): SurveyResult => (
         image: 'any_image',
         answer: 'any_answer',
         count: 1,
-        percent: 50
+        percent: 50,
+        isCurrentAccountAnswer: false
       }
     ],
     date: new Date().toLocaleDateString('pt-br')
@@ -32,7 +33,7 @@ const MockSurveys = (): Surveys => (
 
 const MockLoadSurveyResultRepository = (): LoadSurveyResultRepository => {
   class LoadSurveyResultRepositoryStub implements LoadSurveyResultRepository {
-    async LoadBySurveyId (survey_id: string): Promise<SurveyResult> {
+    async LoadBySurveyId (survey_id: string, account_id: string): Promise<SurveyResult> {
       return Promise.resolve(MockSurveyResult())
     }
   }
@@ -63,23 +64,23 @@ const makeSut = (): SutTypes => {
 
 describe('Load Survey Result UseCase', () => {
   describe('#LoadSurveyResultRepository', () => {
-    test('Should call LoadSurveyResultRepository with correct survey_id', async () => {
+    test('Should call LoadSurveyResultRepository with correct values', async () => {
       const { Sut, LoadSurveyResultRepositoryStub } = makeSut()
       const LoadBySurveyIdSpy = jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId')
-      await Sut.Load('any_survey_id')
-      expect(LoadBySurveyIdSpy).toHaveBeenCalledWith('any_survey_id')
+      await Sut.Load('any_survey_id', 'any_account_id')
+      expect(LoadBySurveyIdSpy).toHaveBeenCalledWith('any_survey_id', 'any_account_id')
     })
 
     test('Should return a SurveyResult if LoadSurveyResultRepository succeeds', async () => {
       const { Sut } = makeSut()
-      const SurveyResult = await Sut.Load('any_survey_id')
+      const SurveyResult = await Sut.Load('any_survey_id', 'any_account_id')
       expect(SurveyResult).toEqual(MockSurveyResult())
     })
 
     test('Should throw if LoadSurveyResultRepository throws', async () => {
       const { Sut, LoadSurveyResultRepositoryStub } = makeSut()
       jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId').mockRejectedValueOnce(new Error())
-      const PromiseRejected = Sut.Load('any_survey_id')
+      const PromiseRejected = Sut.Load('any_survey_id', 'any_account_id')
       await expect(PromiseRejected).rejects.toThrow()
     })
 
@@ -91,7 +92,7 @@ describe('Load Survey Result UseCase', () => {
       } = makeSut()
       jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId').mockResolvedValueOnce(null)
       const LoadByIdSpy = jest.spyOn(LoadSurveyByIdRepositoryStub, 'LoadById')
-      await Sut.Load('any_survey_id')
+      await Sut.Load('any_survey_id', 'any_account_id')
       expect(LoadByIdSpy).toHaveBeenCalledWith('any_survey_id')
     })
 
@@ -99,11 +100,11 @@ describe('Load Survey Result UseCase', () => {
       const { Sut, LoadSurveyResultRepositoryStub } = makeSut()
       const SurveyResultWithCountZero = MockSurveyResult()
       jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId').mockResolvedValueOnce(null)
-      const SurveyResult = await Sut.Load('any_survey_id')
+      const SurveyResult = await Sut.Load('any_survey_id', 'any_account_id')
       expect(SurveyResult).toEqual(
         {
           ...SurveyResultWithCountZero,
-          answers: [{ answer: 'any_answer', image: 'any_image', count: 0, percent: 0 }]
+          answers: [{ answer: 'any_answer', image: 'any_image', count: 0, percent: 0, isCurrentAccountAnswer: false }]
         })
     })
   })

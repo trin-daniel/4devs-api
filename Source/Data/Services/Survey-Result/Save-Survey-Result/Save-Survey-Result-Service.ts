@@ -10,9 +10,9 @@ export class SaveSurveyResultService implements SaveSurveyResultUseCase {
   ) {}
 
   public async Save (data: SurveyResultDTO): Promise<SurveyResult> {
-    const { survey_id } = data
+    const { survey_id, account_id } = data
     await this.SaveSurveyResultRepository.Save(data)
-    const SurveyResult = await this.LoadSurveyResultRepository.LoadBySurveyId(survey_id)
+    const SurveyResult = await this.LoadSurveyResultRepository.LoadBySurveyId(survey_id, account_id)
     return SurveyResult
   }
 }

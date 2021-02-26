@@ -16,7 +16,8 @@ const MockSurveyResult = (): SurveyResult => (
         image: 'any_image',
         answer: 'any_answer',
         count: 1,
-        percent: 50
+        percent: 50,
+        isCurrentAccountAnswer: true
       }
     ],
     date: new Date().toLocaleDateString('pt-br')
@@ -43,7 +44,7 @@ const MockSaveSurveyResultRepository = (): SaveSurveyResultRepository => {
 
 const MockLoadSurveyResultRepository = (): LoadSurveyResultRepository => {
   class LoadSurveyResultRepositoryStub implements LoadSurveyResultRepository {
-    async LoadBySurveyId (survey_id: string): Promise<SurveyResult> {
+    async LoadBySurveyId (survey_id: string, account_id: string): Promise<SurveyResult> {
       return Promise.resolve(MockSurveyResult())
     }
   }
@@ -80,7 +81,7 @@ describe('Save Survey Result Service', () => {
       const { Sut, LoadSurveyResultRepositoryStub } = makeSut()
       const LoadBySurveyIdSpy = jest.spyOn(LoadSurveyResultRepositoryStub, 'LoadBySurveyId')
       await Sut.Save(MockSurveyResultDTO())
-      expect(LoadBySurveyIdSpy).toHaveBeenCalledWith(MockSurveyResultDTO().survey_id)
+      expect(LoadBySurveyIdSpy).toHaveBeenCalledWith(MockSurveyResultDTO().survey_id, MockSurveyResultDTO().account_id)
     })
 
     test('Should throw if LoadSurveyResultRepository throws', async () => {

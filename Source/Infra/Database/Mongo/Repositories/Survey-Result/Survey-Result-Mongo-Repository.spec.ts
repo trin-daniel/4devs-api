@@ -119,6 +119,7 @@ describe('Survey Result Mongo Repository', () => {
   describe('#LoadSurveyResultRespository', () => {
     test('Should return a SurveyResult if LoadBySurveyId succeeds', async () => {
       const Account = await InsertAccount()
+      const Account2 = await InsertAccount()
       const Survey = await InsertSurvey()
       const InsertSurveyResult = await MongoHelper.collection('survey-results')
       await InsertSurveyResult.insertMany(
@@ -129,27 +130,29 @@ describe('Survey Result Mongo Repository', () => {
           date: new Date().toLocaleDateString('pt-br')
         },
         {
-          account_id: new ObjectId(Account.id),
-          answer: Survey.answers[1].answer,
+          account_id: new ObjectId(Account2.id),
+          answer: Survey.answers[0].answer,
           survey_id: new ObjectId(Survey.id),
           date: new Date().toLocaleDateString('pt-br')
         }]
       )
       const { Sut } = makeSut()
-      const SurveyResult = await Sut.LoadBySurveyId(Survey.id)
+      const SurveyResult = await Sut.LoadBySurveyId(Survey.id, Account.id)
       expect(SurveyResult).toBeTruthy()
       expect(SurveyResult).toHaveProperty('survey_id')
-      expect(SurveyResult.answers[0].answer).toBe(Survey.answers[1].answer)
-      expect(SurveyResult.answers[0].count).toBe(1)
-      expect(SurveyResult.answers[0].percent).toBe(50)
-      expect(SurveyResult.answers[1].count).toBe(1)
-      expect(SurveyResult.answers[1].percent).toBe(50)
+      expect(SurveyResult.answers[0].count).toBe(2)
+      expect(SurveyResult.answers[0].percent).toBe(100)
+      expect(SurveyResult.answers[0].isCurrentAccountAnswer).toBe(true)
+      expect(SurveyResult.answers[1].count).toBe(0)
+      expect(SurveyResult.answers[1].percent).toBe(0)
+      expect(SurveyResult.answers[1].isCurrentAccountAnswer).toBe(false)
     })
 
     test('Should return null if LoadBySurveyId not find survey results', async () => {
       const Survey = await InsertSurvey()
+      const Account = await InsertAccount()
       const { Sut } = makeSut()
-      const SurveyResult = await Sut.LoadBySurveyId(Survey.id)
+      const SurveyResult = await Sut.LoadBySurveyId(Survey.id, Account.id)
       expect(SurveyResult).toBeNull()
     })
   })
