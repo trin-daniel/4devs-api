@@ -10,7 +10,12 @@ export class LoadAccountByTokenService implements LoadAccountByTokenUseCase {
   ) {}
 
   async Load (token: string, role?: string): Promise<Account> {
-    const ID = await this.Decrypter.Decrypt(token)
+    let ID: string
+    try {
+      ID = await this.Decrypter.Decrypt(token)
+    } catch (error) {
+      return null
+    }
     if (ID) {
       const Account = await this.LoadAccountByTokenRepository.LoadByToken(token, role)
       return Account && Account

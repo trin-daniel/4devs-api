@@ -3,7 +3,7 @@ import { Decrypter } from '@Data/Protocols/Cryptography'
 import { LoadAccountByTokenRepository } from '@Data/Protocols/Database'
 import { LoadAccountByTokenService } from '@Data/Services/Account/Load-Account-By-Token/Load-Account-By-Token-Service'
 
-type SutTypes = {Sut: LoadAccountByTokenService, DecrypterStub: Decrypter, LoadAccountByTokenRepositoryStub: LoadAccountByTokenRepository}
+type SutTypes = { Sut: LoadAccountByTokenService, DecrypterStub: Decrypter, LoadAccountByTokenRepositoryStub: LoadAccountByTokenRepository }
 
 const MockDecrypter = (): Decrypter => {
   class DecrypterStub implements Decrypter {
@@ -59,13 +59,13 @@ describe('Load Account By Token Service', () => {
       expect(Account).toBeNull()
     })
 
-    test('Should throw if Decrypter throws', async () => {
+    test('Should return null if Decrypter throws', async () => {
       const { Sut, DecrypterStub } = makeSut()
       jest.spyOn(DecrypterStub, 'Decrypt').mockRejectedValueOnce(new Error())
       const Token = 'any_token'
       const Role = 'admin'
-      const PromiseRejected = Sut.Load(Token, Role)
-      await expect(PromiseRejected).rejects.toThrow()
+      const Account = await Sut.Load(Token, Role)
+      expect(Account).toBeNull()
     })
   })
 
