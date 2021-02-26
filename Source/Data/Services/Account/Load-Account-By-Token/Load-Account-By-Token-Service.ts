@@ -1,7 +1,7 @@
 import { Account } from '@Application/Entities'
 import { LoadAccountByTokenUseCase } from '@Application/Use-Cases/Account/Load-Account-By-Token-Use-Case'
 import { Decrypter } from '@Data/Protocols/Cryptography'
-import { LoadAccountByTokenRepository } from '@Data/Protocols/Database'
+import { LoadAccountByTokenRepository } from '@Data/Protocols/Database/Account'
 
 export class LoadAccountByTokenService implements LoadAccountByTokenUseCase {
   constructor (

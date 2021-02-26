@@ -1,4 +1,9 @@
-import { AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByTokenRepository, UpdateTokenRepository } from '@Data/Protocols/Database'
+import {
+  AddAccountRepository,
+  LoadAccountByEmailRepository,
+  LoadAccountByTokenRepository,
+  UpdateTokenRepository
+} from '@Data/Protocols/Database/Account'
 import { Account } from '@Application/Entities'
 import { AccountDTO } from '@Application/DTOS'
 import { MongoHelper } from '@Infra/Database/Mongo/Helper/Mongo-Helper'

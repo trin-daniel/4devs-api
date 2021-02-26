@@ -1,6 +1,6 @@
 import { Surveys } from '@Application/Entities'
 import { LoadSurveysUseCase } from '@Application/Use-Cases/Survey/Load-Surveys-Use-Case'
-import { LoadSurveysRepository } from '@Data/Protocols/Database'
+import { LoadSurveysRepository } from '@Data/Protocols/Database/Survey'
 
 export class LoadSurveysService implements LoadSurveysUseCase {
   constructor (

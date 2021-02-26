@@ -1,12 +1,18 @@
 import { SurveyResultDTO } from '@Application/DTOS'
 import { SurveyResult } from '@Application/Entities'
-import { LoadSurveyResultRepository, SaveSurveyResultRepository } from '@Data/Protocols/Database'
+import {
+  LoadSurveyResultRepository,
+  SaveSurveyResultRepository
+} from '@Data/Protocols/Database/Survey'
 import { MongoHelper, QueryBuilder } from '@Infra/Database/Mongo/Helper'
 const Round = require('mongo-round')
 import { ObjectId } from 'mongodb'
 
-export class SurveyResultRepository implements SaveSurveyResultRepository, LoadSurveyResultRepository {
-  async LoadBySurveyId (survey_id: string, account_id: string): Promise<SurveyResult> {
+export class SurveyResultRepository implements
+SaveSurveyResultRepository,
+LoadSurveyResultRepository {
+  async LoadBySurveyId (survey_id: string, account_id: string):
+  Promise<SurveyResult> {
     const Collection = await MongoHelper.collection('survey-results')
     const Query = new QueryBuilder()
       .Match({

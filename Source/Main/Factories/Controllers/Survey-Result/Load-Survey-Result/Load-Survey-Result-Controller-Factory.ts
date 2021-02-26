@@ -6,6 +6,9 @@ import { LoadSurveyByIdServiceFactory } from '@Main/Factories/Use-Cases/Survey/L
 
 export const LoadSurveyResultControllerFactory = (): Controller => {
   return LogControllerDecoratorFactory(
-    new LoadSurveyResultController(LoadSurveyByIdServiceFactory(), LoadSurveyResultServiceFactory())
+    new LoadSurveyResultController(
+      LoadSurveyByIdServiceFactory(),
+      LoadSurveyResultServiceFactory()
+    )
   )
 }

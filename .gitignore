@@ -4,3 +4,4 @@ Coverage
 globalConfig.json
 Database
 !Source/**/Database
+!__Tests__/**/Database

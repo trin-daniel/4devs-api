@@ -1,6 +1,6 @@
 import { SurveyDTO } from '@Application/DTOS'
 import { AddSurveyUseCase } from '@Application/Use-Cases/Survey/Add-Survey-Use-Case'
-import { AddSurveyRepository } from '@Data/Protocols/Database'
+import { AddSurveyRepository } from '@Data/Protocols/Database/Survey'
 
 export class AddSurveyServices implements AddSurveyUseCase {
   constructor (

@@ -1,7 +1,7 @@
 import { Account } from '@Application/Entities'
 import { AccountDTO } from '@Application/DTOS'
 import { AddAccountUseCase } from '@Application/Use-Cases/Account/Add-Account-Use-Case'
-import { AddAccountRepository, LoadAccountByEmailRepository } from '@Data/Protocols/Database'
+import { AddAccountRepository, LoadAccountByEmailRepository } from '@Data/Protocols/Database/Account'
 import { Hasher } from '@Data/Protocols/Cryptography'
 
 export class AddAccountService implements AddAccountUseCase {

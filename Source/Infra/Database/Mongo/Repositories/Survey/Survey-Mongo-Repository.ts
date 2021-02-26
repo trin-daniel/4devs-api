@@ -1,9 +1,13 @@
 import { SurveyDTO } from '@Application/DTOS'
 import { Surveys } from '@Application/Entities'
-import { AddSurveyRepository, LoadSurveyByIdRepository, LoadSurveysRepository } from '@Data/Protocols/Database'
+import {
+  AddSurveyRepository,
+  LoadSurveyByIdRepository,
+  LoadSurveysRepository
+} from '@Data/Protocols/Database/Survey'
 import { MongoHelper } from '@Infra/Database/Mongo/Helper/Mongo-Helper'
+import { QueryBuilder } from '@Infra/Database/Mongo/Helper'
 import { ObjectId } from 'mongodb'
-import { QueryBuilder } from '../../Helper'
 
 export class SurveyMongoRepository implements
 AddSurveyRepository,

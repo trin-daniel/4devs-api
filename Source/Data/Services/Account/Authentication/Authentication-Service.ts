@@ -1,7 +1,7 @@
 import { AuthenticationUseCase } from '@Application/Use-Cases/Authentication/Authentication-Use-Case'
 import { AuthenticationDTO } from '@Application/DTOS'
 import { Encrypter, HashCompare } from '@Data/Protocols/Cryptography'
-import { LoadAccountByEmailRepository, UpdateTokenRepository } from '@Data/Protocols/Database'
+import { LoadAccountByEmailRepository, UpdateTokenRepository } from '@Data/Protocols/Database/Account'
 import { Authentication } from '@Application/Entities'
 
 export class AuthenticationService implements AuthenticationUseCase {

@@ -1,6 +1,6 @@
 import { SurveyResult } from '@Application/Entities'
 import { LoadSurveyResultUseCase } from '@Application/Use-Cases/Survey-Result/Load-Survey-Result-Use-Case'
-import { LoadSurveyByIdRepository, LoadSurveyResultRepository } from '@Data/Protocols/Database'
+import { LoadSurveyByIdRepository, LoadSurveyResultRepository } from '@Data/Protocols/Database/Survey'
 
 export class LoadSurveyResultService implements LoadSurveyResultUseCase {
   constructor (
