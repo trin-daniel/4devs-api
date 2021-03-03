@@ -6,17 +6,17 @@ import { Hasher } from '@Data/Protocols/Cryptography'
 
 export class AddAccountService implements AddAccountUseCase {
   constructor (
-    private readonly HasherComponent: Hasher,
-    private readonly AddAccount: AddAccountRepository,
-    private readonly LoadAccountByEmail: LoadAccountByEmailRepository
+    private readonly Hasher: Hasher,
+    private readonly AddAccountRepository: AddAccountRepository,
+    private readonly LoadAccountByEmailRepository: LoadAccountByEmailRepository
   ) {}
 
   public async Add (data: AccountDTO): Promise<Account> {
     const { email, password } = data
-    const Account = await this.LoadAccountByEmail.LoadByEmail(email)
+    const Account = await this.LoadAccountByEmailRepository.LoadByEmail(email)
     if (!Account) {
-      const Hash = await this.HasherComponent.Hash(password)
-      const Account = await this.AddAccount.Add({ ...data, password: Hash })
+      const Hash = await this.Hasher.Hash(password)
+      const Account = await this.AddAccountRepository.Add({ ...data, password: Hash })
       return Account
     }
     return null

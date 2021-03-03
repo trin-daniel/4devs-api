@@ -6,7 +6,7 @@ import { Authentication } from '@Application/Entities'
 
 export class AuthenticationService implements AuthenticationUseCase {
   constructor (
-    private readonly LoadAccountByEmail: LoadAccountByEmailRepository,
+    private readonly LoadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly HashCompare: HashCompare,
     private readonly Encrypter: Encrypter,
     private readonly UpdateTokenRepository: UpdateTokenRepository
@@ -14,7 +14,7 @@ export class AuthenticationService implements AuthenticationUseCase {
 
   async Auth (data: AuthenticationDTO): Promise<Authentication> {
     const { email, password } = data
-    const Account = await this.LoadAccountByEmail.LoadByEmail(email)
+    const Account = await this.LoadAccountByEmailRepository.LoadByEmail(email)
     if (Account) {
       const IsEqual = await this.HashCompare.Compare(password, Account.password)
       if (IsEqual) {

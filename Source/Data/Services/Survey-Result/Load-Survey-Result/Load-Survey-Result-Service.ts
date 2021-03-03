@@ -4,25 +4,29 @@ import { LoadSurveyByIdRepository, LoadSurveyResultRepository } from '@Data/Prot
 
 export class LoadSurveyResultService implements LoadSurveyResultUseCase {
   constructor (
-    private readonly LoadSurveyResult: LoadSurveyResultRepository,
+    private readonly LoadSurveyResultRepository: LoadSurveyResultRepository,
     private readonly LoadSurveyByIdRepository: LoadSurveyByIdRepository
   ) {}
 
   async Load (survey_id: string, account_id: string):Promise<SurveyResult> {
-    const Survey = await this.LoadSurveyResult.LoadBySurveyId(survey_id, account_id)
+    const Survey = await this.LoadSurveyResultRepository.LoadBySurveyId(survey_id, account_id)
     if (!Survey) {
       const Survey = await this.LoadSurveyByIdRepository.LoadById(survey_id)
       const { id, question, answers, date } = Survey
-      const Result = {
+      const SurveyResult = {
         id,
         question,
         survey_id,
         answers: answers.map(item => ({
-          answer: item.answer, image: item.image, count: 0, percent: 0, isCurrentAccountAnswer: false
+          answer: item.answer,
+          image: item.image,
+          count: 0,
+          percent: 0,
+          isCurrentAccountAnswer: false
         })),
         date
       }
-      return Result
+      return SurveyResult
     }
     return Survey
   }

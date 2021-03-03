@@ -1,26 +1,20 @@
-import { SurveyResultDTO } from '@Application/DTOS'
-import { SurveyResult } from '@Application/Entities'
+import { LoadSurveyByIdUseCase } from '@Application/Use-Cases/Survey/Load-Survey-By-Id-Use-Case'
 import { Controller, Request, Response } from '@Presentation/Protocols'
 import { InvalidParamError } from '@Presentation/Errors'
 import { Forbidden, Ok, ServerErrorHelper } from '@Presentation/Helpers/Http-Helper'
-import { LoadSurveyByIdUseCase } from '@Application/Use-Cases/Survey/Load-Survey-By-Id-Use-Case'
 import { SaveSurveyResultUseCase } from '@Application/Use-Cases/Survey-Result/Save-Survey-Result'
+import { SurveyResultViewModel } from '@Presentation/View-Models'
 
 export class SaveSurveyResultController implements Controller {
   constructor (
-    private readonly LoadSurveyById: LoadSurveyByIdUseCase,
-    private readonly SaveSurveyResult: SaveSurveyResultUseCase
+    private readonly LoadSurveyByIdUseCase: LoadSurveyByIdUseCase,
+    private readonly SaveSurveyResultUseCase: SaveSurveyResultUseCase
   ) {}
 
-  async handle (request: Request<SurveyResultDTO>): Promise<Response<SurveyResult>> {
+  async handle (Request: Request): Promise<Response<SurveyResultViewModel>> {
     try {
-      const { params: { survey_id }, body: { answer }, account_id } =
-      request as Request<
-      SurveyResultDTO,
-      {[key: string]: string},
-      {[key: string]: string}
-      >
-      const Survey = await this.LoadSurveyById.Load(survey_id)
+      const { params: { survey_id }, body: { answer }, account_id } = Request
+      const Survey = await this.LoadSurveyByIdUseCase.Load(survey_id)
       if (Survey) {
         const Answers = Survey.answers.map(item => item.answer)
         if (!Answers.includes(answer)) {
@@ -30,14 +24,12 @@ export class SaveSurveyResultController implements Controller {
         return Forbidden(new InvalidParamError('survey_id'))
       }
 
-      return Ok(await this.SaveSurveyResult.Save(
-        {
-          survey_id,
-          account_id,
-          answer,
-          date: new Date().toLocaleDateString('pt-br')
-        }
-      ))
+      return Ok(await this.SaveSurveyResultUseCase.Save({
+        survey_id,
+        account_id,
+        answer,
+        date: new Date().toLocaleDateString('pt-br')
+      }))
     } catch (error) {
       return ServerErrorHelper(error)
     }

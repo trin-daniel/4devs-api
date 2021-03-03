@@ -14,7 +14,7 @@
     "down": "docker-compose down",
     "start": "DEBUG=app:server node Dist/Main/Server.js",
     "start:dev": "DEBUG=app* node Dist/Main/Server.js",
-    "build": "rimraf Dist && tsc",
+    "build": "rimraf Dist && tsc -p build.json",
     "postbuild": "copyfiles -u 1 Public/**/* Dist/Static"
   },
   "keywords": [],
