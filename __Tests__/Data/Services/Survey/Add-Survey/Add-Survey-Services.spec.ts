@@ -1,7 +1,7 @@
 import { SurveyDTO } from '@Application/DTOS'
 import { AddSurveyRepository } from '@Data/Protocols/Database/Survey'
 import { AddSurveyServices } from '@Data/Services/Survey/Add-Survey/Add-Survey-Services'
-import MockDate from 'mockdate'
+import Faker from 'faker'
 
 const MockAddSurveyRepository = (): AddSurveyRepository => {
   class AddSurveyRepositoryStub implements AddSurveyRepository {
@@ -12,42 +12,47 @@ const MockAddSurveyRepository = (): AddSurveyRepository => {
   return new AddSurveyRepositoryStub()
 }
 
-const MockSurveyDTO = (): SurveyDTO => ({
-  question: 'any_question',
-  answers:
-  [
-    {
-      image: 'any_images',
-      answer: 'any_answer'
-    }
-  ],
-  date: new Date().toLocaleDateString('pt-br')
-})
+const MockSurveyDTO = (): SurveyDTO => (
+  {
 
-type SutTypes = {Sut: AddSurveyServices, AddSurveyRepositoryStub: AddSurveyRepository}
+    question: Faker.lorem.paragraph(1),
+    answers:
+     [
+       {
+         image: Faker.image.imageUrl(),
+         answer: Faker.random.word()
+       }
+     ],
+    date: new Date().toLocaleDateString('pt-br')
+  }
+)
 
-const makeSut = (): SutTypes => {
+const MOCK_SURVEY_INSTANCE = MockSurveyDTO()
+
+interface SutTypes {
+  Sut: AddSurveyServices,
+  AddSurveyRepositoryStub: AddSurveyRepository
+}
+
+const MakeSut = (): SutTypes => {
   const AddSurveyRepositoryStub = MockAddSurveyRepository()
   const Sut = new AddSurveyServices(AddSurveyRepositoryStub)
   return { Sut, AddSurveyRepositoryStub }
 }
 
 describe('Add Survey Services', () => {
-  beforeAll(() => MockDate.set(new Date()))
-  afterAll(() => MockDate.reset())
-
   describe('#AddSurveyRepository', () => {
     test('Should call AddSurveyRepository with correct values', async () => {
-      const { Sut, AddSurveyRepositoryStub } = makeSut()
+      const { Sut, AddSurveyRepositoryStub } = MakeSut()
       const AddSpy = jest.spyOn(AddSurveyRepositoryStub, 'Add')
-      await Sut.Add(MockSurveyDTO())
-      expect(AddSpy).toHaveBeenCalledWith(MockSurveyDTO())
+      await Sut.Add(MOCK_SURVEY_INSTANCE)
+      expect(AddSpy).toHaveBeenCalledWith(MOCK_SURVEY_INSTANCE)
     })
 
     test('Should throw if AddSurveyRepository throws', async () => {
-      const { Sut, AddSurveyRepositoryStub } = makeSut()
+      const { Sut, AddSurveyRepositoryStub } = MakeSut()
       jest.spyOn(AddSurveyRepositoryStub, 'Add').mockRejectedValueOnce(new Error())
-      const PromiseRejected = Sut.Add(MockSurveyDTO())
+      const PromiseRejected = Sut.Add(MOCK_SURVEY_INSTANCE)
       await expect(PromiseRejected).rejects.toThrow()
     })
   })

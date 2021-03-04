@@ -1,14 +1,15 @@
 import app from '@Main/Config/App'
 import supertest from 'supertest'
-
+import Faker from 'faker'
 describe('Body parser middleware', () => {
   test('Should parse body as JSON', async () => {
-    const data =
+    const PASSWORD_FREZEED = Faker.internet.password()
+    const AccountDTO =
     {
-      name: 'any_name',
-      email: 'any_email@gmail.com',
-      password: 'any_password',
-      confirmation: 'any_password'
+      name: Faker.internet.userName(),
+      email: Faker.internet.email(),
+      password: PASSWORD_FREZEED,
+      confirmation: PASSWORD_FREZEED
     }
     app
       .post('/test_body_parser', (request, response, next) => {
@@ -17,7 +18,7 @@ describe('Body parser middleware', () => {
       })
     await supertest(app)
       .post('/test_body_parser')
-      .send(data)
-      .expect(data)
+      .send(AccountDTO)
+      .expect(AccountDTO)
   })
 })

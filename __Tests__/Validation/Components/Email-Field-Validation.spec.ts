@@ -1,5 +1,6 @@
 import { InvalidParamError } from '@Presentation/Errors'
 import { EmailFieldValidation } from '@Validation/Components/Email-Field-Validation'
+import Faker from 'faker'
 
 type SutTypes = {Sut: EmailFieldValidation}
 
@@ -8,10 +9,7 @@ const makeSut = (): SutTypes => {
   return { Sut }
 }
 
-const Data = () =>
-  ({
-    email: 'any_email@gmail.com'
-  })
+const Email = () => ({ email: Faker.internet.email() })
 
 describe('Email Field Validation', () => {
   test('Should return an InvalidParamError if invalid e-mail address are provided', () => {
@@ -22,7 +20,7 @@ describe('Email Field Validation', () => {
 
   test('Should return null if valid e-mail address are provided', () => {
     const { Sut } = makeSut()
-    const Input = Data()
+    const Input = Email()
     const Error = Sut.Validate(Input)
     expect(Error).toBeNull()
   })

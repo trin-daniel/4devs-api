@@ -1,9 +1,24 @@
+import { AccountDTO } from '@Application/DTOS'
 import { MongoHelper } from '@Infra/Database/Mongo/Helper/Mongo-Helper'
 import { AccountMongoRepository } from '@Infra/Database/Mongo/Repositories/Account/Account-Mongo-Repository'
+import Faker from 'faker'
 
-type SutTypes = {Sut: AccountMongoRepository}
+interface SutTypes {
+  Sut: AccountMongoRepository
+}
 
-const makeSut = (): SutTypes => {
+const HASHED_PASSWORD = Faker.internet.password()
+const EXPECTED_TOKEN = Faker.random.uuid()
+const MockAccount = (): AccountDTO =>
+  (
+    {
+      name: Faker.internet.userName(),
+      email: Faker.internet.email(),
+      password: HASHED_PASSWORD
+    }
+  )
+const MOCK_ACCOUNT_INSTANCE = MockAccount()
+const MakeSut = (): SutTypes => {
   const Sut = new AccountMongoRepository()
   return { Sut }
 }
@@ -20,136 +35,112 @@ describe('Account Repository', () => {
 
   describe('#AddAccountRepository', () => {
     test('Should return an account on success', async () => {
-      const { Sut } = makeSut()
-      const Data =
-      {
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'hash'
-      }
-      const Account = await Sut.Add(Data)
+      const { Sut } = MakeSut()
+      const Account = await Sut.Add(MOCK_ACCOUNT_INSTANCE)
       expect(Account).toBeTruthy()
       expect(Account.id).toBeTruthy()
-      expect(Account.name).toBe('any_name')
-      expect(Account.email).toBe('any_email@gmail.com')
+      expect(Account.name).toBe(MOCK_ACCOUNT_INSTANCE.name)
+      expect(Account.email).toBe(MOCK_ACCOUNT_INSTANCE.email)
     })
   })
 
   describe('#LoadAccountByEmailRepository', () => {
     test('Should return an account if load by e-mail address succeeds', async () => {
-      const { Sut } = makeSut()
-      const data =
-      {
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'hash'
-      }
+      const { Sut } = MakeSut()
       const Collection = await MongoHelper.collection('accounts')
-      await Collection.insertOne(data)
-      const Account = await Sut.LoadByEmail('any_email@gmail.com')
+      await Collection.insertOne(MOCK_ACCOUNT_INSTANCE)
+      const Account = await Sut.LoadByEmail(MOCK_ACCOUNT_INSTANCE.email)
       expect(Account).toBeTruthy()
-      expect(Account.id).toHaveProperty('id')
+      expect(Account).toHaveProperty('id')
       expect(Account).toHaveProperty('name')
     })
 
     test('Should return null if load by e-mail address return null', async () => {
-      const { Sut } = makeSut()
-      const Account = await Sut.LoadByEmail('any_email@gmail.com')
+      const { Sut } = MakeSut()
+      const { email } = MockAccount()
+      const Account = await Sut.LoadByEmail(email)
       expect(Account).toBeNull()
     })
   })
 
   describe('#UpdateTokenRepository', () => {
     test('Should update the account token if updateToken is successful', async () => {
-      const { Sut } = makeSut()
-      const Data =
-      {
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'hash'
-      }
+      const { Sut } = MakeSut()
       const Collection = await MongoHelper.collection('accounts')
-      const { ops } = await Collection.insertOne(Data)
+      const { ops } = await Collection.insertOne(MOCK_ACCOUNT_INSTANCE)
       const [Account] = ops
-      const { _id } = Account
+      const FormattedAccount = MongoHelper.mapper(Account)
+      const { id } = FormattedAccount
       expect(Account).not.toHaveProperty('token')
-      await Sut.UpdateToken(_id, 'any_token')
-      const Result = await Collection.findOne({ _id })
-      expect(Result.token).toBe('any_token')
+      await Sut.UpdateToken(id, EXPECTED_TOKEN)
+      const Result = await Collection.findOne({ _id: id })
+      expect(Result.token).toBe(EXPECTED_TOKEN)
     })
   })
 
   describe('#LoadAccountByTokenRepository', () => {
     test('Should return an account if admin role are not provided', async () => {
-      const { Sut } = makeSut()
-      const Data =
+      const { Sut } = MakeSut()
+      const Account =
       {
-        token: 'any_token',
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'hash'
+        token: EXPECTED_TOKEN,
+        ...MOCK_ACCOUNT_INSTANCE
       }
       const Collection = await MongoHelper.collection('accounts')
-      await Collection.insertOne(Data)
-      const Account = await Sut.LoadByToken(Data.token)
-      expect(Account).toBeTruthy()
-      expect(Account).toHaveProperty('id')
-      expect(Account).toHaveProperty('name')
+      await Collection.insertOne(Account)
+      const ExpectedAccount = await Sut.LoadByToken(Account.token)
+      expect(ExpectedAccount).toBeTruthy()
+      expect(ExpectedAccount).toHaveProperty('id')
+      expect(ExpectedAccount).toHaveProperty('name')
     })
 
     test('Should return an account if admin role are provided', async () => {
-      const { Sut } = makeSut()
-      const Data =
+      const { Sut } = MakeSut()
+      const Account =
       {
-        token: 'any_token',
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'hash',
+        token: EXPECTED_TOKEN,
+        ...MOCK_ACCOUNT_INSTANCE,
         role: 'admin'
       }
       const Collection = await MongoHelper.collection('accounts')
-      await Collection.insertOne(Data)
-      const Account = await Sut.LoadByToken(Data.token, Data.role)
-      expect(Account).toBeTruthy()
-      expect(Account).toHaveProperty('id')
-      expect(Account).toHaveProperty('name')
+      await Collection.insertOne(Account)
+      const ExpectedAccount = await Sut.LoadByToken(Account.token, Account.role)
+      expect(ExpectedAccount).toBeTruthy()
+      expect(ExpectedAccount).toHaveProperty('id')
+      expect(ExpectedAccount).toHaveProperty('name')
     })
 
     test('Should return null if the admin role is wrong or is not provided', async () => {
-      const { Sut } = makeSut()
-      const Data =
+      const { Sut } = MakeSut()
+      const Account =
       {
-        token: 'any_token',
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'hash'
+        token: EXPECTED_TOKEN,
+        ...MOCK_ACCOUNT_INSTANCE
       }
       const Collection = await MongoHelper.collection('accounts')
-      await Collection.insertOne(Data)
-      const Account = await Sut.LoadByToken(Data.token, 'any_role')
-      expect(Account).toBeNull()
+      await Collection.insertOne(Account)
+      const ExpectedAccount = await Sut.LoadByToken(Account.token, 'another_role')
+      expect(ExpectedAccount).toBeNull()
     })
 
     test('Should allow the admin to access any route if the admin role is provided', async () => {
-      const { Sut } = makeSut()
-      const Data =
+      const { Sut } = MakeSut()
+      const Account =
       {
-        token: 'any_token',
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'hash',
+        token: EXPECTED_TOKEN,
+        ...MOCK_ACCOUNT_INSTANCE,
         role: 'admin'
       }
       const Collection = await MongoHelper.collection('accounts')
-      await Collection.insertOne(Data)
-      const Account = await Sut.LoadByToken(Data.token)
-      expect(Account).toBeTruthy()
-      expect(Account).toHaveProperty('token')
+      await Collection.insertOne(Account)
+      const ExpectedAccount = await Sut.LoadByToken(Account.token)
+      expect(ExpectedAccount).toBeTruthy()
+      expect(ExpectedAccount).toHaveProperty('token')
     })
 
     test('Should return null if load by token returns null', async () => {
-      const { Sut } = makeSut()
-      const Account = await Sut.LoadByToken('any_token', 'any_role')
+      const { Sut } = MakeSut()
+      const Account = await Sut.LoadByToken(EXPECTED_TOKEN, 'another_role')
       expect(Account).toBeNull()
     })
   })

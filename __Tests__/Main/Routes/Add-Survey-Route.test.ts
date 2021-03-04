@@ -6,31 +6,31 @@ import Env from '@Main/Config/Env'
 import Bcrypt from 'bcrypt'
 import JsonWebToken from 'jsonwebtoken'
 import Supertest from 'supertest'
+import Faker from 'faker'
 
+const EXPECTED_TOKEN = Faker.random.uuid()
 const MockSurveyDTO = (): Omit<SurveyDTO, 'date'> => ({
-  question: 'any_question',
+  question: Faker.lorem.paragraph(1),
   answers:
   [
     {
-      image: 'any_images',
-      answer: 'any_answer'
+      image: Faker.image.imageUrl(),
+      answer: Faker.random.word()
     }
   ]
 })
-
-type AccountWithRole = AccountDTO & {role: 'admin'}
-
-const MockAccountDTO = async (): Promise<AccountWithRole> =>
+const MOCK_SURVEY_DTO_INSTANCE = MockSurveyDTO()
+const MockAccountDTO = async (): Promise<AccountDTO & {role: 'admin'}> =>
   ({
-    name: 'any_name',
-    email: 'any_email@gmail.com',
+    name: Faker.internet.userName(),
+    email: Faker.internet.email(),
     password: await Bcrypt.hash('any_password', 12),
     role: 'admin'
   })
-
-const insertAccount = async () => {
+const MOCK_ACCOUNT_DTO_INSTANCE = MockAccountDTO()
+const InsertAccount = async () => {
   const Collection = await MongoHelper.collection('accounts')
-  const { ops } = await Collection.insertOne(await MockAccountDTO())
+  const { ops } = await Collection.insertOne(await MOCK_ACCOUNT_DTO_INSTANCE)
   const [res] = ops
   const Account = await MongoHelper.mapper(res) as Account
 
@@ -51,14 +51,14 @@ describe('Add Survey Route', () => {
     test('Should return 403 if no token is provided', async () => {
       await Supertest(App)
         .post('/api/surveys')
-        .send(MockSurveyDTO())
+        .send(MOCK_SURVEY_DTO_INSTANCE)
         .expect(403)
     })
 
     test('Should return 204 if valid token is provided', async () => {
       const collection = await MongoHelper.collection('accounts')
-      const { id } = await insertAccount()
-      const token = JsonWebToken.sign('any_token', Env.SECRET_KEY)
+      const { id } = await InsertAccount()
+      const token = JsonWebToken.sign(EXPECTED_TOKEN, Env.SECRET_KEY)
       await collection.updateOne(
         { _id: id },
         { $set: { token } }

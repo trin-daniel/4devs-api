@@ -2,9 +2,11 @@ import { MongoHelper } from '@Infra/Database/Mongo/Helper/Mongo-Helper'
 import { LogMongoRepository } from '@Infra/Database/Mongo/Repositories/Log-Error/Log-Mongo-Repository'
 import { LogErrorRepository } from '@Data/Protocols/Database/Log'
 
-type SutTypes = {Sut: LogErrorRepository}
+interface SutTypes {
+  Sut: LogErrorRepository
+}
 
-const makeSut = (): SutTypes => {
+const MakeSut = (): SutTypes => {
   const Sut = new LogMongoRepository()
   return { Sut }
 }
@@ -19,7 +21,7 @@ describe('Log Mongo Repository', () => {
   })
 
   test('Should create an error log on success', async () => {
-    const { Sut } = makeSut()
+    const { Sut } = MakeSut()
     await Sut.LogError('An unexpected error has occurred')
     const Collection = await MongoHelper.collection('error')
     const ExpectedData = await Collection.findOne({ error: 'An unexpected error has occurred' })

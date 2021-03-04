@@ -1,65 +1,81 @@
-import { Surveys } from '@Application/Entities'
+import { Account, Surveys } from '@Application/Entities'
 import { LoadSurveysService } from '@Data/Services/Survey/Load-Surveys/Load-Surveys-Service'
 import { LoadSurveysRepository } from '@Data/Protocols/Database/Survey'
-import MockDate from 'mockdate'
+import Faker from 'faker'
 
-type SutTypes = {Sut: LoadSurveysService, LoadSurveysRepositoryStub: LoadSurveysRepository}
-const MockAccountId = () => ({ account_id: 'any_id' })
+interface SutTypes {
+  Sut: LoadSurveysService,
+  LoadSurveysRepositoryStub: LoadSurveysRepository
+}
+const MockAccount = (): Account =>
+  (
+    {
+      id: Faker.random.uuid(),
+      name: Faker.internet.userName(),
+      email: Faker.internet.email(),
+      password: Faker.internet.password()
+    }
+  )
+const MOCK_ACCOUNT_INSTANCE = MockAccount()
+
 const MockSurveys = (): Surveys[] => (
   [
     {
-      id: '507f1f77bcf86cd799439011',
-      question: 'any_question',
-      answers: [{ image: 'any_image', answer: 'any_answer' }],
+      id: Faker.random.uuid(),
+      question: Faker.lorem.paragraph(1),
+      answers: [{
+        image: Faker.image.imageUrl(),
+        answer: Faker.random.word()
+      }],
       date: new Date().toLocaleDateString('pt-br')
     },
-
     {
-      id: '507f1f77bcf86cd799439011',
-      question: 'another_question',
-      answers: [{ image: 'another_image', answer: 'another_answer' }],
+      id: Faker.random.uuid(),
+      question: Faker.lorem.paragraph(1),
+      answers: [{
+        image: Faker.image.imageUrl(),
+        answer: Faker.random.word()
+      }],
       date: new Date().toLocaleDateString('pt-br')
     }
   ]
 )
+const MOCK_SURVEYS_INSTANCE = MockSurveys()
 
 const MockLoadSurveysRepository = (): LoadSurveysRepository => {
   class LoadSurveysRepositoryStub implements LoadSurveysRepository {
     async LoadAll (): Promise<Surveys[]> {
-      return Promise.resolve(MockSurveys())
+      return Promise.resolve(MOCK_SURVEYS_INSTANCE)
     }
   }
   return new LoadSurveysRepositoryStub()
 }
 
-const makeSut = (): SutTypes => {
+const MakeSut = (): SutTypes => {
   const LoadSurveysRepositoryStub = MockLoadSurveysRepository()
   const Sut = new LoadSurveysService(LoadSurveysRepositoryStub)
   return { Sut, LoadSurveysRepositoryStub }
 }
 
 describe('Load Surveys Service', () => {
-  beforeAll(() => MockDate.set(new Date()))
-  afterAll(() => MockDate.reset())
-
   describe('#LoadSurveysRepository', () => {
     test('Should call LoadSurveysRepository with correct account_id', async () => {
-      const { Sut, LoadSurveysRepositoryStub } = makeSut()
+      const { Sut, LoadSurveysRepositoryStub } = MakeSut()
       const LoadAllSpy = jest.spyOn(LoadSurveysRepositoryStub, 'LoadAll')
-      await Sut.Load(MockAccountId().account_id)
-      expect(LoadAllSpy).toHaveBeenCalledWith(MockAccountId().account_id)
+      await Sut.Load(MOCK_ACCOUNT_INSTANCE.id)
+      expect(LoadAllSpy).toHaveBeenCalledWith(MOCK_ACCOUNT_INSTANCE.id)
     })
 
     test('Should return all surveys when the case is successful', async () => {
-      const { Sut } = makeSut()
-      const Surveys = await Sut.Load(MockAccountId().account_id)
-      expect(Surveys).toEqual(MockSurveys())
+      const { Sut } = MakeSut()
+      const Surveys = await Sut.Load(MOCK_ACCOUNT_INSTANCE.id)
+      expect(Surveys).toEqual(MOCK_SURVEYS_INSTANCE)
     })
 
     test('Should throw if LoadSurveysRepository throws', async () => {
-      const { Sut, LoadSurveysRepositoryStub } = makeSut()
+      const { Sut, LoadSurveysRepositoryStub } = MakeSut()
       jest.spyOn(LoadSurveysRepositoryStub, 'LoadAll').mockRejectedValueOnce(new Error())
-      const PromiseRejected = Sut.Load(MockAccountId().account_id)
+      const PromiseRejected = Sut.Load(MOCK_ACCOUNT_INSTANCE.id)
       await expect(PromiseRejected).rejects.toThrow()
     })
   })

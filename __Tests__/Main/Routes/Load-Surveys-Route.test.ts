@@ -6,36 +6,36 @@ import Env from '@Main/Config/Env'
 import Supertest from 'supertest'
 import Jsonwebtoken from 'jsonwebtoken'
 import Bcrypt from 'bcrypt'
+import Faker from 'faker'
 
-const MockSurveyDTO = (): SurveyDTO => ({
-  question: 'any_question',
+const MockSurveyDTO = (): Omit<SurveyDTO, 'date'> => ({
+  question: Faker.lorem.paragraph(1),
   answers:
-    [
-      {
-        image: 'any_images',
-        answer: 'any_answer'
-      }
-    ],
-  date: new Date().toLocaleDateString('pt-br')
+  [
+    {
+      image: Faker.image.imageUrl(),
+      answer: Faker.random.word()
+    }
+  ]
 })
-
+const MOCK_SURVEY_DTO_INSTANCE = MockSurveyDTO()
 const MockAccountDTO = async (): Promise<AccountDTO> =>
   ({
-    name: 'any_name',
-    email: 'any_email@gmail.com',
+    name: Faker.internet.userName(),
+    email: Faker.internet.email(),
     password: await Bcrypt.hash('any_password', 12)
   })
-
+const MOCK_ACCOUNT_DTO_INSTANCE = MockAccountDTO()
 const InsertSurvey = async () => {
   const collection = await MongoHelper.collection('surveys')
-  const { ops } = await collection.insertOne(MockSurveyDTO())
+  const { ops } = await collection.insertOne(MOCK_SURVEY_DTO_INSTANCE)
   const [res] = ops
   return res as Surveys
 }
 
 const InsertAccount = async () => {
   const Collection = await MongoHelper.collection('accounts')
-  const { ops } = await Collection.insertOne(await MockAccountDTO())
+  const { ops } = await Collection.insertOne(await MOCK_ACCOUNT_DTO_INSTANCE)
   const [res] = ops
   const FormattedAccount = await MongoHelper.mapper(res) as Account
   return FormattedAccount

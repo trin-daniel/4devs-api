@@ -1,6 +1,7 @@
 import { MongoHelper } from '@Infra/Database/Mongo/Helper/Mongo-Helper'
 import App from '@Main/Config/App'
 import Supertest from 'supertest'
+import Faker from 'faker'
 
 describe('SignUp Route', () => {
   beforeAll(async () => await MongoHelper.connect(process.env.MONGO_URL))
@@ -13,17 +14,18 @@ describe('SignUp Route', () => {
 
   describe('#POST/SignUp', () => {
     test('Should return 200 when adding account successfully', async () => {
-      const Data =
+      const PASSWORD_FREZEED = Faker.internet.password()
+      const AccountDTO =
       {
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'any_password',
-        confirmation: 'any_password'
+        name: Faker.internet.userName(),
+        email: Faker.internet.email(),
+        password: PASSWORD_FREZEED,
+        confirmation: PASSWORD_FREZEED
       }
 
       await Supertest(App)
         .post('/api/sign-up')
-        .send(Data)
+        .send(AccountDTO)
         .expect(200)
     })
   })

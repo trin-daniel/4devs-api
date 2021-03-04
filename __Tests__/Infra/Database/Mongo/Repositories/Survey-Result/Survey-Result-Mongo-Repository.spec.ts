@@ -3,33 +3,38 @@ import { AccountDTO, SurveyDTO } from '@Application/DTOS'
 import { MongoHelper } from '@Infra/Database/Mongo/Helper/Mongo-Helper'
 import { SurveyResultRepository } from '@Infra/Database/Mongo/Repositories/Survey-Result/Survey-Result-Mongo-Repository'
 import { ObjectId } from 'mongodb'
+import Faker from 'faker'
+import Bcrypt from 'bcrypt'
 
+const ENTRY_PASSWORD = Faker.internet.password()
 const MockAccountDTO = async (): Promise<AccountDTO> =>
   (
     {
-      name: 'any_name',
-      email: 'any_email@gmail.com',
-      password: 'any_password'
+      name: Faker.internet.userName(),
+      email: Faker.internet.email(),
+      password: await Bcrypt.hash(ENTRY_PASSWORD, 12)
+    }
+  )
+const MockSurveyDTO = (): SurveyDTO =>
+  (
+    {
+      question: Faker.lorem.lines(1),
+      answers:
+    [
+      {
+        image: Faker.image.imageUrl(),
+        answer: Faker.random.word()
+      },
+      {
+        image: Faker.image.imageUrl(),
+        answer: Faker.random.word()
+      }
+    ],
+      date: new Date().toLocaleDateString('pt-br')
     }
   )
 
-const MockSurveyDTO = (): SurveyDTO => ({
-  question: 'any_question',
-  answers:
-      [
-        {
-          image: 'any_images',
-          answer: 'any_answer'
-        },
-        {
-          image: 'another_image',
-          answer: 'another_answer'
-        }
-      ],
-  date: new Date().toLocaleDateString('pt-br')
-})
-
-const InsertSurvey = async () => {
+const InsertSurvey = async (): Promise<Surveys> => {
   const Collection = await MongoHelper.collection('surveys')
   const { ops } = await Collection.insertOne(MockSurveyDTO())
   const [res] = ops
@@ -37,7 +42,7 @@ const InsertSurvey = async () => {
   return Survey as Surveys
 }
 
-const InsertAccount = async () => {
+const InsertAccount = async (): Promise<Account> => {
   const Collection = await MongoHelper.collection('accounts')
   const { ops } = await Collection.insertOne(await MockAccountDTO())
   const [res] = ops
@@ -45,9 +50,11 @@ const InsertAccount = async () => {
   return FormattedAccount
 }
 
-type SutTypes = {Sut: SurveyResultRepository}
+interface SutTypes {
+  Sut: SurveyResultRepository
+}
 
-const makeSut = (): SutTypes => {
+const MakeSut = (): SutTypes => {
   const Sut = new SurveyResultRepository()
   return { Sut }
 }
@@ -66,7 +73,7 @@ describe('Survey Result Mongo Repository', () => {
     test('Should add a new survey result', async () => {
       const Account = await InsertAccount()
       const Survey = await InsertSurvey()
-      const { Sut } = makeSut()
+      const { Sut } = MakeSut()
       await Sut.Save(
         {
           account_id: Account.id,
@@ -93,7 +100,7 @@ describe('Survey Result Mongo Repository', () => {
           date: new Date().toLocaleDateString('pt-br')
         }
       )
-      const { Sut } = makeSut()
+      const { Sut } = MakeSut()
       await Sut.Save(
         {
           account_id: Account.id,
@@ -136,7 +143,7 @@ describe('Survey Result Mongo Repository', () => {
           date: new Date().toLocaleDateString('pt-br')
         }]
       )
-      const { Sut } = makeSut()
+      const { Sut } = MakeSut()
       const SurveyResult = await Sut.LoadBySurveyId(Survey.id, Account.id)
       expect(SurveyResult).toBeTruthy()
       expect(SurveyResult).toHaveProperty('survey_id')
@@ -151,7 +158,7 @@ describe('Survey Result Mongo Repository', () => {
     test('Should return null if LoadBySurveyId not find survey results', async () => {
       const Survey = await InsertSurvey()
       const Account = await InsertAccount()
-      const { Sut } = makeSut()
+      const { Sut } = MakeSut()
       const SurveyResult = await Sut.LoadBySurveyId(Survey.id, Account.id)
       expect(SurveyResult).toBeNull()
     })

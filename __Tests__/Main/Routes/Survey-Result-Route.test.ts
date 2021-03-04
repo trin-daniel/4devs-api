@@ -6,13 +6,15 @@ import Env from '@Main/Config/Env'
 import JsonWebToken from 'jsonwebtoken'
 import Supertest from 'supertest'
 import Bcrypt from 'bcrypt'
+import Faker from 'faker'
 
+const PASSWORD_FREZEED = Faker.internet.password()
 const MockAccountDTO = async (): Promise<AccountDTO> =>
   (
     {
-      name: 'any_name',
-      email: 'any_email@gmail.com',
-      password: await Bcrypt.hash('any_password', 12)
+      name: Faker.internet.userName(),
+      email: Faker.internet.email(),
+      password: await Bcrypt.hash(PASSWORD_FREZEED, 12)
     }
   )
 
@@ -35,21 +37,24 @@ const UpdateTokenAccount = async () => {
   return MongoHelper.mapper(await Collection.findOne({ _id: Account.id }))
 }
 
-const MockSurveyDTO = (): SurveyDTO => ({
-  question: 'any_question',
-  answers:
-    [
-      {
-        image: 'any_images',
-        answer: 'any_answer'
-      }
-    ],
-  date: new Date().toLocaleDateString('pt-br')
-})
+const MockSurveyDTO = (): SurveyDTO => (
+  {
+    question: Faker.lorem.paragraph(1),
+    answers:
+  [
+    {
+      image: Faker.image.imageUrl(),
+      answer: Faker.random.word()
+    }
+  ],
+    date: new Date().toLocaleDateString('pt-br')
+  }
+)
+const MOCK_SURVEY_DTO_INSTANCE = MockSurveyDTO()
 
 const InsertSurvey = async () => {
   const Collection = await MongoHelper.collection('surveys')
-  const { ops } = await Collection.insertOne(MockSurveyDTO())
+  const { ops } = await Collection.insertOne(MOCK_SURVEY_DTO_INSTANCE)
   const [res] = ops
   return MongoHelper.mapper(res) as Surveys
 }
@@ -68,7 +73,7 @@ describe('Survey Result Route', () => {
     test('Should return 403 if no token is provided', async () => {
       await Supertest(App)
         .put('/api/surveys/any_id/results')
-        .send({ answer: 'any_answer' })
+        .send({ answer: MOCK_SURVEY_DTO_INSTANCE.answers[0].answer })
         .expect(403)
     })
 
@@ -78,7 +83,7 @@ describe('Survey Result Route', () => {
       await Supertest(App)
         .put(`/api/surveys/${Survey.id}/results`)
         .set('x-access-token', Account.token)
-        .send({ answer: 'any_answer' })
+        .send({ answer: MOCK_SURVEY_DTO_INSTANCE.answers[0].answer })
         .expect(200)
     })
   })

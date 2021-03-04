@@ -1,35 +1,41 @@
-import { SurveyDTO } from '@Application/DTOS'
 import { AddSurveyUseCase } from '@Application/Use-Cases/Survey/Add-Survey-Use-Case'
 import { AddSurveyController } from '@Presentation/Controllers/Survey/Add-Survey/Add-Survey-Controller'
 import { Request, Validation } from '@Presentation/Protocols'
 import { BadRequest, NoContent, ServerErrorHelper } from '@Presentation/Helpers/Http-Helper'
-import MockDate from 'mockdate'
+import { SurveyDTO } from '@Presentation/DTOS'
+import Faker from 'faker'
 
-const MockRequest = (): Request => ({
-  body:
-  {
-    question: 'any_question',
+interface SutTypes {
+  Sut: AddSurveyController,
+  ValidationStub: Validation,
+  AddSurveyUseCaseStub: AddSurveyUseCase
+}
+
+const MockRequest = (): Request<SurveyDTO> => ({
+  body: {
+    question: Faker.lorem.paragraph(1),
     answers:
      [
        {
-         image: 'any_image',
-         answer: 'any_answer'
+         image: Faker.image.imageUrl(),
+         answer: Faker.random.word()
        }
      ],
     date: new Date().toLocaleDateString('pt-br')
   }
 })
+const MOCK_REQUEST_INSTANCE = MockRequest()
 
-const MockValidationComponent = (): Validation => {
-  class ValidationComponentStub implements Validation {
+const MockValidation = (): Validation => {
+  class ValidationStub implements Validation {
     Validate (input: { [key: string]: any }): Error {
       return null
     }
   }
-  return new ValidationComponentStub()
+  return new ValidationStub()
 }
 
-const MockAddSurveyUseCaseStub = (): AddSurveyUseCase => {
+const MockAddSurveyUseCase = (): AddSurveyUseCase => {
   class AddSurveyUseCaseStub implements AddSurveyUseCase {
     public async Add (data: SurveyDTO): Promise<void> {
       return Promise.resolve()
@@ -38,23 +44,18 @@ const MockAddSurveyUseCaseStub = (): AddSurveyUseCase => {
   return new AddSurveyUseCaseStub()
 }
 
-type SutTypes = {Sut: AddSurveyController, ValidationComponentStub: Validation, AddSurveyUseCaseStub: AddSurveyUseCase}
-
-const makeSut = (): SutTypes => {
-  const AddSurveyUseCaseStub = MockAddSurveyUseCaseStub()
-  const ValidationComponentStub = MockValidationComponent()
-  const Sut = new AddSurveyController(ValidationComponentStub, AddSurveyUseCaseStub)
-  return { Sut, ValidationComponentStub, AddSurveyUseCaseStub }
+const MakeSut = (): SutTypes => {
+  const AddSurveyUseCaseStub = MockAddSurveyUseCase()
+  const ValidationStub = MockValidation()
+  const Sut = new AddSurveyController(ValidationStub, AddSurveyUseCaseStub)
+  return { Sut, ValidationStub, AddSurveyUseCaseStub }
 }
 
 describe('Add Survey Controller', () => {
-  beforeAll(() => MockDate.set(new Date()))
-  afterAll(() => MockDate.reset())
-
   describe('#Validation', () => {
     test('Should call Validation with correct values', async () => {
-      const { Sut, ValidationComponentStub } = makeSut()
-      const ValidateSpy = jest.spyOn(ValidationComponentStub, 'Validate')
+      const { Sut, ValidationStub } = MakeSut()
+      const ValidateSpy = jest.spyOn(ValidationStub, 'Validate')
       const Request = MockRequest()
       const Data = Object.assign({}, Request.body, delete Request.body.date)
       await Sut.handle(Request)
@@ -62,32 +63,31 @@ describe('Add Survey Controller', () => {
     })
 
     test('Should return 400 if Validation returns an error', async () => {
-      const { Sut, ValidationComponentStub } = makeSut()
-      jest.spyOn(ValidationComponentStub, 'Validate').mockReturnValueOnce(new Error())
-      const response = await Sut.handle(MockRequest())
+      const { Sut, ValidationStub } = MakeSut()
+      jest.spyOn(ValidationStub, 'Validate').mockReturnValueOnce(new Error())
+      const response = await Sut.handle(MOCK_REQUEST_INSTANCE)
       expect(response).toEqual(BadRequest(new Error()))
     })
   })
 
   describe('#AddSurveyUseCase', () => {
     test('Should call AddSurveyUseCase with correct values', async () => {
-      const { Sut, AddSurveyUseCaseStub } = makeSut()
+      const { Sut, AddSurveyUseCaseStub } = MakeSut()
       const AddSpy = jest.spyOn(AddSurveyUseCaseStub, 'Add')
-      const { body } = MockRequest()
-      await Sut.handle({ body })
-      expect(AddSpy).toHaveBeenCalledWith(body)
+      await Sut.handle(MOCK_REQUEST_INSTANCE)
+      expect(AddSpy).toHaveBeenCalledWith(MOCK_REQUEST_INSTANCE.body)
     })
 
     test('Should return 500 if AddSurveyUseCase throws exception', async () => {
-      const { Sut, AddSurveyUseCaseStub } = makeSut()
+      const { Sut, AddSurveyUseCaseStub } = MakeSut()
       jest.spyOn(AddSurveyUseCaseStub, 'Add').mockReturnValueOnce(Promise.reject(new Error()))
-      const Response = await Sut.handle(MockRequest())
+      const Response = await Sut.handle(MOCK_REQUEST_INSTANCE)
       expect(Response).toEqual(ServerErrorHelper(new Error()))
     })
 
     test('Should return 204 if AddSurveyUseCase succeeds', async () => {
-      const { Sut } = makeSut()
-      const Response = await Sut.handle(MockRequest())
+      const { Sut } = MakeSut()
+      const Response = await Sut.handle(MOCK_REQUEST_INSTANCE)
       expect(Response).toEqual(NoContent())
     })
   })
