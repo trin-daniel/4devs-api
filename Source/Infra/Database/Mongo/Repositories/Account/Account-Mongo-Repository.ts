@@ -9,10 +9,10 @@ import { AccountDTO } from '@Application/DTOS'
 import { MongoHelper } from '@Infra/Database/Mongo/Helper/Mongo-Helper'
 
 export class AccountMongoRepository implements
-AddAccountRepository,
-LoadAccountByEmailRepository,
-UpdateTokenRepository,
-LoadAccountByTokenRepository {
+  AddAccountRepository,
+  LoadAccountByEmailRepository,
+  UpdateTokenRepository,
+  LoadAccountByTokenRepository {
   public async Add (data: AccountDTO): Promise<Account> {
     const Collection = await MongoHelper.collection('accounts')
     const { ops } = await Collection.insertOne(data)
@@ -28,7 +28,16 @@ LoadAccountByTokenRepository {
 
   public async LoadByToken (token: string, role?: string): Promise<Account> {
     const Collection = await MongoHelper.collection('accounts')
-    const Account = await Collection.findOne({ token, $or: [{ role }, { role: 'admin' }] })
+    const Account = await Collection.findOne({
+      token,
+      $or: [{ role }, { role: 'admin' }]
+    },
+    {
+      projection: {
+        _id: 1
+      }
+    }
+    )
     return Account && MongoHelper.mapper<Account>(Account)
   }
 

@@ -91,7 +91,6 @@ describe('Account Repository', () => {
       const ExpectedAccount = await Sut.LoadByToken(Account.token)
       expect(ExpectedAccount).toBeTruthy()
       expect(ExpectedAccount).toHaveProperty('id')
-      expect(ExpectedAccount).toHaveProperty('name')
     })
 
     test('Should return an account if admin role are provided', async () => {
@@ -107,7 +106,6 @@ describe('Account Repository', () => {
       const ExpectedAccount = await Sut.LoadByToken(Account.token, Account.role)
       expect(ExpectedAccount).toBeTruthy()
       expect(ExpectedAccount).toHaveProperty('id')
-      expect(ExpectedAccount).toHaveProperty('name')
     })
 
     test('Should return null if the admin role is wrong or is not provided', async () => {
@@ -135,7 +133,7 @@ describe('Account Repository', () => {
       await Collection.insertOne(Account)
       const ExpectedAccount = await Sut.LoadByToken(Account.token)
       expect(ExpectedAccount).toBeTruthy()
-      expect(ExpectedAccount).toHaveProperty('token')
+      expect(ExpectedAccount).toHaveProperty('id')
     })
 
     test('Should return null if load by token returns null', async () => {
