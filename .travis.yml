@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 15.x
+  - 14
 script:
   - eslint 'Source/**'
   - npm run test:coveralls
