@@ -1,5 +1,8 @@
 # 4Devs-API
 
+[![Build Status](https://travis-ci.com/trin-daniel/4devs-api.svg?branch=master)](https://travis-ci.com/trin-daniel/4devs-api)
+[![Coverage Status](https://coveralls.io/repos/github/trin-daniel/4devs-api/badge.svg?branch=master)](https://coveralls.io/github/trin-daniel/4devs-api?branch=master)
+
 API desenvolvida durante o treinamento do instrutor Rodrigo Manguinho, treinamento voltado para clean architecture e domain driven design em node js usando typescript.
 
 ## Apresentação.
