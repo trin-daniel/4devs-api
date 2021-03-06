@@ -1,7 +1,7 @@
 {
   "name": "4devs-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "application to create, answer and consult surveys",
   "main": "Dist/Main/Server.js",
   "scripts": {
     "test": "jest --passWithNoTests --runInBand",
