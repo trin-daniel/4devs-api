@@ -5,7 +5,8 @@ API desenvolvida durante o treinamento do instrutor Rodrigo Manguinho, treinamen
 ## Apresentação.
 
 A proposta do projeto é fornecer serviços capazes de criar, responder e obter os resultados de uma determinada pesquisa.
-Acesse: [4Devs-API]('') para usar a documentação.
+
+Acesse: [4Devs-API](https://app-4devs-api.herokuapp.com/api/docs/) para usar a documentação.
 
 ## Padrões de projeto.
 
